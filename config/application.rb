@@ -23,6 +23,7 @@ module Realballerz
       g.test_framework :rspec
     end
 
+    I18n.enforce_available_locales = false
     config.secret_key_base = "helloworld"
   end
 end
