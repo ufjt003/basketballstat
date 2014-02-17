@@ -22,5 +22,7 @@ module Realballerz
     config.generators do |g|
       g.test_framework :rspec
     end
+
+    config.secret_key_base = "helloworld"
   end
 end
