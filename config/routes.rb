@@ -1,5 +1,5 @@
 Realballerz::Application.routes.draw do
-  devise_for :users, skip: [ :session, :registration]
+  devise_for :users, skip: [ :session, :registration, :password]
   devise_scope :user do
     post "users/sign_in",    to: "sessions#create"
     delete "users/sign_out", to: "sessions#destroy"
