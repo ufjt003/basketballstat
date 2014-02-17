@@ -29,6 +29,7 @@ GEM
     atomic (1.1.14)
     bcrypt-ruby (3.1.2)
     builder (3.1.4)
+    cancan (1.6.10)
     coderay (1.1.0)
     devise (3.2.2)
       bcrypt-ruby (~> 3.0)
@@ -128,6 +129,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  cancan
   devise
   factory_girl_rails
   flay

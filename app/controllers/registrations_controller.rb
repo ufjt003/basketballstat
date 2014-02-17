@@ -3,6 +3,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   prepend_before_filter :require_no_authentication, :only => [:create ]
   before_filter :load_user, only: [:update]
+  skip_authorization_check
 
   def create
     user = User.new(params.require(:user).permit(:email, :password, :name))
