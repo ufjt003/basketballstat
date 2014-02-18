@@ -62,3 +62,25 @@ describe PlayersController, "POST makes_three_pointer" do
     player.player_stat.three_pointer_made.should == 1
   end
 end
+
+describe PlayersController, "POST shoots_free_throw" do
+  let(:player) { FactoryGirl.create(:player) }
+
+  it "should set player stat accordingly" do
+    post :shoots_free_throw, id: player.id
+    response.status.should == 200
+    response.body.should == { success: true, message: "player's free throw attempted incremented" }.to_json
+    player.player_stat.free_throw_attempted.should == 1
+  end
+end
+
+describe PlayersController, "POST makes_free_throw" do
+  let(:player) { FactoryGirl.create(:player) }
+
+  it "should set player stat accordingly" do
+    post :makes_free_throw, id: player.id
+    response.status.should == 200
+    response.body.should == { success: true, message: "player's free throw made incremented" }.to_json
+    player.player_stat.free_throw_made.should == 1
+  end
+end

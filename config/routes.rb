@@ -14,6 +14,8 @@ Realballerz::Application.routes.draw do
       post :makes_field_goal
       post :shoots_three_pointer
       post :makes_three_pointer
+      post :shoots_free_throw
+      post :makes_free_throw
     end
   end
 end

@@ -5,6 +5,8 @@ describe PlayerStat, "validations" do
   it { should validate_presence_of(:field_goal_made) }
   it { should validate_presence_of(:three_pointer_attempted) }
   it { should validate_presence_of(:three_pointer_made) }
+  it { should validate_presence_of(:free_throw_attempted) }
+  it { should validate_presence_of(:free_throw_made) }
 end
 
 describe PlayerStat, "relations" do

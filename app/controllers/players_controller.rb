@@ -1,7 +1,9 @@
 class PlayersController < ApplicationController
   skip_authorization_check
 
-  before_filter :load_player, only: [ :show, :shoots, :makes_field_goal, :shoots_three_pointer, :makes_three_pointer ]
+  before_filter :load_player, only: [ :show, :shoots, :makes_field_goal,
+                                      :shoots_three_pointer, :makes_three_pointer,
+                                      :shoots_free_throw, :makes_free_throw ]
 
   def create
     if Player.create(params[:player])
@@ -44,6 +46,22 @@ class PlayersController < ApplicationController
       render json: { success: true, message: "player's three pointer made incremented" }
     else
       render json: { success: false, message: "player's three pointer made increment failed" }, status: 400
+    end
+  end
+
+  def shoots_free_throw
+    if @player.player_stat.increment!(:free_throw_attempted)
+      render json: { success: true, message: "player's free throw attempted incremented" }
+    else
+      render json: { success: false, message: "player's free throw attempted increment failed" }, status: 400
+    end
+  end
+
+  def makes_free_throw
+    if @player.player_stat.increment!(:free_throw_made)
+      render json: { success: true, message: "player's free throw made incremented" }
+    else
+      render json: { success: false, message: "player's free throw made increment failed" }, status: 400
     end
   end
 
