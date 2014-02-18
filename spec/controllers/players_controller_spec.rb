@@ -84,3 +84,58 @@ describe PlayersController, "POST makes_free_throw" do
     player.player_stat.free_throw_made.should == 1
   end
 end
+
+describe PlayersController, "POST assist" do
+  let(:player) { FactoryGirl.create(:player) }
+
+  it "should set player stat accordingly" do
+    post :assist, id: player.id
+    response.status.should == 200
+    response.body.should == { success: true, message: "player's assist incremented" }.to_json
+    player.player_stat.assist.should == 1
+  end
+end
+
+describe PlayersController, "POST block" do
+  let(:player) { FactoryGirl.create(:player) }
+
+  it "should set player stat accordingly" do
+    post :block, id: player.id
+    response.status.should == 200
+    response.body.should == { success: true, message: "player's block incremented" }.to_json
+    player.player_stat.block.should == 1
+  end
+end
+
+describe PlayersController, "POST steal" do
+  let(:player) { FactoryGirl.create(:player) }
+
+  it "should set player stat accordingly" do
+    post :steal, id: player.id
+    response.status.should == 200
+    response.body.should == { success: true, message: "player's steal incremented" }.to_json
+    player.player_stat.steal.should == 1
+  end
+end
+
+describe PlayersController, "POST rebound" do
+  let(:player) { FactoryGirl.create(:player) }
+
+  it "should set player stat accordingly" do
+    post :rebound, id: player.id
+    response.status.should == 200
+    response.body.should == { success: true, message: "player's rebound incremented" }.to_json
+    player.player_stat.rebound.should == 1
+  end
+end
+
+describe PlayersController, "POST turnover" do
+  let(:player) { FactoryGirl.create(:player) }
+
+  it "should set player stat accordingly" do
+    post :turnover, id: player.id
+    response.status.should == 200
+    response.body.should == { success: true, message: "player's turnover incremented" }.to_json
+    player.player_stat.turnover.should == 1
+  end
+end

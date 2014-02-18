@@ -16,6 +16,11 @@ Realballerz::Application.routes.draw do
       post :makes_three_pointer
       post :shoots_free_throw
       post :makes_free_throw
+      post :assist
+      post :rebound
+      post :steal
+      post :block
+      post :turnover
     end
   end
 end

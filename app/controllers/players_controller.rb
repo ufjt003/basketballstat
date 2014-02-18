@@ -3,7 +3,8 @@ class PlayersController < ApplicationController
 
   before_filter :load_player, only: [ :show, :shoots, :makes_field_goal,
                                       :shoots_three_pointer, :makes_three_pointer,
-                                      :shoots_free_throw, :makes_free_throw ]
+                                      :shoots_free_throw, :makes_free_throw, :assist,
+                                      :block, :steal, :rebound, :turnover ]
 
   def create
     if Player.create(params[:player])
@@ -62,6 +63,46 @@ class PlayersController < ApplicationController
       render json: { success: true, message: "player's free throw made incremented" }
     else
       render json: { success: false, message: "player's free throw made increment failed" }, status: 400
+    end
+  end
+
+  def assist
+    if @player.player_stat.increment!(:assist)
+      render json: { success: true, message: "player's assist incremented" }
+    else
+      render json: { success: false, message: "player's assist increment failed" }, status: 400
+    end
+  end
+
+  def block
+    if @player.player_stat.increment!(:block)
+      render json: { success: true, message: "player's block incremented" }
+    else
+      render json: { success: false, message: "player's block increment failed" }, status: 400
+    end
+  end
+
+  def steal
+    if @player.player_stat.increment!(:steal)
+      render json: { success: true, message: "player's steal incremented" }
+    else
+      render json: { success: false, message: "player's steal increment failed" }, status: 400
+    end
+  end
+
+  def rebound
+    if @player.player_stat.increment!(:rebound)
+      render json: { success: true, message: "player's rebound incremented" }
+    else
+      render json: { success: false, message: "player's rebound increment failed" }, status: 400
+    end
+  end
+
+  def turnover
+    if @player.player_stat.increment!(:turnover)
+      render json: { success: true, message: "player's turnover incremented" }
+    else
+      render json: { success: false, message: "player's turnover increment failed" }, status: 400
     end
   end
 
