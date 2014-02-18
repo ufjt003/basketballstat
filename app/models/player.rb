@@ -3,6 +3,8 @@ class Player < ActiveRecord::Base
 
   after_create :create_player_stat
 
+  has_one :player_stat
+
   private
 
   def create_player_stat
