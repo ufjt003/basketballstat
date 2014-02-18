@@ -12,6 +12,8 @@ Realballerz::Application.routes.draw do
     member do
       post :shoots
       post :makes_field_goal
+      post :shoots_three_pointer
+      post :makes_three_pointer
     end
   end
 end
