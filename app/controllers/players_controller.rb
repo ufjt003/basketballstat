@@ -1,9 +1,9 @@
 class PlayersController < ApplicationController
   skip_authorization_check
 
-  before_filter :load_player, only: [ :show, :shoots, :makes_field_goal,
-                                      :shoots_three_pointer, :makes_three_pointer,
-                                      :shoots_free_throw, :makes_free_throw, :assist,
+  before_filter :load_player, only: [ :show, :shoot, :make_field_goal,
+                                      :shoot_three_pointer, :make_three_pointer,
+                                      :shoot_free_throw, :make_free_throw, :assist,
                                       :block, :steal, :rebound, :turnover ]
 
   def create
@@ -18,7 +18,7 @@ class PlayersController < ApplicationController
     render json: @player
   end
 
-  def shoots
+  def shoot
     if @player.player_stat.increment!(:field_goal_attempted)
       render json: { success: true, message: "player's field goal attempted incremented" }
     else
@@ -26,7 +26,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def makes_field_goal
+  def make_field_goal
     if @player.player_stat.increment!(:field_goal_made)
       render json: { success: true, message: "player's field goal made incremented" }
     else
@@ -34,7 +34,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def shoots_three_pointer
+  def shoot_three_pointer
     if @player.player_stat.increment!(:three_pointer_attempted)
       render json: { success: true, message: "player's three pointer attempted incremented" }
     else
@@ -42,7 +42,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def makes_three_pointer
+  def make_three_pointer
     if @player.player_stat.increment!(:three_pointer_made)
       render json: { success: true, message: "player's three pointer made incremented" }
     else
@@ -50,7 +50,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def shoots_free_throw
+  def shoot_free_throw
     if @player.player_stat.increment!(:free_throw_attempted)
       render json: { success: true, message: "player's free throw attempted incremented" }
     else
@@ -58,7 +58,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def makes_free_throw
+  def make_free_throw
     if @player.player_stat.increment!(:free_throw_made)
       render json: { success: true, message: "player's free throw made incremented" }
     else

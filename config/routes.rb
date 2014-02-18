@@ -10,12 +10,12 @@ Realballerz::Application.routes.draw do
   root :to => "home#index"
   resources :players, only: [ :create, :show ] do
     member do
-      post :shoots
-      post :makes_field_goal
-      post :shoots_three_pointer
-      post :makes_three_pointer
-      post :shoots_free_throw
-      post :makes_free_throw
+      post :shoot
+      post :make_field_goal
+      post :shoot_three_pointer
+      post :make_three_pointer
+      post :shoot_free_throw
+      post :make_free_throw
       post :assist
       post :rebound
       post :steal
