@@ -9,3 +9,12 @@ describe PlayersController, "POST create" do
     }.to change(Player, :count).by(1)
   end
 end
+
+describe PlayersController, "GET show" do
+  it "should return player info" do
+    player = FactoryGirl.create(:player)
+    get :show, id: player.id
+    response.status.should == 200
+    response.body.should == player.to_json
+  end
+end
