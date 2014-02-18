@@ -8,4 +8,5 @@ Realballerz::Application.routes.draw do
   end
 
   root :to => "home#index"
+  resources :players, only: [ :create ]
 end
