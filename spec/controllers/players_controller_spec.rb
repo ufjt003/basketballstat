@@ -8,6 +8,13 @@ describe PlayersController, "POST create" do
       response.body.should == { success: true, message: 'player created' }.to_json
     }.to change(Player, :count).by(1)
   end
+
+  context "for wrong params" do
+    it "should return error message" do
+      post :create, player: { number: 10 }
+      response.status.should == 400
+    end
+  end
 end
 
 describe PlayersController, "GET show" do
@@ -27,6 +34,14 @@ describe PlayersController, "POST shoot" do
     response.status.should == 200
     response.body.should == { success: true, message: "player's field goal attempted incremented" }.to_json
     player.player_stat.field_goal_attempted.should == 1
+  end
+
+  context "when player is not found" do
+    it "should return 400" do
+      post :shoot, id: player.id + 1
+      response.status.should == 400
+      response.body.should == { success: false, message: "player #{player.id + 1} not found" }.to_json
+    end
   end
 end
 
