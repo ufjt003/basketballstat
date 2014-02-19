@@ -14,5 +14,7 @@ group :test, :development do
   gem 'factory_girl_rails'
   gem 'shoulda-matchers'
   gem 'forgery'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
