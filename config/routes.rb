@@ -23,4 +23,6 @@ Realballerz::Application.routes.draw do
       post :turnover
     end
   end
+
+  resources :teams, only: [ :create, :show ]
 end
