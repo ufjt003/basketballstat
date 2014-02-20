@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140219051040) do
+ActiveRecord::Schema.define(version: 20140220163613) do
 
   create_table "player_stats", force: true do |t|
     t.integer  "field_goal_attempted",    default: 0, null: false
@@ -36,6 +36,23 @@ ActiveRecord::Schema.define(version: 20140219051040) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "team_id"
+  end
+
+  create_table "team_stats", force: true do |t|
+    t.integer  "field_goal_attempted",    default: 0, null: false
+    t.integer  "field_goal_made",         default: 0, null: false
+    t.integer  "three_pointer_attempted", default: 0, null: false
+    t.integer  "three_pointer_made",      default: 0, null: false
+    t.integer  "free_throw_attempted",    default: 0, null: false
+    t.integer  "free_throw_made",         default: 0, null: false
+    t.integer  "assist",                  default: 0, null: false
+    t.integer  "rebound",                 default: 0, null: false
+    t.integer  "steal",                   default: 0, null: false
+    t.integer  "block",                   default: 0, null: false
+    t.integer  "turnover",                default: 0, null: false
+    t.integer  "team_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "teams", force: true do |t|
