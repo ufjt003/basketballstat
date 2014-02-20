@@ -4,7 +4,7 @@ class TeamsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
-  before_filter :load_team, only: [ :show ]
+  before_filter :load_team, only: [ :show, :add_player, :remove_player ]
 
   def create
     Team.create!(params[:team])
@@ -13,6 +13,18 @@ class TeamsController < ApplicationController
 
   def show
     render json: @team
+  end
+
+  def add_player
+    if @team.players << Player.find(params[:player_id])
+      render json: { success: true, message: "a player added to a team" }
+    end
+  end
+
+  def remove_player
+    if @team.players.delete(Player.find(params[:player_id]))
+      render json: { success: true, message: "a player removed from a team" }
+    end
   end
 
   private
@@ -25,8 +37,8 @@ class TeamsController < ApplicationController
     params.require(:team).permit(:name)
   end
 
-  def record_not_found
-    render json: { success: false, message: "team #{params[:id]} not found" }, status: 400
+  def record_not_found(error)
+    render json: { success: false, message: error.message }, status: 400
   end
 
   def record_invalid(error)
