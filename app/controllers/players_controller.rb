@@ -19,57 +19,57 @@ class PlayersController < ApplicationController
   end
 
   def shoot
-    @player.player_stat.increment!(:field_goal_attempted)
+    @player.shoot
     render json: { success: true, message: "player's field goal attempted incremented" }
   end
 
   def make_field_goal
-    @player.player_stat.increment!(:field_goal_made)
+    @player.make_field_goal
     render json: { success: true, message: "player's field goal made incremented" }
   end
 
   def shoot_three_pointer
-    @player.player_stat.increment!(:three_pointer_attempted)
+    @player.shoot_three_pointer
     render json: { success: true, message: "player's three pointer attempted incremented" }
   end
 
   def make_three_pointer
-    @player.player_stat.increment!(:three_pointer_made)
+    @player.make_three_pointer
     render json: { success: true, message: "player's three pointer made incremented" }
   end
 
   def shoot_free_throw
-    @player.player_stat.increment!(:free_throw_attempted)
+    @player.shoot_free_throw
     render json: { success: true, message: "player's free throw attempted incremented" }
   end
 
   def make_free_throw
-    @player.player_stat.increment!(:free_throw_made)
+    @player.make_free_throw
     render json: { success: true, message: "player's free throw made incremented" }
   end
 
   def assist
-    @player.player_stat.increment!(:assist)
+    @player.assist
     render json: { success: true, message: "player's assist incremented" }
   end
 
   def block
-    @player.player_stat.increment!(:block)
+    @player.block
     render json: { success: true, message: "player's block incremented" }
   end
 
   def steal
-    @player.player_stat.increment!(:steal)
+    @player.steal
     render json: { success: true, message: "player's steal incremented" }
   end
 
   def rebound
-    @player.player_stat.increment!(:rebound)
+    @player.rebound
     render json: { success: true, message: "player's rebound incremented" }
   end
 
   def turnover
-    @player.player_stat.increment!(:turnover)
+    @player.turnover
     render json: { success: true, message: "player's turnover incremented" }
   end
 
