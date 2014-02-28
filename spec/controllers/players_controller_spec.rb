@@ -33,7 +33,7 @@ describe PlayersController, "POST shoot" do
     post :shoot, id: player.id
     response.status.should == 200
     response.body.should == { success: true, message: "player's field goal attempted incremented" }.to_json
-    player.player_stat.field_goal_attempted.should == 1
+    player.stat.field_goal_attempted.should == 1
   end
 
   context "when player is not found" do
@@ -52,7 +52,7 @@ describe PlayersController, "POST makes_field_goal" do
     post :make_field_goal, id: player.id
     response.status.should == 200
     response.body.should == { success: true, message: "player's field goal made incremented" }.to_json
-    player.player_stat.field_goal_made.should == 1
+    player.stat.field_goal_made.should == 1
   end
 end
 
@@ -63,7 +63,7 @@ describe PlayersController, "POST shoots_three_pointer" do
     post :shoot_three_pointer, id: player.id
     response.status.should == 200
     response.body.should == { success: true, message: "player's three pointer attempted incremented" }.to_json
-    player.player_stat.three_pointer_attempted.should == 1
+    player.stat.three_pointer_attempted.should == 1
   end
 end
 
@@ -74,7 +74,7 @@ describe PlayersController, "POST makes_three_pointer" do
     post :make_three_pointer, id: player.id
     response.status.should == 200
     response.body.should == { success: true, message: "player's three pointer made incremented" }.to_json
-    player.player_stat.three_pointer_made.should == 1
+    player.stat.three_pointer_made.should == 1
   end
 end
 
@@ -85,7 +85,7 @@ describe PlayersController, "POST shoots_free_throw" do
     post :shoot_free_throw, id: player.id
     response.status.should == 200
     response.body.should == { success: true, message: "player's free throw attempted incremented" }.to_json
-    player.player_stat.free_throw_attempted.should == 1
+    player.stat.free_throw_attempted.should == 1
   end
 end
 
@@ -96,7 +96,7 @@ describe PlayersController, "POST makes_free_throw" do
     post :make_free_throw, id: player.id
     response.status.should == 200
     response.body.should == { success: true, message: "player's free throw made incremented" }.to_json
-    player.player_stat.free_throw_made.should == 1
+    player.stat.free_throw_made.should == 1
   end
 end
 
@@ -107,7 +107,7 @@ describe PlayersController, "POST assist" do
     post :assist, id: player.id
     response.status.should == 200
     response.body.should == { success: true, message: "player's assist incremented" }.to_json
-    player.player_stat.assist.should == 1
+    player.stat.assist.should == 1
   end
 end
 
@@ -118,7 +118,7 @@ describe PlayersController, "POST block" do
     post :block, id: player.id
     response.status.should == 200
     response.body.should == { success: true, message: "player's block incremented" }.to_json
-    player.player_stat.block.should == 1
+    player.stat.block.should == 1
   end
 end
 
@@ -129,7 +129,7 @@ describe PlayersController, "POST steal" do
     post :steal, id: player.id
     response.status.should == 200
     response.body.should == { success: true, message: "player's steal incremented" }.to_json
-    player.player_stat.steal.should == 1
+    player.stat.steal.should == 1
   end
 end
 
@@ -140,7 +140,7 @@ describe PlayersController, "POST rebound" do
     post :rebound, id: player.id
     response.status.should == 200
     response.body.should == { success: true, message: "player's rebound incremented" }.to_json
-    player.player_stat.rebound.should == 1
+    player.stat.rebound.should == 1
   end
 end
 
@@ -151,6 +151,6 @@ describe PlayersController, "POST turnover" do
     post :turnover, id: player.id
     response.status.should == 200
     response.body.should == { success: true, message: "player's turnover incremented" }.to_json
-    player.player_stat.turnover.should == 1
+    player.stat.turnover.should == 1
   end
 end

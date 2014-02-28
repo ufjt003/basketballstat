@@ -36,6 +36,7 @@ describe TeamsController, "POST add_player" do
     response.status.should == 200
     response.body.should == { success: true, message: 'a player added to a team' }.to_json
     team.players.should include(player)
+    player.reload.team.should == team
   end
 
   context "when a player is not found" do
