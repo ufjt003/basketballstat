@@ -28,6 +28,7 @@ end
 
 describe PlayersController do
   let(:player) { FactoryGirl.create(:player) }
+  let(:team)   { FactoryGirl.create(:team) }
 
   describe "POST shoot" do
     it "should set player stat accordingly" do
@@ -37,6 +38,14 @@ describe PlayersController do
       player.stat.field_goal_attempted.should == 1
     end
 
+    context "when player belongs to a team" do
+      before { team.players << player }
+      it "should set team stat, too" do
+        post :shoot, id: player.id
+        team.stat.field_goal_attempted.should == 1
+      end
+    end
+
     context "when player is not found" do
       it "should return 400" do
         post :shoot, id: player.id + 1
@@ -44,6 +53,7 @@ describe PlayersController do
         response.body.should == { success: false, message: "player #{player.id + 1} not found" }.to_json
       end
     end
+
   end
 
   describe "POST makes_field_goal" do

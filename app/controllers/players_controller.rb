@@ -20,56 +20,67 @@ class PlayersController < ApplicationController
 
   def shoot
     @player.shoot
+    @player.team.try(:shoot)
     render json: { success: true, message: "player's field goal attempted incremented" }
   end
 
   def make_field_goal
     @player.make_field_goal
+    @player.team.try(:make_field_goal)
     render json: { success: true, message: "player's field goal made incremented" }
   end
 
   def shoot_three_pointer
     @player.shoot_three_pointer
+    @player.team.try(:shoot_three_pointer)
     render json: { success: true, message: "player's three pointer attempted incremented" }
   end
 
   def make_three_pointer
     @player.make_three_pointer
+    @player.team.try(:make_three_pointer)
     render json: { success: true, message: "player's three pointer made incremented" }
   end
 
   def shoot_free_throw
     @player.shoot_free_throw
+    @player.team.try(:shoot_free_throw)
     render json: { success: true, message: "player's free throw attempted incremented" }
   end
 
   def make_free_throw
     @player.make_free_throw
+    @player.team.try(:make_free_throw)
     render json: { success: true, message: "player's free throw made incremented" }
   end
 
   def assist
     @player.assist
+    @player.team.try(:assist)
     render json: { success: true, message: "player's assist incremented" }
   end
 
   def block
     @player.block
+    @player.team.try(:block)
     render json: { success: true, message: "player's block incremented" }
   end
 
   def steal
     @player.steal
+    @player.team.try(:steal)
     render json: { success: true, message: "player's steal incremented" }
   end
 
   def rebound
     @player.rebound
+    @player.team.try(:rebound)
     render json: { success: true, message: "player's rebound incremented" }
   end
 
   def turnover
     @player.turnover
+    @player.team.try(:turnover)
     render json: { success: true, message: "player's turnover incremented" }
   end
 
