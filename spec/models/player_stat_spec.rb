@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe PlayerStat, "validations" do
+shared_examples_for StatValidator do
   it { should validate_presence_of(:field_goal_attempted) }
   it { should validate_presence_of(:field_goal_made) }
   it { should validate_presence_of(:three_pointer_attempted) }
@@ -12,6 +12,10 @@ describe PlayerStat, "validations" do
   it { should validate_presence_of(:steal) }
   it { should validate_presence_of(:block) }
   it { should validate_presence_of(:turnover) }
+end
+
+describe PlayerStat, "validations" do
+  it_behaves_like StatValidator
 end
 
 describe PlayerStat, "relations" do
