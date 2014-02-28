@@ -1,4 +1,4 @@
-module StatValidator
+module ValidatedStat
   extend ActiveSupport::Concern
 
   included do

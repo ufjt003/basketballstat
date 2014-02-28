@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-shared_examples_for StatValidator do
+shared_examples_for ValidatedStat do
   it { should validate_presence_of(:field_goal_attempted) }
   it { should validate_presence_of(:field_goal_made) }
   it { should validate_presence_of(:three_pointer_attempted) }
@@ -20,7 +20,7 @@ shared_examples "a stat" do |stat_type|
 end
 
 describe PlayerStat do
-  it_behaves_like StatValidator
+  it_behaves_like ValidatedStat
   it { should belong_to(:player) }
   it_behaves_like "a stat", :player_stat
 end

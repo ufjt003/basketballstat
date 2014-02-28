@@ -1,5 +1,5 @@
 class PlayerStat < ActiveRecord::Base
-  include StatValidator
+  include ValidatedStat
 
   belongs_to :player
 
