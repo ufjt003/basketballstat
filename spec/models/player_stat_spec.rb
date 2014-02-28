@@ -14,10 +14,13 @@ shared_examples_for StatValidator do
   it { should validate_presence_of(:turnover) }
 end
 
-describe PlayerStat, "validations" do
-  it_behaves_like StatValidator
+shared_examples "a stat" do |stat_type|
+  let(:stat) { FactoryGirl.create(stat_type.to_sym, field_goal_made: 1, three_pointer_made: 1, free_throw_made: 1) }
+  it { stat.points.should == 6 }
 end
 
-describe PlayerStat, "relations" do
+describe PlayerStat do
+  it_behaves_like StatValidator
   it { should belong_to(:player) }
+  it_behaves_like "a stat", :player_stat
 end

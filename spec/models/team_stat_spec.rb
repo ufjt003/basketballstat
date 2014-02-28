@@ -1,9 +1,7 @@
 require 'spec_helper'
 
-describe TeamStat, "validations" do
+describe TeamStat do
   it_behaves_like StatValidator
-end
-
-describe TeamStat, "relations" do
   it { should belong_to(:team) }
+  it_behaves_like "a stat", :team_stat
 end
