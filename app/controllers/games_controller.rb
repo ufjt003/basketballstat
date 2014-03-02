@@ -21,13 +21,13 @@ class GamesController < ApplicationController
       return
     end
 
-    if @game.teams << Team.find(params[:team_id])
+    if @game.add_team(Team.find(params[:team_id]))
       render json: { success: true, message: "a team added to a game" }
     end
   end
 
   def remove_team
-    if @game.teams.delete(Team.find(params[:team_id]))
+    if @game.remove_team(Team.find(params[:team_id]))
       render json: { success: true, message: "a team removed from a game" }
     end
   end

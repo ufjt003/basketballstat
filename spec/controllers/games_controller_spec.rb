@@ -63,7 +63,6 @@ describe GamesController, "POST add_team" do
       JSON.parse(response.body)["success"].should be_false
       JSON.parse(response.body)["message"].should == "game has 2 teams already"
     end
-
   end
 end
 
