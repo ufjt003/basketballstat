@@ -16,10 +16,3 @@ describe Team, "callbacks" do
     AllTimeTeamStat.last.team.should == team
   end
 end
-
-describe Team, ".shoot" do
-  let(:team) { FactoryGirl.create(:team) }
-  it "should increment field_goal_attemped" do
-    expect { team.shoot }.to change(team.all_time_stat, :field_goal_attempted).by(1)
-  end
-end

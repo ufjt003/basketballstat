@@ -1,5 +1,4 @@
 class Team < ActiveRecord::Base
-  include PlayMakable
 
   validates :name, presence: true
 
@@ -15,6 +14,10 @@ class Team < ActiveRecord::Base
 
   def remove_player(player)
     self.players.delete(player)
+  end
+
+  def game_stat
+    TeamStat.find_by(game_id: self.game, team_id: self.id) if self.game
   end
 
   private
