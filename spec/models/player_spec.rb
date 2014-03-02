@@ -38,3 +38,30 @@ describe Player, ".shoot" do
     end
   end
 end
+
+describe Player do
+  [:assist, :block, :steal, :rebound, :turnover].each do |play|
+    describe "#{play}" do
+      let(:player) { FactoryGirl.create(:player) }
+      let(:team) { FactoryGirl.create(:team) }
+      let(:game) { FactoryGirl.create(:game) }
+
+      it "should increment #{play}" do
+        expect { player.send(play) }.to change(player.all_time_stat, play).by(1)
+      end
+
+      context "when a player is in a game" do
+        before { team.add_player(player) }
+        before { game.add_team(team) }
+        it do
+          player.send(play)
+          player.all_time_stat.send(play).should == 1
+          player.game_stat.send(play).should == 1
+          team.all_time_stat.send(play).should == 1
+          team.game_stat.send(play).should == 1
+        end
+      end
+    end
+  end
+end
+

@@ -65,46 +65,31 @@ class Player < ActiveRecord::Base
   def assist
     self.all_time_stat.increment!(:assist)
     self.game_stat.try(:increment!, :assist)
-    if in_a_team?
-      self.team.all_time_stat.increment!(:assist)
-      self.team.game_stat.try(:increment!, :assist)
-    end
+    update_team_stat(:assist)
   end
 
   def block
     self.all_time_stat.increment!(:block)
     self.game_stat.try(:increment!, :block)
-    if in_a_team?
-      self.team.all_time_stat.increment!(:block)
-      self.team.game_stat.try(:increment!, :block)
-    end
+    update_team_stat(:block)
   end
 
   def steal
     self.all_time_stat.increment!(:steal)
     self.game_stat.try(:increment!, :steal)
-    if in_a_team?
-      self.team.all_time_stat.increment!(:steal)
-      self.team.game_stat.try(:increment!, :steal)
-    end
+    update_team_stat(:steal)
   end
 
   def rebound
     self.all_time_stat.increment!(:rebound)
     self.game_stat.try(:increment!, :rebound)
-    if in_a_team?
-      self.team.all_time_stat.increment!(:rebound)
-      self.team.game_stat.try(:increment!, :rebound)
-    end
+    update_team_stat(:rebound)
   end
 
   def turnover
     self.all_time_stat.increment!(:turnover)
     self.game_stat.try(:increment!, :turnover)
-    if in_a_team?
-      self.team.all_time_stat.increment!(:turnover)
-      self.team.game_stat.try(:increment!, :turnover)
-    end
+    update_team_stat(:turnover)
   end
 
   def game_stat
@@ -123,5 +108,12 @@ class Player < ActiveRecord::Base
 
   def create_all_time_stat
     AllTimePlayerStat.create(player_id: self.id)
+  end
+
+  def update_team_stat(play)
+    if in_a_team?
+      self.team.all_time_stat.increment!(play)
+      self.team.game_stat.try(:increment!, play)
+    end
   end
 end
