@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 shared_examples_for ValidatedStat do
-  it { should validate_presence_of(:field_goal_attempted) }
-  it { should validate_presence_of(:field_goal_made) }
-  it { should validate_presence_of(:three_pointer_attempted) }
-  it { should validate_presence_of(:three_pointer_made) }
-  it { should validate_presence_of(:free_throw_attempted) }
-  it { should validate_presence_of(:free_throw_made) }
+  it { should validate_presence_of(:two_pointer_attempt) }
+  it { should validate_presence_of(:two_pointer_make) }
+  it { should validate_presence_of(:three_pointer_attempt) }
+  it { should validate_presence_of(:three_pointer_make) }
+  it { should validate_presence_of(:free_throw_attempt) }
+  it { should validate_presence_of(:free_throw_make) }
   it { should validate_presence_of(:assist) }
   it { should validate_presence_of(:rebound) }
   it { should validate_presence_of(:steal) }
@@ -15,6 +15,6 @@ shared_examples_for ValidatedStat do
 end
 
 shared_examples "a stat" do |stat_type|
-  let(:stat) { FactoryGirl.create(stat_type.to_sym, field_goal_made: 1, three_pointer_made: 1, free_throw_made: 1) }
+  let(:stat) { FactoryGirl.create(stat_type.to_sym, two_pointer_make: 1, three_pointer_make: 1, free_throw_make: 1) }
   it { stat.points.should == 6 }
 end

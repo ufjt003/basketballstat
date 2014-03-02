@@ -17,30 +17,10 @@ describe Player, "callbacks" do
   end
 end
 
-describe Player, ".shoot" do
-  let(:player) { FactoryGirl.create(:player) }
-  let(:team) { FactoryGirl.create(:team) }
-  let(:game) { FactoryGirl.create(:game) }
-
-  it "should increment field_goal_attemped" do
-    expect { player.shoot }.to change(player.all_time_stat, :field_goal_attempted).by(1)
-  end
-
-  context "when a player is in a game" do
-    before { team.add_player(player) }
-    before { game.add_team(team) }
-    it do
-      player.shoot
-      player.all_time_stat.field_goal_attempted.should == 1
-      player.game_stat.field_goal_attempted.should == 1
-      team.all_time_stat.field_goal_attempted.should == 1
-      team.game_stat.field_goal_attempted.should == 1
-    end
-  end
-end
-
 describe Player do
-  [:assist, :block, :steal, :rebound, :turnover].each do |play|
+  [:two_pointer_attempt, :two_pointer_make, :three_pointer_attempt, :three_pointer_make,
+   :free_throw_attempt, :free_throw_make, :assist, :block, :steal,
+   :rebound, :turnover].each do |play|
     describe "#{play}" do
       let(:player) { FactoryGirl.create(:player) }
       let(:team) { FactoryGirl.create(:team) }
@@ -53,7 +33,7 @@ describe Player do
       context "when a player is in a game" do
         before { team.add_player(player) }
         before { game.add_team(team) }
-        it do
+        it "player's + team's game stat and all_time_stat should be updated" do
           player.send(play)
           player.all_time_stat.send(play).should == 1
           player.game_stat.send(play).should == 1

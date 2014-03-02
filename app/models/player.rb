@@ -8,58 +8,40 @@ class Player < ActiveRecord::Base
   belongs_to :team
   belongs_to :game
 
-  def shoot
-    self.all_time_stat.increment!(:field_goal_attempted)
-    self.game_stat.try(:increment!, :field_goal_attempted)
-    if in_a_team?
-      self.team.all_time_stat.increment!(:field_goal_attempted)
-      self.team.game_stat.try(:increment!, :field_goal_attempted)
-    end
+  def two_pointer_attempt
+    self.all_time_stat.increment!(:two_pointer_attempt)
+    self.game_stat.try(:increment!, :two_pointer_attempt)
+    update_team_stat(:two_pointer_attempt)
   end
 
-  def make_field_goal
-    self.all_time_stat.increment!(:field_goal_made)
-    self.game_stat.try(:increment!, :field_goal_made)
-    if in_a_team?
-      self.team.all_time_stat.increment!(:field_goal_made)
-      self.team.game_stat.try(:increment!, :field_goal_made)
-    end
+  def two_pointer_make
+    self.all_time_stat.increment!(:two_pointer_make)
+    self.game_stat.try(:increment!, :two_pointer_make)
+    update_team_stat(:two_pointer_make)
   end
 
-  def shoot_three_pointer
-    self.all_time_stat.increment!(:three_pointer_attempted)
-    self.game_stat.try(:increment!, :three_pointer_attempted)
-    if in_a_team?
-      self.team.all_time_stat.increment!(:three_pointer_attempted)
-      self.team.game_stat.try(:increment!, :three_pointer_attempted)
-    end
+  def three_pointer_attempt
+    self.all_time_stat.increment!(:three_pointer_attempt)
+    self.game_stat.try(:increment!, :three_pointer_attempt)
+    update_team_stat(:three_pointer_attempt)
   end
 
-  def make_three_pointer
-    self.all_time_stat.increment!(:three_pointer_made)
-    self.game_stat.try(:increment!, :three_pointe_made)
-    if in_a_team?
-      self.team.all_time_stat.increment!(:three_pointer_made)
-      self.team.game_stat.try(:increment!, :three_pointer_made)
-    end
+  def three_pointer_make
+    self.all_time_stat.increment!(:three_pointer_make)
+    self.game_stat.try(:increment!, :three_pointer_make)
+    update_team_stat(:three_pointer_make)
   end
 
-  def shoot_free_throw
-    self.all_time_stat.increment!(:free_throw_attempted)
-    self.game_stat.try(:increment!, :free_throw_attempted)
-    if in_a_team?
-      self.team.all_time_stat.increment!(:free_throw_attempted)
-      self.team.game_stat.try(:increment!, :free_throw_attempted)
-    end
+  def free_throw_attempt
+    self.all_time_stat.increment!(:free_throw_attempt)
+    self.game_stat.try(:increment!, :free_throw_attempt)
+    update_team_stat(:free_throw_attempt)
   end
 
-  def make_free_throw
-    self.all_time_stat.increment!(:free_throw_made)
-    self.game_stat.try(:increment!, :free_throw_made)
-    if in_a_team?
-      self.team.all_time_stat.increment!(:free_throw_made)
-      self.team.game_stat.try(:increment!, :free_throw_made)
-    end
+  def free_throw_make
+    self.all_time_stat.increment!(:free_throw_make)
+    self.game_stat.try(:increment!, :free_throw_make)
+    update_team_stat(:free_throw_make)
   end
 
   def assist

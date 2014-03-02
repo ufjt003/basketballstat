@@ -4,9 +4,9 @@ class PlayersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
-  before_filter :load_player, only: [ :show, :shoot, :make_field_goal,
-                                      :shoot_three_pointer, :make_three_pointer,
-                                      :shoot_free_throw, :make_free_throw, :assist,
+  before_filter :load_player, only: [ :show, :shoot, :two_pointer_attempt, :two_pointer_make,
+                                      :three_pointer_attempt, :three_pointer_make,
+                                      :free_throw_attempt, :free_throw_make, :assist,
                                       :block, :steal, :rebound, :turnover ]
 
   def create
@@ -18,73 +18,56 @@ class PlayersController < ApplicationController
     render json: @player
   end
 
-  def shoot
-    @player.shoot
-    @player.team.try(:shoot)
-    render json: { success: true, message: "player's field goal attempted incremented" }
+  def two_pointer_attempt
+    action
   end
 
-  def make_field_goal
-    @player.make_field_goal
-    @player.team.try(:make_field_goal)
-    render json: { success: true, message: "player's field goal made incremented" }
+  def two_pointer_make
+    action
   end
 
-  def shoot_three_pointer
-    @player.shoot_three_pointer
-    @player.team.try(:shoot_three_pointer)
-    render json: { success: true, message: "player's three pointer attempted incremented" }
+  def three_pointer_attempt
+    action
   end
 
-  def make_three_pointer
-    @player.make_three_pointer
-    @player.team.try(:make_three_pointer)
-    render json: { success: true, message: "player's three pointer made incremented" }
+  def three_pointer_make
+    action
   end
 
-  def shoot_free_throw
-    @player.shoot_free_throw
-    @player.team.try(:shoot_free_throw)
-    render json: { success: true, message: "player's free throw attempted incremented" }
+  def free_throw_attempt
+    action
   end
 
-  def make_free_throw
-    @player.make_free_throw
-    @player.team.try(:make_free_throw)
-    render json: { success: true, message: "player's free throw made incremented" }
+  def free_throw_make
+    action
   end
 
   def assist
-    @player.assist
-    @player.team.try(:assist)
-    render json: { success: true, message: "player's assist incremented" }
+    action
   end
 
   def block
-    @player.block
-    @player.team.try(:block)
-    render json: { success: true, message: "player's block incremented" }
+    action
   end
 
   def steal
-    @player.steal
-    @player.team.try(:steal)
-    render json: { success: true, message: "player's steal incremented" }
+    action
   end
 
   def rebound
-    @player.rebound
-    @player.team.try(:rebound)
-    render json: { success: true, message: "player's rebound incremented" }
+    action
   end
 
   def turnover
-    @player.turnover
-    @player.team.try(:turnover)
-    render json: { success: true, message: "player's turnover incremented" }
+    action
   end
 
   private
+
+  def action
+    @player.send(action_name)
+    render json: { success: true, message: "player's #{action_name} incremented" }
+  end
 
   def load_player
     @player = Player.find(params[:id])

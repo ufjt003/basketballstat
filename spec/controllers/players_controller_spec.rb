@@ -30,78 +30,8 @@ describe PlayersController do
   let(:player) { FactoryGirl.create(:player) }
   let(:team)   { FactoryGirl.create(:team) }
 
-  describe "POST shoot" do
-    it "should set player all_time_stat accordingly" do
-      post :shoot, id: player.id
-      response.status.should == 200
-      response.body.should == { success: true, message: "player's field goal attempted incremented" }.to_json
-      player.all_time_stat.field_goal_attempted.should == 1
-    end
-
-    context "when player belongs to a team" do
-      before { team.players << player }
-      it "should set team all_time_stat, too" do
-        post :shoot, id: player.id
-        team.all_time_stat.field_goal_attempted.should == 1
-      end
-    end
-
-    context "when player is not found" do
-      it "should return 400" do
-        post :shoot, id: player.id + 1
-        response.status.should == 400
-        response.body.should == { success: false, message: "player #{player.id + 1} not found" }.to_json
-      end
-    end
-
-  end
-
-  describe "POST makes_field_goal" do
-    it "should set player all_time_stat accordingly" do
-      post :make_field_goal, id: player.id
-      response.status.should == 200
-      response.body.should == { success: true, message: "player's field goal made incremented" }.to_json
-      player.all_time_stat.field_goal_made.should == 1
-    end
-  end
-
-  describe "POST shoots_three_pointer" do
-    it "should set player all_time_stat accordingly" do
-      post :shoot_three_pointer, id: player.id
-      response.status.should == 200
-      response.body.should == { success: true, message: "player's three pointer attempted incremented" }.to_json
-      player.all_time_stat.three_pointer_attempted.should == 1
-    end
-  end
-
-  describe "POST makes_three_pointer" do
-    it "should set player all_time_stat accordingly" do
-      post :make_three_pointer, id: player.id
-      response.status.should == 200
-      response.body.should == { success: true, message: "player's three pointer made incremented" }.to_json
-      player.all_time_stat.three_pointer_made.should == 1
-    end
-  end
-
-  describe "POST shoots_free_throw" do
-    it "should set player all_time_stat accordingly" do
-      post :shoot_free_throw, id: player.id
-      response.status.should == 200
-      response.body.should == { success: true, message: "player's free throw attempted incremented" }.to_json
-      player.all_time_stat.free_throw_attempted.should == 1
-    end
-  end
-
-  describe "POST makes_free_throw" do
-    it "should set player all_time_stat accordingly" do
-      post :make_free_throw, id: player.id
-      response.status.should == 200
-      response.body.should == { success: true, message: "player's free throw made incremented" }.to_json
-      player.all_time_stat.free_throw_made.should == 1
-    end
-  end
-
-  ['assist', 'block', 'steal', 'rebound', 'turnover'].each do |play|
+  ['three_pointer_attempt', 'three_pointer_make', 'two_pointer_attempt', 'two_pointer_make',
+   'free_throw_attempt', 'free_throw_make', 'assist', 'block', 'steal', 'rebound', 'turnover'].each do |play|
     describe "POST #{play}" do
       it "should set player all_time_stat accordingly" do
         post play.to_sym, id: player.id
@@ -109,6 +39,23 @@ describe PlayersController do
         response.body.should == { success: true, message: "player's #{play} incremented" }.to_json
         player.all_time_stat.send(play.to_sym).should == 1
       end
+
+      context "when player belongs to a team" do
+        before { team.players << player }
+        it "should set team all_time_stat, too" do
+          post play.to_sym, id: player.id
+          team.all_time_stat.send(play.to_sym).should == 1
+        end
+      end
+
+      context "when player is not found" do
+        it "should return 400" do
+          post play.to_sym, id: player.id + 1
+          response.status.should == 400
+          response.body.should == { success: false, message: "player #{player.id + 1} not found" }.to_json
+        end
+      end
+
     end
   end
 end

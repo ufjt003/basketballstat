@@ -2,17 +2,6 @@
 
 FactoryGirl.define do
   factory :all_time_player_stat do
-    player_id 1
-    field_goal_attempted 1
-    field_goal_made 1
-    three_pointer_attempted 1
-    three_pointer_made 1
-    free_throw_attempted 1
-    free_throw_made 1
-    assist 1
-    rebound 1
-    steal 1
-    block 1
-    turnover 1
+    player { FactoryGirl.create(:player) }
   end
 end

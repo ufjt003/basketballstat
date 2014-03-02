@@ -11,38 +11,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140302160831) do
+ActiveRecord::Schema.define(version: 20140302171530) do
 
   create_table "all_time_player_stats", force: true do |t|
     t.integer  "player_id"
-    t.integer  "field_goal_attempted",    default: 0, null: false
-    t.integer  "field_goal_made",         default: 0, null: false
-    t.integer  "three_pointer_attempted", default: 0, null: false
-    t.integer  "three_pointer_made",      default: 0, null: false
-    t.integer  "free_throw_attempted",    default: 0, null: false
-    t.integer  "free_throw_made",         default: 0, null: false
-    t.integer  "assist",                  default: 0, null: false
-    t.integer  "rebound",                 default: 0, null: false
-    t.integer  "steal",                   default: 0, null: false
-    t.integer  "block",                   default: 0, null: false
-    t.integer  "turnover",                default: 0, null: false
+    t.integer  "two_pointer_attempt",   default: 0, null: false
+    t.integer  "two_pointer_make",      default: 0, null: false
+    t.integer  "three_pointer_attempt", default: 0, null: false
+    t.integer  "three_pointer_make",    default: 0, null: false
+    t.integer  "free_throw_attempt",    default: 0, null: false
+    t.integer  "free_throw_make",       default: 0, null: false
+    t.integer  "assist",                default: 0, null: false
+    t.integer  "rebound",               default: 0, null: false
+    t.integer  "steal",                 default: 0, null: false
+    t.integer  "block",                 default: 0, null: false
+    t.integer  "turnover",              default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "all_time_team_stats", force: true do |t|
     t.integer  "team_id"
-    t.integer  "field_goal_attempted",    default: 0, null: false
-    t.integer  "field_goal_made",         default: 0, null: false
-    t.integer  "three_pointer_attempted", default: 0, null: false
-    t.integer  "three_pointer_made",      default: 0, null: false
-    t.integer  "free_throw_attempted",    default: 0, null: false
-    t.integer  "free_throw_made",         default: 0, null: false
-    t.integer  "assist",                  default: 0, null: false
-    t.integer  "rebound",                 default: 0, null: false
-    t.integer  "steal",                   default: 0, null: false
-    t.integer  "block",                   default: 0, null: false
-    t.integer  "turnover",                default: 0, null: false
+    t.integer  "two_pointer_attempt",   default: 0, null: false
+    t.integer  "two_pointer_make",      default: 0, null: false
+    t.integer  "three_pointer_attempt", default: 0, null: false
+    t.integer  "three_pointer_make",    default: 0, null: false
+    t.integer  "free_throw_attempt",    default: 0, null: false
+    t.integer  "free_throw_make",       default: 0, null: false
+    t.integer  "assist",                default: 0, null: false
+    t.integer  "rebound",               default: 0, null: false
+    t.integer  "steal",                 default: 0, null: false
+    t.integer  "block",                 default: 0, null: false
+    t.integer  "turnover",              default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -54,20 +54,20 @@ ActiveRecord::Schema.define(version: 20140302160831) do
   end
 
   create_table "player_stats", force: true do |t|
-    t.integer  "field_goal_attempted",    default: 0, null: false
-    t.integer  "field_goal_made",         default: 0, null: false
-    t.integer  "three_pointer_attempted", default: 0, null: false
-    t.integer  "three_pointer_made",      default: 0, null: false
+    t.integer  "two_pointer_attempt",   default: 0, null: false
+    t.integer  "two_pointer_make",      default: 0, null: false
+    t.integer  "three_pointer_attempt", default: 0, null: false
+    t.integer  "three_pointer_make",    default: 0, null: false
     t.integer  "player_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "free_throw_attempted",    default: 0, null: false
-    t.integer  "free_throw_made",         default: 0, null: false
-    t.integer  "assist",                  default: 0, null: false
-    t.integer  "rebound",                 default: 0, null: false
-    t.integer  "steal",                   default: 0, null: false
-    t.integer  "block",                   default: 0, null: false
-    t.integer  "turnover",                default: 0, null: false
+    t.integer  "free_throw_attempt",    default: 0, null: false
+    t.integer  "free_throw_make",       default: 0, null: false
+    t.integer  "assist",                default: 0, null: false
+    t.integer  "rebound",               default: 0, null: false
+    t.integer  "steal",                 default: 0, null: false
+    t.integer  "block",                 default: 0, null: false
+    t.integer  "turnover",              default: 0, null: false
     t.integer  "game_id"
   end
 
@@ -81,17 +81,17 @@ ActiveRecord::Schema.define(version: 20140302160831) do
   end
 
   create_table "team_stats", force: true do |t|
-    t.integer  "field_goal_attempted",    default: 0, null: false
-    t.integer  "field_goal_made",         default: 0, null: false
-    t.integer  "three_pointer_attempted", default: 0, null: false
-    t.integer  "three_pointer_made",      default: 0, null: false
-    t.integer  "free_throw_attempted",    default: 0, null: false
-    t.integer  "free_throw_made",         default: 0, null: false
-    t.integer  "assist",                  default: 0, null: false
-    t.integer  "rebound",                 default: 0, null: false
-    t.integer  "steal",                   default: 0, null: false
-    t.integer  "block",                   default: 0, null: false
-    t.integer  "turnover",                default: 0, null: false
+    t.integer  "two_pointer_attempt",   default: 0, null: false
+    t.integer  "two_pointer_make",      default: 0, null: false
+    t.integer  "three_pointer_attempt", default: 0, null: false
+    t.integer  "three_pointer_make",    default: 0, null: false
+    t.integer  "free_throw_attempt",    default: 0, null: false
+    t.integer  "free_throw_make",       default: 0, null: false
+    t.integer  "assist",                default: 0, null: false
+    t.integer  "rebound",               default: 0, null: false
+    t.integer  "steal",                 default: 0, null: false
+    t.integer  "block",                 default: 0, null: false
+    t.integer  "turnover",              default: 0, null: false
     t.integer  "team_id"
     t.datetime "created_at"
     t.datetime "updated_at"

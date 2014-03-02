@@ -2,12 +2,12 @@ module ValidatedStat
   extend ActiveSupport::Concern
 
   included do
-    validates :field_goal_attempted, presence: true
-    validates :field_goal_made, presence: true
-    validates :three_pointer_attempted, presence: true
-    validates :three_pointer_made, presence: true
-    validates :free_throw_attempted, presence: true
-    validates :free_throw_made, presence: true
+    validates :two_pointer_attempt, presence: true
+    validates :two_pointer_make, presence: true
+    validates :three_pointer_attempt, presence: true
+    validates :three_pointer_make, presence: true
+    validates :free_throw_attempt, presence: true
+    validates :free_throw_make, presence: true
     validates :assist, presence: true
     validates :rebound, presence: true
     validates :steal, presence: true
