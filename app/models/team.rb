@@ -5,6 +5,7 @@ class Team < ActiveRecord::Base
 
   has_many :players
   has_one :stat, :foreign_key => 'team_id', :class_name => "TeamStat"
+  belongs_to :game
 
   after_create :create_stat
 
