@@ -16,5 +16,6 @@ group :test, :development do
   gem 'forgery'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'zeus'
 end
 
