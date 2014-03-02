@@ -1,8 +1,6 @@
-class TeamStat < ActiveRecord::Base
+class AllTimeTeamStat < ActiveRecord::Base
   include ValidatedStat
   include StatMethods
 
   belongs_to :team
-  belongs_to :game
-
 end

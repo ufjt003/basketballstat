@@ -11,7 +11,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140302141833) do
+ActiveRecord::Schema.define(version: 20140302153055) do
+
+  create_table "all_time_player_stats", force: true do |t|
+    t.integer  "player_id"
+    t.integer  "field_goal_attempted",    default: 0, null: false
+    t.integer  "field_goal_made",         default: 0, null: false
+    t.integer  "three_pointer_attempted", default: 0, null: false
+    t.integer  "three_pointer_made",      default: 0, null: false
+    t.integer  "free_throw_attempted",    default: 0, null: false
+    t.integer  "free_throw_made",         default: 0, null: false
+    t.integer  "assist",                  default: 0, null: false
+    t.integer  "rebound",                 default: 0, null: false
+    t.integer  "steal",                   default: 0, null: false
+    t.integer  "block",                   default: 0, null: false
+    t.integer  "turnover",                default: 0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "all_time_team_stats", force: true do |t|
+    t.integer  "team_id"
+    t.integer  "field_goal_attempted",    default: 0, null: false
+    t.integer  "field_goal_made",         default: 0, null: false
+    t.integer  "three_pointer_attempted", default: 0, null: false
+    t.integer  "three_pointer_made",      default: 0, null: false
+    t.integer  "free_throw_attempted",    default: 0, null: false
+    t.integer  "free_throw_made",         default: 0, null: false
+    t.integer  "assist",                  default: 0, null: false
+    t.integer  "rebound",                 default: 0, null: false
+    t.integer  "steal",                   default: 0, null: false
+    t.integer  "block",                   default: 0, null: false
+    t.integer  "turnover",                default: 0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "games", force: true do |t|
     t.datetime "gametime",   default: '2014-03-02 13:27:35', null: false

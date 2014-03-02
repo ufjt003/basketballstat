@@ -3,47 +3,47 @@ module PlayMakable
 
   included do
     def shoot
-      self.stat.increment!(:field_goal_attempted)
+      self.all_time_stat.increment!(:field_goal_attempted)
     end
 
     def make_field_goal
-      self.stat.increment!(:field_goal_made)
+      self.all_time_stat.increment!(:field_goal_made)
     end
 
     def shoot_three_pointer
-      self.stat.increment!(:three_pointer_attempted)
+      self.all_time_stat.increment!(:three_pointer_attempted)
     end
 
     def make_three_pointer
-      self.stat.increment!(:three_pointer_made)
+      self.all_time_stat.increment!(:three_pointer_made)
     end
 
     def shoot_free_throw
-      self.stat.increment!(:free_throw_attempted)
+      self.all_time_stat.increment!(:free_throw_attempted)
     end
 
     def make_free_throw
-      self.stat.increment!(:free_throw_made)
+      self.all_time_stat.increment!(:free_throw_made)
     end
 
     def assist
-      self.stat.increment!(:assist)
+      self.all_time_stat.increment!(:assist)
     end
 
     def block
-      self.stat.increment!(:block)
+      self.all_time_stat.increment!(:block)
     end
 
     def steal
-      self.stat.increment!(:steal)
+      self.all_time_stat.increment!(:steal)
     end
 
     def rebound
-      self.stat.increment!(:rebound)
+      self.all_time_stat.increment!(:rebound)
     end
 
     def turnover
-      self.stat.increment!(:turnover)
+      self.all_time_stat.increment!(:turnover)
     end
   end
 end
