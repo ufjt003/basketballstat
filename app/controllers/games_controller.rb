@@ -16,11 +16,7 @@ class GamesController < ApplicationController
   end
 
   def add_team
-    if @game.teams.count >= 2
-      render json: { success: false, message: "game has 2 teams already" }, status: 400
-      return
-    end
-
+    reject_if_two_teams_are_already_in_the_game
     if @game.add_team(Team.find(params[:team_id]))
       render json: { success: true, message: "a team added to a game" }
     end
@@ -49,4 +45,12 @@ class GamesController < ApplicationController
   def record_invalid(error)
     render json: { success: false, message: error.message }, status: 400
   end
+
+  def reject_if_two_teams_are_already_in_the_game
+    if @game.teams.count >= 2
+      render json: { success: false, message: "game has 2 teams already" }, status: 400
+      return
+    end
+  end
+
 end
