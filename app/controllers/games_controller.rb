@@ -3,11 +3,13 @@ class GamesController < ApplicationController
 
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
+  rescue_from StandardError, with: :standard_error_handling
 
   before_filter :load_game, only: [ :show, :add_team, :remove_team, :start ]
+  before_filter :load_team, only: [ :add_team, :remove_team ]
 
   def create
-    params[:game][:gametime] = DateTime.now if params[:game][:gametime].nil?
+    set_game_time_if_blank
     Game.create!(params[:game])
     render json: { success: true, message: 'game created' }
   end
@@ -17,45 +19,33 @@ class GamesController < ApplicationController
   end
 
   def add_team
-    begin
-      @game.add_team(Team.find(params[:team_id]))
-      render json: { success: true, message: "a team added to a game" }
-    rescue StandardError => e
-      render json: { success: false, message: e.message }, status: 400
-    end
+    @game.add_team(@team)
+    render json: { success: true, message: "a team added to a game" }
   end
 
   def remove_team
-    begin
-      @game.remove_team(Team.find(params[:team_id]))
-      render json: { success: true, message: "a team removed from a game" }
-    rescue StandardError => e
-      render json: { success: false, message: e.message }, status: 400
-    end
+    @game.remove_team(@team)
+    render json: { success: true, message: "a team removed from a game" }
   end
 
   def start
-    begin
-      @game.start
-      render json: { success: true, message: "game started" }
-    rescue StandardError => e
-      render json: { success: false, message: e.message }, status: 400
-    end
+    @game.start
+    render json: { success: true, message: "game started" }
   end
 
   def finish
-    begin
-      @game.finish
-      render json: { success: true, message: "game finished" }
-    rescue StandardError => e
-      render json: { success: false, message: e.message }, status: 400
-    end
+    @game.finish
+    render json: { success: true, message: "game finished" }
   end
 
   private
 
   def load_game
     @game = Game.find(params[:id])
+  end
+
+  def load_team
+    @team = Team.find(params[:team_id])
   end
 
   def game_params
@@ -70,10 +60,12 @@ class GamesController < ApplicationController
     render json: { success: false, message: error.message }, status: 400
   end
 
-  def reject_if_two_teams_are_already_in_the_game
-    if @game.teams.count >= 2
-      render json: { success: false, message: "game has 2 teams already" }, status: 400
-      return
-    end
+  def standard_error_handling(error)
+    render json: { success: false, message: error.message }, status: 400
   end
+
+  def set_game_time_if_blank
+    params[:game][:gametime] = DateTime.now if params[:game][:gametime].blank?
+  end
+
 end

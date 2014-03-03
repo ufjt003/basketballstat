@@ -5,6 +5,7 @@ class TeamsController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
   before_filter :load_team, only: [ :show, :add_player, :remove_player ]
+  before_filter :load_player, only: [ :add_player, :remove_player ]
 
   def create
     Team.create!(params[:team])
@@ -16,21 +17,27 @@ class TeamsController < ApplicationController
   end
 
   def add_player
-    if @team.add_player(Player.find(params[:player_id]))
-      render json: { success: true, message: "a player added to a team" }
-    end
+    action
   end
 
   def remove_player
-    if @team.remove_player(Player.find(params[:player_id]))
-      render json: { success: true, message: "a player removed from a team" }
-    end
+    action
   end
 
   private
 
+  def action
+    if @team.send(action_name, @player)
+      render json: { success: true, message: "#{action_name} successful" }
+    end
+  end
+
   def load_team
     @team = Team.find(params[:id])
+  end
+
+  def load_player
+    @player = Player.find(params[:player_id])
   end
 
   def team_params

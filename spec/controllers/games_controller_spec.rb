@@ -82,7 +82,7 @@ describe GamesController, "POST start" do
   let(:game) { FactoryGirl.create(:game) }
 
   context "when two teams have beend added to a game" do
-    before 'add team teams to game' do
+    before 'add 2 teams to game' do
       post :add_team, id: game.id, team_id: FactoryGirl.create(:team).id
       post :add_team, id: game.id, team_id: FactoryGirl.create(:team).id
     end
@@ -116,16 +116,15 @@ describe GamesController, "POST start" do
 end
 
 describe GamesController, "POST finish" do
-  let(:team) { FactoryGirl.create(:team) }
-  let(:team2) { FactoryGirl.create(:team) }
   let(:game) { FactoryGirl.create(:game) }
 
-  before 'set up a game' do
-    post :add_team, id: game.id, team_id: team.id
-    post :add_team, id: game.id, team_id: team2.id
+  before 'add 2 teams to game' do
+    post :add_team, id: game.id, team_id: FactoryGirl.create(:team)
+    post :add_team, id: game.id, team_id: FactoryGirl.create(:team)
   end
 
   context "when game is not started yet" do
+    before { game.is_in_progress?.should be_false }
     it do
       post :finish, id: game.id
       response.status.should == 400
