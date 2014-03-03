@@ -17,15 +17,20 @@ class GamesController < ApplicationController
   end
 
   def add_team
-    reject_if_two_teams_are_already_in_the_game
-    if @game.add_team(Team.find(params[:team_id]))
+    begin
+      @game.add_team(Team.find(params[:team_id]))
       render json: { success: true, message: "a team added to a game" }
+    rescue StandardError => e
+      render json: { success: false, message: e.message }, status: 400
     end
   end
 
   def remove_team
-    if @game.remove_team(Team.find(params[:team_id]))
+    begin
+      @game.remove_team(Team.find(params[:team_id]))
       render json: { success: true, message: "a team removed from a game" }
+    rescue StandardError => e
+      render json: { success: false, message: e.message }, status: 400
     end
   end
 

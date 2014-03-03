@@ -65,13 +65,16 @@ describe Game, ".add_team" do
     game.players.should include(player2)
   end
 
-  context "when game is in progress" do
-    let(:team2) { FactoryGirl.create(:team) }
-    let(:team3) { FactoryGirl.create(:team) }
-    before { game.add_team(team); game.add_team(team2) }
-    it 'should not add team to game' do
-      expect { game.add_team(team3) }.to change(TeamStat, :count).by(0)
-      game.teams.should_not include(team3)
+  context "when game already has 2 teams" do
+    before 'add 2 teams to game' do
+      game.add_team(FactoryGirl.create(:team))
+      game.add_team(FactoryGirl.create(:team))
+    end
+    it { expect { game.add_team(team) }.to raise_error(StandardError, 'game already has 2 teams') }
+
+    context 'when game is alreayd in progress' do
+      before { game.start }
+      it { expect { game.add_team(team) }.to raise_error(StandardError, 'game is already in progress') }
     end
   end
 end
@@ -105,11 +108,13 @@ describe Game, ".remove_team" do
   end
 
   context "when game is in progress" do
-    let(:team2) { FactoryGirl.create(:team) }
-    before { game.add_team(team2); game.start }
+    before "add another team and start game" do
+      game.add_team(FactoryGirl.create(:team))
+      game.start
+    end
 
     it 'should not remove team from game' do
-      game.remove_team(team) 
+      expect { game.remove_team(team) }.to raise_error(StandardError, 'game is already in progress')
       game.teams.should include(team)
       game.players.should include(player)
     end

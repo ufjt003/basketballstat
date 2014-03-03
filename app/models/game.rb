@@ -5,23 +5,23 @@ class Game < ActiveRecord::Base
   has_many :players
 
   def add_team(team)
-    return if self.teams.count >= 2
-    return if self.is_in_progress?
+    raise StandardError.new('game is already in progress') if is_in_progress?
+    raise StandardError.new('game already has 2 teams') if has_two_teams?
     self.teams << team
     self.players << team.players
     create_game_stats(team)
   end
 
   def remove_team(team)
-    return if self.is_in_progress?
+    raise StandardError.new('game is already in progress') if is_in_progress?
     self.teams.delete(team)
     self.players.delete(team.players)
     remove_game_stats(team)
   end
 
   def start
-    raise StandardError.new('game requires 2 teams to get started') unless has_two_teams?
     raise StandardError.new('game is already in progress') if is_in_progress?
+    raise StandardError.new('game requires 2 teams to get started') unless has_two_teams?
     update_attributes(in_progress: true)
   end
 

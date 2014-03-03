@@ -49,19 +49,16 @@ describe GamesController, "POST add_team" do
   end
 
   context "when a game has two teams already" do
-    let(:team_2) { FactoryGirl.create(:team) }
-    let(:team_3) { FactoryGirl.create(:team) }
-
     before do
-      post :add_team, id: game.id, team_id: team.id
-      post :add_team, id: game.id, team_id: team_2.id
+      post :add_team, id: game.id, team_id: FactoryGirl.create(:team).id
+      post :add_team, id: game.id, team_id: FactoryGirl.create(:team).id
     end
 
     it "should not add a team to a game" do
-      post :add_team, id: game.id, team_id: team_3.id
+      post :add_team, id: game.id, team_id: team.id
       response.status.should == 400
       JSON.parse(response.body)["success"].should be_false
-      JSON.parse(response.body)["message"].should == "game has 2 teams already"
+      JSON.parse(response.body)["message"].should == "game already has 2 teams"
     end
   end
 end
@@ -82,14 +79,12 @@ describe GamesController, "POST remove_team" do
 end
 
 describe GamesController, "POST start" do
-  let(:team) { FactoryGirl.create(:team) }
-  let(:team2) { FactoryGirl.create(:team) }
   let(:game) { FactoryGirl.create(:game) }
 
   context "when two teams have beend added to a game" do
-    before do
-      post :add_team, id: game.id, team_id: team.id
-      post :add_team, id: game.id, team_id: team2.id
+    before 'add team teams to game' do
+      post :add_team, id: game.id, team_id: FactoryGirl.create(:team).id
+      post :add_team, id: game.id, team_id: FactoryGirl.create(:team).id
     end
 
     it do
@@ -100,6 +95,7 @@ describe GamesController, "POST start" do
 
     context "when game is already started" do
       before { post :start, id: game.id }
+
       it do
         post :start, id: game.id
         response.status.should == 400
@@ -109,7 +105,8 @@ describe GamesController, "POST start" do
   end
 
   context "when less than two teams are in a game" do
-    before { post :add_team, id: game.id, team_id: team.id }
+    before { post :add_team, id: game.id, team_id: FactoryGirl.create(:team).id }
+
     it do
       post :start, id: game.id
       response.status.should == 400
