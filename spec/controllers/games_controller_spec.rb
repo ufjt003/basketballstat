@@ -81,3 +81,69 @@ describe GamesController, "POST remove_team" do
   end
 end
 
+describe GamesController, "POST start" do
+  let(:team) { FactoryGirl.create(:team) }
+  let(:team2) { FactoryGirl.create(:team) }
+  let(:game) { FactoryGirl.create(:game) }
+
+  context "when two teams have beend added to a game" do
+    before do
+      post :add_team, id: game.id, team_id: team.id
+      post :add_team, id: game.id, team_id: team2.id
+    end
+
+    it do
+      post :start, id: game.id
+      response.status.should == 200
+      response.body.should == { success: true, message: 'game started' }.to_json
+    end
+
+    context "when game is already started" do
+      before { post :start, id: game.id }
+      it do
+        post :start, id: game.id
+        response.status.should == 400
+        response.body.should == { success: false, message: 'game is already in progress' }.to_json
+      end
+    end
+  end
+
+  context "when less than two teams are in a game" do
+    before { post :add_team, id: game.id, team_id: team.id }
+    it do
+      post :start, id: game.id
+      response.status.should == 400
+      response.body.should == { success: false, message: 'game requires 2 teams to get started' }.to_json
+    end
+  end
+end
+
+describe GamesController, "POST finish" do
+  let(:team) { FactoryGirl.create(:team) }
+  let(:team2) { FactoryGirl.create(:team) }
+  let(:game) { FactoryGirl.create(:game) }
+
+  before 'set up a game' do
+    post :add_team, id: game.id, team_id: team.id
+    post :add_team, id: game.id, team_id: team2.id
+  end
+
+  context "when game is not started yet" do
+    it do
+      post :finish, id: game.id
+      response.status.should == 400
+      response.body.should == { success: false, message: 'game is not in progress' }.to_json
+    end
+  end
+
+  context "when game is in progress" do
+    before { post :start, id: game.id }
+
+    it do
+      post :finish, id: game.id
+      response.status.should == 200
+      response.body.should == { success: true, message: 'game finished' }.to_json
+    end
+  end
+end
+

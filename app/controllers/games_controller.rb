@@ -4,7 +4,7 @@ class GamesController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
-  before_filter :load_game, only: [ :show, :add_team, :remove_team ]
+  before_filter :load_game, only: [ :show, :add_team, :remove_team, :start ]
 
   def create
     params[:game][:gametime] = DateTime.now if params[:game][:gametime].nil?
@@ -26,6 +26,24 @@ class GamesController < ApplicationController
   def remove_team
     if @game.remove_team(Team.find(params[:team_id]))
       render json: { success: true, message: "a team removed from a game" }
+    end
+  end
+
+  def start
+    begin
+      @game.start
+      render json: { success: true, message: "game started" }
+    rescue StandardError => e
+      render json: { success: false, message: e.message }, status: 400
+    end
+  end
+
+  def finish
+    begin
+      @game.finish
+      render json: { success: true, message: "game finished" }
+    rescue StandardError => e
+      render json: { success: false, message: e.message }, status: 400
     end
   end
 
@@ -53,5 +71,4 @@ class GamesController < ApplicationController
       return
     end
   end
-
 end

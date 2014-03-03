@@ -35,6 +35,8 @@ Realballerz::Application.routes.draw do
     member do
       post '/add_team/:team_id', to: 'games#add_team'
       post '/remove_team/:team_id', to: 'games#remove_team'
+      post '/start', to: 'games#start'
+      post '/finish', to: 'games#finish'
     end
   end
 
