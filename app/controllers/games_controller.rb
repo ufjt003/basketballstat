@@ -7,6 +7,7 @@ class GamesController < ApplicationController
   before_filter :load_game, only: [ :show, :add_team, :remove_team ]
 
   def create
+    params[:game][:gametime] = DateTime.now if params[:game][:gametime].nil?
     Game.create!(params[:game])
     render json: { success: true, message: 'game created' }
   end
