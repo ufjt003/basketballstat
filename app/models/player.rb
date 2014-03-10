@@ -9,69 +9,47 @@ class Player < ActiveRecord::Base
   belongs_to :game
 
   def two_pointer_attempt
-    self.all_time_stat.increment!(:two_pointer_attempt)
-    self.game_stat.try(:increment!, :two_pointer_attempt)
-    update_team_stat(:two_pointer_attempt)
+    player_action(__method__)
   end
 
   def two_pointer_make
-    self.all_time_stat.increment!(:two_pointer_make)
-    self.game_stat.try(:increment!, :two_pointer_make)
-    update_team_stat(:two_pointer_make)
+    player_action(__method__)
   end
 
   def three_pointer_attempt
-    self.all_time_stat.increment!(:three_pointer_attempt)
-    self.game_stat.try(:increment!, :three_pointer_attempt)
-    update_team_stat(:three_pointer_attempt)
+    player_action(__method__)
   end
 
   def three_pointer_make
-    self.all_time_stat.increment!(:three_pointer_make)
-    self.game_stat.try(:increment!, :three_pointer_make)
-    update_team_stat(:three_pointer_make)
+    player_action(__method__)
   end
 
   def free_throw_attempt
-    self.all_time_stat.increment!(:free_throw_attempt)
-    self.game_stat.try(:increment!, :free_throw_attempt)
-    update_team_stat(:free_throw_attempt)
+    player_action(__method__)
   end
 
   def free_throw_make
-    self.all_time_stat.increment!(:free_throw_make)
-    self.game_stat.try(:increment!, :free_throw_make)
-    update_team_stat(:free_throw_make)
+    player_action(__method__)
   end
 
   def assist
-    self.all_time_stat.increment!(:assist)
-    self.game_stat.try(:increment!, :assist)
-    update_team_stat(:assist)
+    player_action(__method__)
   end
 
   def block
-    self.all_time_stat.increment!(:block)
-    self.game_stat.try(:increment!, :block)
-    update_team_stat(:block)
+    player_action(__method__)
   end
 
   def steal
-    self.all_time_stat.increment!(:steal)
-    self.game_stat.try(:increment!, :steal)
-    update_team_stat(:steal)
+    player_action(__method__)
   end
 
   def rebound
-    self.all_time_stat.increment!(:rebound)
-    self.game_stat.try(:increment!, :rebound)
-    update_team_stat(:rebound)
+    player_action(__method__)
   end
 
   def turnover
-    self.all_time_stat.increment!(:turnover)
-    self.game_stat.try(:increment!, :turnover)
-    update_team_stat(:turnover)
+    player_action(__method__)
   end
 
   def game_stat
@@ -87,6 +65,12 @@ class Player < ActiveRecord::Base
   end
 
   private
+
+  def player_action(action_name)
+    self.all_time_stat.increment!(action_name)
+    self.game_stat.try(:increment!, action_name)
+    update_team_stat(action_name)
+  end
 
   def create_all_time_stat
     AllTimePlayerStat.create(player_id: self.id)
