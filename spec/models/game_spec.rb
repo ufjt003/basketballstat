@@ -76,6 +76,12 @@ describe Game, ".add_team" do
     game.players.size.should == 5
   end
 
+  context "when team has less than 5 teams" do
+    let(:team_with_four_players) { FactoryGirl.create(:team) }
+    before { 4.times { team_with_four_players.add_player(FactoryGirl.create(:player)) } }
+    it { expect { game.add_team(team_with_four_players) }.to raise_error(StandardError, 'team has less than 5 players') }
+  end
+
   context "when game already has 2 teams" do
     let(:team2) { FactoryGirl.create(:team) }
     let(:team3) { FactoryGirl.create(:team) }

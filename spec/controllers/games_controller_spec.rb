@@ -29,7 +29,21 @@ end
 
 describe GamesController, "POST add_team" do
   let(:team) { FactoryGirl.create(:team) }
+  let(:team2) { FactoryGirl.create(:team) }
   let(:game) { FactoryGirl.create(:game) }
+
+  before { 5.times { team.add_player(FactoryGirl.create(:player)) } }
+  before { 5.times { team2.add_player(FactoryGirl.create(:player)) } }
+
+  context "trying to add a team with less than 5 players" do
+    let(:insufficient_team) { FactoryGirl.create(:team) }
+    before { 4.times { insufficient_team.add_player(FactoryGirl.create(:player)) } }
+    it "should fail" do
+      post :add_team, id: game.id, team_id: insufficient_team.id
+      response.status.should == 400
+      response.body.should == { success: false, message: 'team has less than 5 players' }.to_json
+    end
+  end
 
   it "should add a team to a game" do
     post :add_team, id: game.id, team_id: team.id
@@ -41,7 +55,7 @@ describe GamesController, "POST add_team" do
 
   context "when a game is not found" do
     it "should not add a team to a game" do
-      post :add_team, id: game.id, team_id: team.id + 1
+      post :add_team, id: game.id, team_id: 999
       response.status.should == 400
       JSON.parse(response.body)["success"].should be_false
       game.teams.should be_empty
@@ -50,8 +64,8 @@ describe GamesController, "POST add_team" do
 
   context "when a game has two teams already" do
     before do
-      post :add_team, id: game.id, team_id: FactoryGirl.create(:team).id
-      post :add_team, id: game.id, team_id: FactoryGirl.create(:team).id
+      post :add_team, id: game.id, team_id: team.id
+      post :add_team, id: game.id, team_id: team2.id
     end
 
     it "should not add a team to a game" do
@@ -79,12 +93,17 @@ describe GamesController, "POST remove_team" do
 end
 
 describe GamesController, "POST start" do
+  let(:team) { FactoryGirl.create(:team) }
+  let(:team2) { FactoryGirl.create(:team) }
   let(:game) { FactoryGirl.create(:game) }
+
+  before { 5.times { team.add_player(FactoryGirl.create(:player)) } }
+  before { 5.times { team2.add_player(FactoryGirl.create(:player)) } }
 
   context "when two teams have beend added to a game" do
     before 'add 2 teams to game' do
-      post :add_team, id: game.id, team_id: FactoryGirl.create(:team).id
-      post :add_team, id: game.id, team_id: FactoryGirl.create(:team).id
+      post :add_team, id: game.id, team_id: team.id
+      post :add_team, id: game.id, team_id: team2.id
     end
 
     it do
@@ -116,11 +135,16 @@ describe GamesController, "POST start" do
 end
 
 describe GamesController, "POST finish" do
+  let(:team) { FactoryGirl.create(:team) }
+  let(:team2) { FactoryGirl.create(:team) }
   let(:game) { FactoryGirl.create(:game) }
 
+  before { 5.times { team.add_player(FactoryGirl.create(:player)) } }
+  before { 5.times { team2.add_player(FactoryGirl.create(:player)) } }
+
   before 'add 2 teams to game' do
-    post :add_team, id: game.id, team_id: FactoryGirl.create(:team)
-    post :add_team, id: game.id, team_id: FactoryGirl.create(:team)
+    post :add_team, id: game.id, team_id: team.id
+    post :add_team, id: game.id, team_id: team2.id
   end
 
   context "when game is not started yet" do

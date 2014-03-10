@@ -6,6 +6,7 @@ class Game < ActiveRecord::Base
 
   def add_team(team)
     error_if_in_progress
+    raise StandardError.new('team has less than 5 players') if team.players.count < 5
     raise StandardError.new('game already has 2 teams') if has_two_teams?
     self.teams << team
     self.players << team.players

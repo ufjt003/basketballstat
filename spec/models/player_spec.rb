@@ -25,6 +25,7 @@ describe Player do
       let(:player) { FactoryGirl.create(:player) }
       let(:team) { FactoryGirl.create(:team) }
       let(:game) { FactoryGirl.create(:game) }
+      before { 5.times { team.add_player(FactoryGirl.create(:player)) } }
 
       it "should increment #{play}" do
         expect { player.send(play) }.to change(player.all_time_stat, play).by(1)
