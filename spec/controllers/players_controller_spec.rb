@@ -32,7 +32,7 @@ describe PlayersController do
   let(:game)   { FactoryGirl.create(:game) }
 
   ['three_pointer_attempt', 'three_pointer_make', 'two_pointer_attempt', 'two_pointer_make',
-   'free_throw_attempt', 'free_throw_make', 'assist', 'block', 'steal', 'rebound', 'turnover'].each do |play|
+   'free_throw_attempt', 'free_throw_make', 'assist', 'block', 'steal', 'rebound', 'turnover', 'foul'].each do |play|
     describe "POST #{play}" do
       it "should set player all_time_stat accordingly" do
         post play.to_sym, id: player.id

@@ -20,7 +20,7 @@ end
 describe Player do
   [:two_pointer_attempt, :two_pointer_make, :three_pointer_attempt, :three_pointer_make,
    :free_throw_attempt, :free_throw_make, :assist, :block, :steal,
-   :rebound, :turnover].each do |play|
+   :rebound, :turnover, :foul].each do |play|
     describe "#{play}" do
       let(:player) { FactoryGirl.create(:player) }
       let(:team) { FactoryGirl.create(:team) }

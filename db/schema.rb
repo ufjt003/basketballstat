@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140303051412) do
+ActiveRecord::Schema.define(version: 20140316143319) do
 
   create_table "all_time_player_stats", force: true do |t|
     t.integer  "player_id"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20140303051412) do
     t.integer  "turnover",              default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "foul",                  default: 0, null: false
   end
 
   create_table "all_time_team_stats", force: true do |t|
@@ -45,13 +46,14 @@ ActiveRecord::Schema.define(version: 20140303051412) do
     t.integer  "turnover",              default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "foul",                  default: 0, null: false
   end
 
   create_table "games", force: true do |t|
-    t.datetime "gametime",    default: '2014-03-02 13:27:35', null: false
+    t.datetime "gametime",                    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "in_progress", default: false,                 null: false
+    t.boolean  "in_progress", default: false, null: false
   end
 
   create_table "player_stats", force: true do |t|
@@ -70,6 +72,7 @@ ActiveRecord::Schema.define(version: 20140303051412) do
     t.integer  "block",                 default: 0, null: false
     t.integer  "turnover",              default: 0, null: false
     t.integer  "game_id"
+    t.integer  "foul",                  default: 0, null: false
   end
 
   create_table "players", force: true do |t|
@@ -97,6 +100,7 @@ ActiveRecord::Schema.define(version: 20140303051412) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "game_id"
+    t.integer  "foul",                  default: 0, null: false
   end
 
   create_table "teams", force: true do |t|

@@ -52,6 +52,10 @@ class Player < ActiveRecord::Base
     player_action(__method__)
   end
 
+  def foul
+    player_action(__method__)
+  end
+
   def game_stat
     PlayerStat.find_by(game_id: self.game, player_id: self.id) if in_a_game?
   end

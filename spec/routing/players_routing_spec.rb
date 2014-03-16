@@ -14,4 +14,5 @@ describe PlayersController do
   it { { post: 'players/1/steal' }.should route_to(controller: "players", action: "steal", id: "1") }
   it { { post: 'players/1/block' }.should route_to(controller: "players", action: "block", id: "1") }
   it { { post: 'players/1/turnover' }.should route_to(controller: "players", action: "turnover", id: "1") }
+  it { { post: 'players/1/foul' }.should route_to(controller: "players", action: "foul", id: "1") }
 end

@@ -21,6 +21,7 @@ Realballerz::Application.routes.draw do
       post :steal
       post :block
       post :turnover
+      post :foul
     end
   end
 

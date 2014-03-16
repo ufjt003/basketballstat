@@ -7,7 +7,7 @@ class PlayersController < ApplicationController
   before_filter :load_player, only: [ :show, :shoot, :two_pointer_attempt, :two_pointer_make,
                                       :three_pointer_attempt, :three_pointer_make,
                                       :free_throw_attempt, :free_throw_make, :assist,
-                                      :block, :steal, :rebound, :turnover ]
+                                      :block, :steal, :rebound, :turnover, :foul ]
 
   def create
     Player.create!(params[:player])
@@ -59,6 +59,10 @@ class PlayersController < ApplicationController
   end
 
   def turnover
+    action
+  end
+
+  def foul
     action
   end
 
