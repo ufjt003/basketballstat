@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  include AbstractController::Layouts
   include ActionController::MimeResponds
   include ActionController::StrongParameters
   include CanCan::ControllerAdditions
