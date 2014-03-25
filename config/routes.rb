@@ -8,36 +8,38 @@ Realballerz::Application.routes.draw do
   end
 
   root :to => "home#index"
-  resources :players, only: [ :create, :show ] do
-    member do
-      post :two_pointer_attempt
-      post :two_pointer_make
-      post :three_pointer_attempt
-      post :three_pointer_make
-      post :free_throw_attempt
-      post :free_throw_make
-      post :assist
-      post :rebound
-      post :steal
-      post :block
-      post :turnover
-      post :foul
+  scope 'api' do
+    resources :players, only: [ :create, :show ] do
+      member do
+        post :two_pointer_attempt
+        post :two_pointer_make
+        post :three_pointer_attempt
+        post :three_pointer_make
+        post :free_throw_attempt
+        post :free_throw_make
+        post :assist
+        post :rebound
+        post :steal
+        post :block
+        post :turnover
+        post :foul
+      end
     end
-  end
 
-  resources :teams, only: [ :create, :show ] do
-    member do
-      post '/add_player/:player_id', to: 'teams#add_player'
-      post '/remove_player/:player_id', to: 'teams#remove_player'
+    resources :teams, only: [ :create, :show ] do
+      member do
+        post '/add_player/:player_id', to: 'teams#add_player'
+        post '/remove_player/:player_id', to: 'teams#remove_player'
+      end
     end
-  end
 
-  resources :games, only: [ :create, :show ] do
-    member do
-      post '/add_team/:team_id', to: 'games#add_team'
-      post '/remove_team/:team_id', to: 'games#remove_team'
-      post '/start', to: 'games#start'
-      post '/finish', to: 'games#finish'
+    resources :games, only: [ :create, :show ] do
+      member do
+        post '/add_team/:team_id', to: 'games#add_team'
+        post '/remove_team/:team_id', to: 'games#remove_team'
+        post '/start', to: 'games#start'
+        post '/finish', to: 'games#finish'
+      end
     end
   end
 
