@@ -2,6 +2,9 @@ class HomeController < ApplicationController
   skip_authorization_check
 
   def index
-    render json: 'realballerz api'
+    respond_to do |format|
+      format.html { render :index }
+      format.json { render json: 'realballerz api' }
+    end
   end
 end
