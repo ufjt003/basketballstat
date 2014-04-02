@@ -9,7 +9,7 @@ Realballerz::Application.routes.draw do
 
   root :to => "home#index"
   scope 'api' do
-    resources :players, only: [ :create, :show ] do
+    resources :players, only: [ :create, :show, :index ] do
       member do
         post :two_pointer_attempt
         post :two_pointer_make

@@ -9,6 +9,10 @@ class PlayersController < ApplicationController
                                       :free_throw_attempt, :free_throw_make, :assist,
                                       :block, :steal, :rebound, :turnover, :foul ]
 
+  def index
+    render json: Player.all
+  end
+
   def create
     Player.create!(params[:player])
     render json: { success: true, message: 'player created' }

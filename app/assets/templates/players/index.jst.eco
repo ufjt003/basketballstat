@@ -1,0 +1,9 @@
+<h1>Player</h1>
+
+<h2># of players : <%= @players.length %></h2>
+
+<ul>
+<% for player in @players.models: %>
+  <li><%= player.get('name') %></li>
+<% end %>
+</ul>

@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
   include AbstractController::Layouts
   include ActionController::MimeResponds
+  include ActionController::RequestForgeryProtection
   include ActionController::StrongParameters
   include CanCan::ControllerAdditions
 

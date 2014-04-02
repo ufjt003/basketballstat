@@ -3,7 +3,9 @@ window.Realballerz =
   Collections: {}
   Views: {}
   Routers: {}
-  initialize: -> alert 'Hello from Backbone!'
+  initialize: ->
+    new Realballerz.Routers.Players
+    Backbone.history.start()
 
 $(document).ready ->
   Realballerz.initialize()
