@@ -7,6 +7,10 @@ class TeamsController < ApplicationController
   before_filter :load_team, only: [ :show, :add_player, :remove_player ]
   before_filter :load_player, only: [ :add_player, :remove_player ]
 
+  def index
+    render json: Team.all
+  end
+
   def create
     Team.create!(params[:team])
     render json: { success: true, message: 'team created' }
