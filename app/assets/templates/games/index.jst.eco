@@ -1,0 +1,9 @@
+<h1>Games</h1>
+
+<h2># of games : <%= @games.length %></h2>
+
+<ul>
+<% for game in @games.models: %>
+  <li><%= game.get('id')%> <%= game.get('gametime') %></li>
+<% end %>
+</ul>

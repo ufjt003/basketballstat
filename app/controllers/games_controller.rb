@@ -8,6 +8,10 @@ class GamesController < ApplicationController
   before_filter :load_game, only: [ :show, :add_team, :remove_team, :start ]
   before_filter :load_team, only: [ :add_team, :remove_team ]
 
+  def index
+    render json: Game.all
+  end
+
   def create
     set_game_time_if_blank
     Game.create!(params[:game])

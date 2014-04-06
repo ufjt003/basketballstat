@@ -1,6 +1,7 @@
 class Realballerz.Routers.Players extends Backbone.Router
   routes:
     '': 'index'
+    'players': 'index'
     'players/:id': 'show'
 
   initialize: ->
