@@ -1,0 +1,3 @@
+<%= @game.get('home_team') %> VS <%= @game.get('away_team') %>
+GameTime at <%= @game.get('gametime') %>
+Game Score <%= @game.get('home_team_score') %> : <%= @game.get('away_team_score') %>

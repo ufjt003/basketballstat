@@ -6,5 +6,11 @@ class Realballerz.Views.GamesIndex extends Backbone.View
     @collection.on('reset', @render, this)
 
   render: ->
-    $(@el).html(@template(games: @collection))
+    $(@el).html(@template())
+    @collection.each(@appendGame)
     this
+
+  appendGame: (game) ->
+    view = new Realballerz.Views.Game(model: game)
+    $('#games').append(view.render().el)
+
