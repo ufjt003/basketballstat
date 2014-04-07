@@ -68,6 +68,10 @@ class Player < ActiveRecord::Base
     self.team != nil
   end
 
+  def serializable_hash(options)
+    super(options.merge(except: [:updated_at, :created_at]))
+  end
+
   private
 
   def player_action(action_name)

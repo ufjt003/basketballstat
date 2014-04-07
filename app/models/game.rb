@@ -39,6 +39,37 @@ class Game < ActiveRecord::Base
     self.teams.count == 2
   end
 
+  def score
+    return [] unless has_two_teams?
+    [{teams.first.name => teams.first.game_score}, {teams.last.name => teams.last.game_score}]
+  end
+
+  def home_team
+    self.teams.first
+  end
+
+  def away_team
+    self.teams.last
+  end
+
+  def home_team_score
+    home_team.game_score
+  end
+
+  def away_team_score
+    away_team.game_score
+  end
+
+  def serializable_hash(options)
+    h = super(options.merge(except: [:updated_at, :created_at]))
+    h.merge!(gametime: gametime.strftime("%Y-%m-%d %H:%M %z"))
+    if has_two_teams?
+      h.merge!(home_team: home_team.name, home_team_score: home_team_score)
+      h.merge!(away_team: away_team.name, away_team_score: away_team_score)
+    end
+    h
+  end
+
   private
 
   def error_if_game_already_has_two_teams

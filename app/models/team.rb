@@ -17,7 +17,19 @@ class Team < ActiveRecord::Base
   end
 
   def game_stat
-    TeamStat.find_by(game_id: self.game, team_id: self.id) if self.game
+    TeamStat.find_by(game_id: self.game, team_id: self.id) if self.in_a_game?
+  end
+
+  def game_score
+    game_stat.try(:points)
+  end
+
+  def in_a_game?
+    self.game != nil
+  end
+
+  def serializable_hash(options)
+    super(options.merge(except: [:updated_at, :created_at]))
   end
 
   private

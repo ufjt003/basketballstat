@@ -2,8 +2,23 @@
 
 <h2># of games : <%= @games.length %></h2>
 
-<ul>
+<table>
+<tr>
+  <th>GameID</th>
+  <th>GameTime</th>
+  <th>In Progress</th>
+  <th>Home Team</th>
+  <th>Away Team</th>
+  <th>Score (Home : Away)</th>
+</tr>
 <% for game in @games.models: %>
-  <li><%= game.get('id')%> <%= game.get('gametime') %></li>
+<tr>
+  <td><%= game.get('id') %></td>
+  <td><%= game.get('gametime') %></td>
+  <td><%= game.get('in_progress') %></td>
+  <td><%= game.get('home_team') %></td>
+  <td><%= game.get('away_team') %></td>
+  <td><%= game.get('home_team_score') %> : <%= game.get('away_team_score') %></td>
+</tr>
 <% end %>
-</ul>
+</table>
