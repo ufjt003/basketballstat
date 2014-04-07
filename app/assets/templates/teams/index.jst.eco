@@ -1,9 +1,3 @@
 <h1>Teams</h1>
 
-<h2># of teams : <%= @teams.length %></h2>
-
-<ul>
-<% for team in @teams.models: %>
-  <li><%= team.get('id')%> <%= team.get('name') %></li>
-<% end %>
-</ul>
+<ul id="teams"></ul>
