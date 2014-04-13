@@ -16,11 +16,18 @@ class Realballerz.Views.PlayersIndex extends Backbone.View
 
   createPlayer: (event) ->
     event.preventDefault()
+    attributes = { player: { name: $('#new_player_name').val(), number: $('#new_player_number').val() } }
     @collection.create(
-      { player: { name: $('#new_player_name').val(), number: $('#new_player_number').val() } },
-      { wait: true }
+      attributes,
+      wait: true
+      success: -> $('#new_player')[0].reset()
+      error: @handleError
     )
-    $('#new_player')[0].reset()
+
+  handleError: (entry, response) ->
+    if response.status == 422
+      errors = $.parseJSON(response.responseText).errors
+      alert(errors)
 
   appendPlayer: (player) ->
     view = new Realballerz.Views.Player(model: player)

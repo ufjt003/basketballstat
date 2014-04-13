@@ -93,6 +93,6 @@ class PlayersController < ApplicationController
   end
 
   def record_invalid(error)
-    render json: { success: false, message: error.message }, status: 400
+    render json: { errors: error.message }, status: 422
   end
 end

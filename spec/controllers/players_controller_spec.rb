@@ -5,14 +5,14 @@ describe PlayersController, "POST create" do
     expect {
       post :create, player: { name: "steve nash", number: 10 }
       response.status.should == 200
-      response.body.should == { success: true, message: 'player created' }.to_json
+      response.body.should == Player.last.to_json
     }.to change(Player, :count).by(1)
   end
 
   context "for wrong params" do
     it "should return error message" do
       post :create, player: { number: 10 }
-      response.status.should == 400
+      response.status.should == 422
     end
   end
 end

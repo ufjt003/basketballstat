@@ -16,11 +16,18 @@ class Realballerz.Views.TeamsIndex extends Backbone.View
 
   createTeam: (event) ->
     event.preventDefault()
+    attributes = { team: { name: $('#new_team_name').val() } }
     @collection.create(
-      { team: { name: $('#new_team_name').val() } },
-      { wait: true }
+      attributes,
+      wait: true
+      success: -> $('#new_team')[0].reset()
+      error: @handleError
     )
-    $('#new_team')[0].reset()
+
+  handleError: (entry, response) ->
+    if response.status == 422
+      errors = $.parseJSON(response.responseText).errors
+      alert(errors)
 
   appendTeam: (team) ->
     view = new Realballerz.Views.Team(model: team)
