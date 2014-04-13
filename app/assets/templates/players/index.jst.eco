@@ -1,3 +1,9 @@
 <h1>Player</h1>
 
+<form id="new_player">
+  Name : <input type="text" name="name" id="new_player_name">
+  Number : <input type="text" name="number" id="new_player_number">
+  <input type="submit" value="Add">
+</form>
+
 <ul id="players"></ul>

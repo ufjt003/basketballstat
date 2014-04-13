@@ -1,3 +1,8 @@
 <h1>Teams</h1>
 
+<form id="new_team">
+  Name : <input type="text" name="name" id="new_team_name">
+  <input type="submit" value="Add">
+</form>
+
 <ul id="teams"></ul>

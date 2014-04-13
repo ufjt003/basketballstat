@@ -12,8 +12,7 @@ class TeamsController < ApplicationController
   end
 
   def create
-    Team.create!(params[:team])
-    render json: { success: true, message: 'team created' }
+    render json: Team.create!(params[:team])
   end
 
   def show

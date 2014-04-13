@@ -14,8 +14,7 @@ class PlayersController < ApplicationController
   end
 
   def create
-    Player.create!(params[:player])
-    render json: { success: true, message: 'player created' }
+    render json: Player.create!(params[:player])
   end
 
   def show
