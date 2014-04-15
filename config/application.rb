@@ -25,5 +25,7 @@ module Realballerz
 
     I18n.enforce_available_locales = false
     config.secret_key_base = "helloworld"
+
+    config.assets.paths << "#{Rails.root}/vendor/assets/fonts"
   end
 end
