@@ -11,6 +11,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'backbone-on-rails'
+gem 'active_model_serializers'
 
 group :test, :development do
   gem 'rspec-rails'

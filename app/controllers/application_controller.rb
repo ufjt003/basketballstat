@@ -12,4 +12,8 @@ class ApplicationController < ActionController::API
     method = "#{resource}_params"
     params[resource] &&= send(method) if respond_to?(method, true)
   end
+
+  def default_serializer_options
+    { root: false }
+  end
 end
