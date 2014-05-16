@@ -3,7 +3,7 @@
 <form id="new_player">
   Name : <input type="text" name="name" id="new_player_name">
   Number : <input type="text" name="number" id="new_player_number">
-  <input type="submit" value="Add">
+  <input type="submit" value="Add Player">
 </form>
 
 <table class="table" id="players">

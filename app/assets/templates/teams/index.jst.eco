@@ -2,7 +2,7 @@
 
 <form id="new_team">
   Name : <input type="text" name="name" id="new_team_name">
-  <input type="submit" value="Add">
+  <input type="submit" value="Add Team">
 </form>
 
 <table class="table" id="teams">
