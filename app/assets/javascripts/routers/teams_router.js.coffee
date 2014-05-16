@@ -12,4 +12,5 @@ class Realballerz.Routers.Teams extends Backbone.Router
     $('#container').html(view.render().el)
 
   show: (id) ->
-    alert "Team #{id}"
+    view = new Realballerz.Views.TeamsShow(collection: @collection, id: id)
+    $('#container').html(view.render().el)
