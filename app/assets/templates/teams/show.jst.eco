@@ -1,4 +1,4 @@
-<h1><%= @team.get('name') %></h1>
+<h1><%= @team.get('name') %></h1><a id='teams_index'>Teams</a>
 <h2>Players</h2>
 <table class="table">
 <thead>

@@ -4,12 +4,13 @@ class Realballerz.Views.TeamsIndex extends Backbone.View
 
   events:
     'submit #new_team': 'createTeam'
+    'click #edit_team': 'editTeam'
 
   initialize: ->
-    @collection.on('reset', @render, this)
-    @collection.on('add', @appendTeam, this)
+    @collection.on('reset', @render)
+    @collection.on('add', @appendTeam)
 
-  render: ->
+  render: =>
     $(@el).html(@template())
     @collection.each(@appendTeam)
     this
@@ -24,12 +25,16 @@ class Realballerz.Views.TeamsIndex extends Backbone.View
       error: @handleError
     )
 
+  editTeam: (event) ->
+    id = event.target.getAttribute('data')
+    Backbone.history.navigate("teams/#{id}", true)
+
   handleError: (entry, response) ->
     if response.status == 422
       errors = $.parseJSON(response.responseText).errors
       alert(errors)
 
-  appendTeam: (team) ->
+  appendTeam: (team) =>
     view = new Realballerz.Views.Team(model: team)
-    $('#teams > tbody:last').append(view.render().el)
+    @$('#teams > tbody:last').append(view.render().el)
 

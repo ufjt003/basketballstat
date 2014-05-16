@@ -1,4 +1,7 @@
-<td><%= @team.get('name') %></td>
+<td>
+  <%= @team.get('name') %>
+  <a id="edit_team" data="<%= @team.get('id') %>">Edit</a>
+</td>
 <td>
   <ul>
   <% for player in @team.get('players'): %>
