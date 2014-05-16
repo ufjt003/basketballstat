@@ -6,4 +6,14 @@
   <input type="submit" value="Add">
 </form>
 
-<ul id="players"></ul>
+<table class="table" id="players">
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Number</th>
+    <th>Team</th>
+  </tr>
+</thead>
+<tbody>
+</tbody>
+</table>

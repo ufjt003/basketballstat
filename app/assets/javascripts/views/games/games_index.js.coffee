@@ -12,5 +12,5 @@ class Realballerz.Views.GamesIndex extends Backbone.View
 
   appendGame: (game) ->
     view = new Realballerz.Views.Game(model: game)
-    $('#games').append(view.render().el)
+    $('#games > tbody:last').append(view.render().el)
 

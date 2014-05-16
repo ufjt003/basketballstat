@@ -31,5 +31,5 @@ class Realballerz.Views.TeamsIndex extends Backbone.View
 
   appendTeam: (team) ->
     view = new Realballerz.Views.Team(model: team)
-    $('#teams').append(view.render().el)
+    $('#teams > tbody:last').append(view.render().el)
 

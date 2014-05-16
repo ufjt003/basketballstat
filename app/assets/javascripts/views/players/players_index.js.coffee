@@ -31,5 +31,4 @@ class Realballerz.Views.PlayersIndex extends Backbone.View
 
   appendPlayer: (player) ->
     view = new Realballerz.Views.Player(model: player)
-    $('#players').append(view.render().el)
-
+    $('#players > tbody:last').append(view.render().el)

@@ -1,1 +1,3 @@
-<%= @player.get('name') %>
+<td><%= @player.get('name') %></td>
+<td><%= @player.get('number') %></td>
+<td><%= @player.get('team_name') %></td>
