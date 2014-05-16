@@ -8,6 +8,8 @@ class Player < ActiveRecord::Base
   belongs_to :team
   belongs_to :game
 
+  scope :not_in_a_team, -> { where(team_id: nil) }
+
   def two_pointer_attempt
     player_action(__method__)
   end

@@ -13,6 +13,10 @@ class PlayersController < ApplicationController
     render json: Player.all
   end
 
+  def not_in_a_team
+    render json: Player.not_in_a_team
+  end
+
   def create
     render json: Player.create!(params[:player])
   end

@@ -3,6 +3,7 @@ require 'spec_helper'
 describe PlayersController do
   it { { post: 'api/players' }.should route_to(controller: "players", action: "create") }
   it { { get:  'api/players' }.should route_to(controller: "players", action: "index") }
+  it { { get:  'api/players/not_in_a_team' }.should route_to(controller: "players", action: "not_in_a_team") }
   it { { get:  'api/players/1' }.should route_to(controller: "players", action: "show", id: "1") }
   it { { post: 'api/players/1/two_pointer_attempt' }.should route_to(controller: "players", action: "two_pointer_attempt", id: "1") }
   it { { post: 'api/players/1/two_pointer_make' }.should route_to(controller: "players", action: "two_pointer_make", id: "1") }

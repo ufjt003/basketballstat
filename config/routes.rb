@@ -10,6 +10,9 @@ Realballerz::Application.routes.draw do
   root :to => "home#index"
   scope 'api' do
     resources :players, only: [ :create, :show, :index ] do
+      collection do
+        get :not_in_a_team
+      end
       member do
         post :two_pointer_attempt
         post :two_pointer_make
