@@ -1,5 +1,7 @@
 <h1>Player</h1>
 
+<% players = @team.get('players') %>
+<%= players.length %>
 <form id="new_player">
   Name : <input type="text" name="name" id="new_player_name">
   Number : <input type="text" name="number" id="new_player_number">

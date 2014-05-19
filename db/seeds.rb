@@ -1,3 +1,7 @@
+Team.delete_all
+Game.delete_all
+Player.delete_all
+
 western_all_star_team = Team.create(name: '2014 Western All Star')
 western_all_star_team.add_player(Player.create(name: 'Kevin Durant', number: 35))
 western_all_star_team.add_player(Player.create(name: 'Blake Griffin', number: 32))
@@ -25,3 +29,7 @@ eastern_all_star_team.add_player(Player.create(name: 'Paul Millsap', number: 4))
 game = Game.create(gametime: DateTime.now)
 game.add_team(western_all_star_team)
 game.add_team(eastern_all_star_team)
+
+Player.create(name: 'Steve Nash', number: 10)
+Player.create(name: 'Klay Thompson', number: 20)
+

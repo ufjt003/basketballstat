@@ -10,7 +10,11 @@ class PlayersController < ApplicationController
                                       :block, :steal, :rebound, :turnover, :foul ]
 
   def index
-    render json: Player.all
+    if params[:not_in_a_team]
+      render json: Player.not_in_a_team
+    else
+      render json: Player.all
+    end
   end
 
   def not_in_a_team
