@@ -19,11 +19,11 @@ describe GamesController, "POST create" do
 end
 
 describe GamesController, "GET show" do
+  let(:game) { FactoryGirl.create(:game) }
   it "should return game info" do
-    game = FactoryGirl.create(:game)
     get :show, id: game.id
     response.status.should == 200
-    response.body.should == game.to_json
+    response.body.should == GameSerializer.new(game).to_json
   end
 end
 

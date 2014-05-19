@@ -27,5 +27,7 @@ module Realballerz
     config.secret_key_base = "helloworld"
 
     config.assets.paths << "#{Rails.root}/vendor/assets/fonts"
+
+    ActiveModel::Serializer.root = false
   end
 end

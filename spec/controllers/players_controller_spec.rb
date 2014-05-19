@@ -5,7 +5,7 @@ describe PlayersController, "POST create" do
     expect {
       post :create, player: { name: "steve nash", number: 10 }
       response.status.should == 200
-      response.body.should == Player.last.to_json
+      response.body.should == PlayerSerializer.new(Player.last).to_json
     }.to change(Player, :count).by(1)
   end
 
@@ -22,7 +22,7 @@ describe PlayersController, "GET show" do
     player = FactoryGirl.create(:player)
     get :show, id: player.id
     response.status.should == 200
-    response.body.should == player.to_json
+    response.body.should == PlayerSerializer.new(player).to_json
   end
 end
 

@@ -6,18 +6,18 @@ class GameSerializer < ActiveModel::Serializer
   end
 
   def home_team
-    object.home_team.name
+    object.home_team.try(:name)
   end
 
   def away_team
-    object.away_team.name
+    object.away_team.try(:name)
   end
 
   def home_team_score
-    object.home_team.game_score
+    object.home_team.try(:game_score)
   end
 
   def away_team_score
-    object.away_team.game_score
+    object.away_team.try(:game_score)
   end
 end
