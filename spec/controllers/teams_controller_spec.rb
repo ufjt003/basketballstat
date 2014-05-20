@@ -34,7 +34,7 @@ describe TeamsController, "POST add_player" do
   it "should add a player to a team" do
     post :add_player, id: team.id, player_id: player.id
     response.status.should == 200
-    response.body.should == { success: true, message: 'add_player successful' }.to_json
+    response.body.should == PlayerSerializer.new(player.reload).to_json
     team.players.should include(player)
     player.reload.team.should == team
   end
@@ -78,7 +78,7 @@ describe TeamsController, "POST remove_player" do
   it "should remove a player from a team" do
     post :remove_player, id: team.id, player_id: player.id
     response.status.should == 200
-    response.body.should == { success: true, message: 'remove_player successful' }.to_json
+    response.body.should == PlayerSerializer.new(player.reload).to_json
     team.players.should_not include(player)
     player.reload.should_not be_nil
   end

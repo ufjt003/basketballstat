@@ -28,7 +28,7 @@ class TeamsController < ApplicationController
 
   def action
     if @team.send(action_name, @player)
-      render json: { success: true, message: "#{action_name} successful" }
+      render json: @player.reload
     end
   end
 
