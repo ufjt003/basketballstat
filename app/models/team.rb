@@ -9,10 +9,12 @@ class Team < ActiveRecord::Base
   after_create :create_all_time_stat
 
   def add_player(player)
+    raise StandardError.new("player #{player.name} already in the team") if self.players.include?(player)
     self.players << player
   end
 
   def remove_player(player)
+    raise StandardError.new("player #{player.name} not in the team") unless self.players.include?(player)
     self.players.delete(player)
   end
 
