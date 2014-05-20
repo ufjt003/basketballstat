@@ -31,4 +31,7 @@ class ApplicationController < ActionController::API
     render json: { success: false, message: error.message }, status: 400
   end
 
+  def default_serializer_options
+    { root: false }
+  end
 end
