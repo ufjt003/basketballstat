@@ -12,11 +12,12 @@
 </form>
 <% end %>
 
-<table class="table">
+<table class="table" id="players">
 <thead>
   <tr>
     <th>Name</th>
     <th>Number</th>
+    <th>Team</th>
   </tr>
 </thead>
 <tbody>
@@ -24,6 +25,7 @@
   <tr>
     <td><%= player.name %></td>
     <td><%= player.number %></td>
+    <td><%= player.team_name %></td>
   </tr>
   <% end %>
 </tbody>

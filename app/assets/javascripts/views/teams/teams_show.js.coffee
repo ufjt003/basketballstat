@@ -10,7 +10,9 @@ class Realballerz.Views.TeamsShow extends Backbone.View
     event.preventDefault()
     new_player_id = $('#new_player_id').val()
     new_player_name = $("#new_player_id option[value=#{new_player_id}]").text()
-    team_player = new Realballerz.Models.TeamPlayer(team_id: @id, player_id: new_player_id)
+    team_player = new Realballerz.Models.Player()
+    team_player.url = "/api/teams/#{@id}/add_player/#{new_player_id}"
+    team_player.on('sync', @appendPlayer)
     team_player.save(
       {},
       wait: true
@@ -44,4 +46,8 @@ class Realballerz.Views.TeamsShow extends Backbone.View
     if response.status == 422
       errors = $.parseJSON(response.responseText).errors
       alert(errors)
+
+  appendPlayer: (player) =>
+    view = new Realballerz.Views.Player(model: player)
+    @$('#players > tbody:last').append(view.render().el)
 

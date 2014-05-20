@@ -32,4 +32,6 @@ game.add_team(eastern_all_star_team)
 
 Player.create(name: 'Steve Nash', number: 10)
 Player.create(name: 'Klay Thompson', number: 20)
+Player.create(name: 'David Lee', number: 10)
+Player.create(name: 'Tim Duncan', number: 21)
 

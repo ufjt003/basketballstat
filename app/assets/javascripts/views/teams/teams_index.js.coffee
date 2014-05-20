@@ -3,7 +3,7 @@ class Realballerz.Views.TeamsIndex extends Backbone.View
   template: JST['teams/index']
 
   events:
-    'submit #new_team': 'createTeam'
+    'submit #new_team_form': 'createTeam'
     'click #edit_team': 'editTeam'
 
   initialize: ->
@@ -21,7 +21,7 @@ class Realballerz.Views.TeamsIndex extends Backbone.View
     @collection.create(
       attributes,
       wait: true
-      success: -> $('#new_team')[0].reset()
+      success: -> $('#new_team_form')[0].reset()
       error: @handleError
     )
 
