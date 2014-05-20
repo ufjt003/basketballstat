@@ -1,8 +1,11 @@
 <h1><%= @team.get('name') %></h1><a id='teams_index'>Teams</a>
 <h2>Players</h2>
 
-<% if @players_with_no_team.length > 0: %>
+<% if @players_with_no_team.length == 0: %>
+<form id="add_new_player_form" style="display: none;">
+<% else: %>
 <form id="add_new_player_form">
+<% end %>
   <select id="new_player_id">
     <% for player in @players_with_no_team.models: %>
       <option value=<%= player.get('id') %>><%= player.get('name') %></option>
@@ -10,7 +13,6 @@
   </select>
   <input type="submit" value="Add Player">
 </form>
-<% end %>
 
 <table class="table" id="players">
 <thead>
@@ -22,8 +24,8 @@
 </thead>
 <tbody>
   <% for player in @team.get('players'): %>
-  <tr>
-    <td><%= player.name %></td>
+  <tr id="player-tr-<%= player.id %>">
+    <td><%= player.name %> <a id='remove_player' data='<%= player.id %>'>X</a></td>
     <td><%= player.number %></td>
     <td><%= player.team_name %></td>
   </tr>

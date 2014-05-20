@@ -5,6 +5,18 @@ class Realballerz.Views.TeamsShow extends Backbone.View
   events:
     'submit #add_new_player_form': 'addNewPlayer'
     'click #teams_index': 'teams_index'
+    'click #remove_player': 'remove_player'
+
+  remove_player: (event) ->
+    event.preventDefault()
+    player_id = event.target.getAttribute('data')
+    removed_player = new Realballerz.Models.Player()
+    removed_player.urlRoot = "/api/teams/#{@id}/remove_player/#{player_id}"
+    removed_player.on('sync', @clearPlayer)
+    removed_player.save(
+      wait: true
+      error: @handleError
+    )
 
   addNewPlayer: (event) ->
     event.preventDefault()
@@ -28,6 +40,7 @@ class Realballerz.Views.TeamsShow extends Backbone.View
     @team = @collection.get(@id)
     if @team != undefined
       $(@el).html(@template(team: @team, players_with_no_team: @players_with_no_team))
+      $("#add_new_player_form").hide() if @players_with_no_team.length == 0
     this
 
   teams_index: ->
@@ -43,9 +56,16 @@ class Realballerz.Views.TeamsShow extends Backbone.View
     @$('#players > tbody:last').append(view.render().el)
     alert("added player #{player.get('name')} to #{player.get('team_name')}")
 
+  clearPlayer: (player) =>
+    event.preventDefault()
+    $("#player-tr-#{player.get('id')}").remove()
+    s = "<option value=#{player.get('id')}>#{player.get('name')}</option>"
+    $("#new_player_id").append(s)
+    $("#add_new_player_form").show()
+    alert("removed player #{player.get('name')}")
+
   resetUnassignedPlayerList: (last_player) ->
     $("#new_player_id option[value=#{last_player.get('id')}]").remove()
-    length = $('#new_player_id > option').length
-    if length == 0
-      $("#add_new_player_form").remove()
+    if $('#new_player_id > option').length == 0
+      $("#add_new_player_form").hide()
 
