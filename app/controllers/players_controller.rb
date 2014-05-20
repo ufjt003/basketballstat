@@ -97,7 +97,7 @@ class PlayersController < ApplicationController
   end
 
   def record_not_found
-    render json: { success: false, message: "player #{params[:id]} not found" }, status: 400
+    render json: { success: false, message: "player #{params[:id]} not found" }, status: 404
   end
 
   def record_invalid(error)

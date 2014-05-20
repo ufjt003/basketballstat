@@ -42,7 +42,7 @@ describe TeamsController, "POST add_player" do
   context "when a player is not found" do
     it "should not add a player to a team" do
       post :add_player, id: team.id, player_id: player.id + 1
-      response.status.should == 400
+      response.status.should == 404
       JSON.parse(response.body)["success"].should be_false
       team.players.should be_empty
     end

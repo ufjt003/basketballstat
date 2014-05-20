@@ -70,9 +70,9 @@ describe PlayersController do
       end
 
       context "when player is not found" do
-        it "should return 400" do
+        it "should return 404" do
           post play.to_sym, id: player.id + 1
-          response.status.should == 400
+          response.status.should == 404
           response.body.should == { success: false, message: "player #{player.id + 1} not found" }.to_json
         end
       end

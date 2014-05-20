@@ -57,11 +57,11 @@ class GamesController < ApplicationController
   end
 
   def record_not_found(error)
-    render json: { success: false, message: error.message }, status: 400
+    render json: { success: false, message: error.message }, status: 404
   end
 
   def record_invalid(error)
-    render json: { success: false, message: error.message }, status: 400
+    render json: { success: false, message: error.message }, status: 422
   end
 
   def standard_error_handling(error)
