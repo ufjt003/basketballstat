@@ -68,7 +68,7 @@ describe TeamsController, "POST add_player" do
   end
 end
 
-describe TeamsController, "POST remove_player" do
+describe TeamsController, "DELETe remove_player" do
   let(:team) { FactoryGirl.create(:team) }
   let(:player) { FactoryGirl.create(:player) }
   let(:another_player) { FactoryGirl.create(:player) }
@@ -76,7 +76,7 @@ describe TeamsController, "POST remove_player" do
   before { team.players << player }
 
   it "should remove a player from a team" do
-    post :remove_player, id: team.id, player_id: player.id
+    delete :remove_player, id: team.id, player_id: player.id
     response.status.should == 200
     response.body.should == PlayerSerializer.new(player.reload).to_json
     team.players.should_not include(player)
@@ -85,7 +85,7 @@ describe TeamsController, "POST remove_player" do
 
   context "when a player is not found" do
     it "should not remove a player from the team" do
-      post :remove_player, id: team.id, player_id: player.id + 1
+      delete :remove_player, id: team.id, player_id: player.id + 1
       response.status.should == 404
       JSON.parse(response.body)["success"].should be_false
       team.players.reload.should include(player)
@@ -94,7 +94,7 @@ describe TeamsController, "POST remove_player" do
 
   context "when a team is not found" do
     it "should not remove a player from the team" do
-      post :remove_player, id: team.id + 1, player_id: player.id
+      delete :remove_player, id: team.id + 1, player_id: player.id
       response.status.should == 404
       JSON.parse(response.body)["success"].should be_false
       team.players.reload.should include(player)
@@ -103,11 +103,10 @@ describe TeamsController, "POST remove_player" do
 
   context "when a player is not in the team" do
     it "return error" do
-      post :remove_player, id: team.id, player_id: another_player.id
+      delete :remove_player, id: team.id, player_id: another_player.id
       response.status.should == 400
       JSON.parse(response.body)["success"].should be_false
     end
   end
-
 end
 
