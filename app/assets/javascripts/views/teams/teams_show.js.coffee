@@ -3,7 +3,7 @@ class Realballerz.Views.TeamsShow extends Backbone.View
   template: JST['teams/show']
 
   events:
-    'submit #add_new_player': 'addNewPlayer'
+    'submit #add_new_player_form': 'addNewPlayer'
     'click #teams_index': 'teams_index'
 
   addNewPlayer: (event) ->
@@ -15,9 +15,16 @@ class Realballerz.Views.TeamsShow extends Backbone.View
       {},
       wait: true
       success: =>
-        alert("added player #{new_player_name} to #{@team.get('name')}")
+        @addNewPlayerSuccess(new_player_name: new_player_name, team_name: @team.get('name'), new_player_id: new_player_id)
       error: @handleError
     )
+
+  addNewPlayerSuccess: (options) ->
+    alert("added player #{options.new_player_name} to #{options.team_name}")
+    $("#new_player_id option[value=#{options.new_player_id}]").remove()
+    length = $('#new_player_id > option').length
+    if length == 0
+      $("#add_new_player_form").remove()
 
   initialize: (options) ->
     @players_with_no_team = options.players_with_no_team

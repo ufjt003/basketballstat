@@ -2,7 +2,7 @@
 <h2>Players</h2>
 
 <% if @players_with_no_team.length > 0: %>
-<form id="add_new_player">
+<form id="add_new_player_form">
   <select id="new_player_id">
     <% for player in @players_with_no_team.models: %>
       <option value=<%= player.get('id') %>><%= player.get('name') %></option>
