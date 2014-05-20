@@ -23,10 +23,10 @@ describe Team, "#add_team, #remove_team" do
 
   context "when a player is already in the team" do
     before { team.add_player(player) }
-    it { expect { team.add_player(player) }.to raise_error(StandardError, "player #{player.name} already in the team") }
+    it { expect { team.add_player(player) }.to raise_error(Errors::InvalidMethodCallError, "player #{player.name} already in the team") }
   end
 
   context "when a player is not in the team" do
-    it { expect { team.remove_player(player) }.to raise_error(StandardError, "player #{player.name} not in the team") }
+    it { expect { team.remove_player(player) }.to raise_error(Errors::InvalidMethodCallError, "player #{player.name} not in the team") }
   end
 end

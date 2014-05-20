@@ -47,6 +47,25 @@ describe TeamsController, "POST add_player" do
       team.players.should be_empty
     end
   end
+
+  context "when a team is not found" do
+    it "should not add a player to a team" do
+      post :add_player, id: team.id + 1, player_id: player.id
+      response.status.should == 404
+      JSON.parse(response.body)["success"].should be_false
+      team.players.should be_empty
+    end
+  end
+
+  context "when a player is already in the team" do
+    before { post :add_player, id: team.id, player_id: player.id }
+    it "..." do
+      post :add_player, id: team.id, player_id: player.id
+      response.status.should == 400
+      JSON.parse(response.body)["success"].should be_false
+      team.players.size.should == 1
+    end
+  end
 end
 
 describe TeamsController, "POST remove_player" do

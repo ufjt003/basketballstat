@@ -1,9 +1,6 @@
 class PlayersController < ApplicationController
   skip_authorization_check
 
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-  rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
-
   before_filter :load_player, only: [ :show, :shoot, :two_pointer_attempt, :two_pointer_make,
                                       :three_pointer_attempt, :three_pointer_make,
                                       :free_throw_attempt, :free_throw_make, :assist,
@@ -96,11 +93,4 @@ class PlayersController < ApplicationController
     params.require(:player).permit(:name, :number)
   end
 
-  def record_not_found
-    render json: { success: false, message: "player #{params[:id]} not found" }, status: 404
-  end
-
-  def record_invalid(error)
-    render json: { errors: error.message }, status: 422
-  end
 end

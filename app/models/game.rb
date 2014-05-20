@@ -22,12 +22,12 @@ class Game < ActiveRecord::Base
 
   def start
     error_if_in_progress
-    raise StandardError.new('game requires 2 teams to get started') unless has_two_teams?
+    raise Errors::InvalidMethodCallError.new('game requires 2 teams to get started') unless has_two_teams?
     update_attributes(in_progress: true)
   end
 
   def finish
-    raise StandardError.new('game is not in progress') unless is_in_progress?
+    raise Errors::InvalidMethodCallError.new('game is not in progress') unless is_in_progress?
     update_attributes(in_progress: false)
   end
 
@@ -73,15 +73,15 @@ class Game < ActiveRecord::Base
   private
 
   def error_if_game_already_has_two_teams
-    raise StandardError.new('game already has 2 teams') if has_two_teams?
+    raise Errors::InvalidMethodCallError.new('game already has 2 teams') if has_two_teams?
   end
 
   def error_if_team_has_less_than_five_players(team)
-    raise StandardError.new('team has less than 5 players') if team.players.count < 5
+    raise Errors::InvalidMethodCallError.new('team has less than 5 players') if team.players.count < 5
   end
 
   def error_if_in_progress
-    raise StandardError.new('game is already in progress') if is_in_progress?
+    raise Errors::InvalidMethodCallError.new('game is already in progress') if is_in_progress?
   end
 
   def create_game_stats(team)

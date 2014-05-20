@@ -56,7 +56,7 @@ describe GamesController, "POST add_team" do
   context "when a game is not found" do
     it "should not add a team to a game" do
       post :add_team, id: game.id, team_id: 999
-      response.status.should == 400
+      response.status.should == 404
       JSON.parse(response.body)["success"].should be_false
       game.teams.should be_empty
     end

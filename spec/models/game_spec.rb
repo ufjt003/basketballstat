@@ -29,7 +29,7 @@ describe Game, ".start .end .score" do
 
   describe ".start" do
     context "when game doesn't have 2 teams yet" do
-      it { expect { game_with_no_team.start }.to raise_error(StandardError, 'game requires 2 teams to get started') }
+      it { expect { game_with_no_team.start }.to raise_error(Errors::InvalidMethodCallError, 'game requires 2 teams to get started') }
     end
 
     context "when game has 2 teams" do
@@ -40,14 +40,14 @@ describe Game, ".start .end .score" do
 
       context 'when game is already in progress' do
         before { game.start }
-        it { expect { game.start }.to raise_error(StandardError, 'game is already in progress') }
+        it { expect { game.start }.to raise_error(Errors::InvalidMethodCallError, 'game is already in progress') }
       end
     end
   end
 
   describe ".finish" do
     context "when game is not in progress" do
-      it { expect { game.finish }.to raise_error(StandardError, 'game is not in progress') }
+      it { expect { game.finish }.to raise_error(Errors::InvalidMethodCallError, 'game is not in progress') }
     end
 
     context "when game is in progress" do
@@ -81,7 +81,7 @@ describe Game, ".add_team" do
   context "when team has less than 5 teams" do
     let(:team_with_four_players) { FactoryGirl.create(:team) }
     before { 4.times { team_with_four_players.add_player(FactoryGirl.create(:player)) } }
-    it { expect { game.add_team(team_with_four_players) }.to raise_error(StandardError, 'team has less than 5 players') }
+    it { expect { game.add_team(team_with_four_players) }.to raise_error(Errors::InvalidMethodCallError, 'team has less than 5 players') }
   end
 
   context "when game already has 2 teams" do
@@ -97,11 +97,11 @@ describe Game, ".add_team" do
       game.add_team(team3)
     end
 
-    it { expect { game.add_team(team) }.to raise_error(StandardError, 'game already has 2 teams') }
+    it { expect { game.add_team(team) }.to raise_error(Errors::InvalidMethodCallError, 'game already has 2 teams') }
 
     context 'when game is alreayd in progress' do
       before { game.start }
-      it { expect { game.add_team(team) }.to raise_error(StandardError, 'game is already in progress') }
+      it { expect { game.add_team(team) }.to raise_error(Errors::InvalidMethodCallError, 'game is already in progress') }
     end
   end
 end
@@ -138,7 +138,7 @@ describe Game, ".remove_team" do
     end
 
     it 'should not remove team from game' do
-      expect { game.remove_team(team) }.to raise_error(StandardError, 'game is already in progress')
+      expect { game.remove_team(team) }.to raise_error(Errors::InvalidMethodCallError, 'game is already in progress')
     end
   end
 end

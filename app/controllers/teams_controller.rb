@@ -1,9 +1,6 @@
 class TeamsController < ApplicationController
   skip_authorization_check
 
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-  rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
-
   before_filter :load_team, only: [ :show, :add_player, :remove_player ]
   before_filter :load_player, only: [ :add_player, :remove_player ]
 
@@ -45,13 +42,5 @@ class TeamsController < ApplicationController
 
   def team_params
     params.require(:team).permit(:name)
-  end
-
-  def record_not_found(error)
-    render json: { success: false, message: error.message }, status: 404
-  end
-
-  def record_invalid(error)
-    render json: { errors: error.message }, status: 422
   end
 end

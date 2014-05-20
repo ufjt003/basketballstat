@@ -1,10 +1,6 @@
 class GamesController < ApplicationController
   skip_authorization_check
 
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-  rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
-  rescue_from StandardError, with: :standard_error_handling
-
   before_filter :load_game, only: [ :show, :add_team, :remove_team, :start ]
   before_filter :load_team, only: [ :add_team, :remove_team ]
 
@@ -56,20 +52,7 @@ class GamesController < ApplicationController
     params.require(:game).permit(:gametime)
   end
 
-  def record_not_found(error)
-    render json: { success: false, message: error.message }, status: 404
-  end
-
-  def record_invalid(error)
-    render json: { success: false, message: error.message }, status: 422
-  end
-
-  def standard_error_handling(error)
-    render json: { success: false, message: error.message }, status: 400
-  end
-
   def set_game_time_if_blank
     params[:game][:gametime] = DateTime.now if params[:game][:gametime].blank?
   end
-
 end
