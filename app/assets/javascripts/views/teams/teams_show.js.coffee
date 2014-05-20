@@ -53,6 +53,7 @@ class Realballerz.Views.TeamsShow extends Backbone.View
 
   appendPlayer: (player) =>
     view = new Realballerz.Views.Player(model: player)
+    view.show_remove_link = true
     @$('#players > tbody:last').append(view.render().el)
     alert("added player #{player.get('name')} to #{player.get('team_name')}")
 

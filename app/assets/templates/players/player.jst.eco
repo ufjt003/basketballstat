@@ -1,3 +1,7 @@
-<td><%= @player.get('name') %></td>
+<% if @show_remove_link: %>
+  <td><%= @player.get('name') %> <a id='remove_player' data='<%= @player.get('id') %>'>X</a></td>
+<% else: %>
+  <td><%= @player.get('name') %></td>
+<% end %>
 <td><%= @player.get('number') %></td>
 <td><%= @player.get('team_name') %></td>
