@@ -59,7 +59,7 @@ describe TeamsController, "POST add_player" do
 
   context "when a player is already in the team" do
     before { post :add_player, id: team.id, player_id: player.id }
-    it "..." do
+    it "should not add a player to a team" do
       post :add_player, id: team.id, player_id: player.id
       response.status.should == 400
       JSON.parse(response.body)["success"].should be_false
@@ -71,6 +71,7 @@ end
 describe TeamsController, "POST remove_player" do
   let(:team) { FactoryGirl.create(:team) }
   let(:player) { FactoryGirl.create(:player) }
+  let(:another_player) { FactoryGirl.create(:player) }
 
   before { team.players << player }
 
@@ -81,5 +82,32 @@ describe TeamsController, "POST remove_player" do
     team.players.should_not include(player)
     player.reload.should_not be_nil
   end
+
+  context "when a player is not found" do
+    it "should not remove a player from the team" do
+      post :remove_player, id: team.id, player_id: player.id + 1
+      response.status.should == 404
+      JSON.parse(response.body)["success"].should be_false
+      team.players.reload.should include(player)
+    end
+  end
+
+  context "when a team is not found" do
+    it "should not remove a player from the team" do
+      post :remove_player, id: team.id + 1, player_id: player.id
+      response.status.should == 404
+      JSON.parse(response.body)["success"].should be_false
+      team.players.reload.should include(player)
+    end
+  end
+
+  context "when a player is not in the team" do
+    it "return error" do
+      post :remove_player, id: team.id, player_id: another_player.id
+      response.status.should == 400
+      JSON.parse(response.body)["success"].should be_false
+    end
+  end
+
 end
 
