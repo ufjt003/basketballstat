@@ -32,7 +32,7 @@ Realballerz::Application.routes.draw do
     resources :teams, only: [ :create, :show, :index ] do
       member do
         post '/add_player/:player_id', to: 'teams#add_player'
-        delete '/remove_player/:player_id', to: 'teams#remove_player'
+        post '/remove_player/:player_id', to: 'teams#remove_player'
       end
     end
 
