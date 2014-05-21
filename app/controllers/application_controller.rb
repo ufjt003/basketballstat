@@ -19,8 +19,8 @@ class ApplicationController < ActionController::API
 
   protected
 
-  def record_not_found
-    render json: { success: false, message: "player #{params[:id]} not found" }, status: 404
+  def record_not_found(e)
+    render json: { success: false, message: e.message }, status: 404
   end
 
   def record_invalid(error)

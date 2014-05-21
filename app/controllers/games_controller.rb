@@ -3,6 +3,8 @@ class GamesController < ApplicationController
 
   before_filter :load_game, only: [ :show, :add_team, :remove_team, :start ]
   before_filter :load_team, only: [ :add_team, :remove_team ]
+  before_filter :load_home_team, only: [ :create ]
+  before_filter :load_away_team, only: [ :create ]
 
   def index
     render json: Game.all
@@ -10,7 +12,11 @@ class GamesController < ApplicationController
 
   def create
     set_game_time_if_blank
-    render json: Game.create!(params[:game])
+    @game = Game.new(params[:game])
+    @game.add_team(@home_team) if @home_team
+    @game.add_team(@away_team) if @away_team
+    @game.save!
+    render json: @game
   end
 
   def show
@@ -54,4 +60,13 @@ class GamesController < ApplicationController
   def set_game_time_if_blank
     params[:game][:gametime] = DateTime.now if params[:game][:gametime].blank?
   end
+
+  def load_home_team
+    @home_team = Team.find(params[:home_team_id]) if params[:home_team_id]
+  end
+
+  def load_away_team
+    @away_team = Team.find(params[:away_team_id]) if params[:away_team_id]
+  end
+
 end
