@@ -5,13 +5,13 @@ class GamesController < ApplicationController
   before_filter :load_team, only: [ :add_team, :remove_team ]
   before_filter :load_home_team, only: [ :create ]
   before_filter :load_away_team, only: [ :create ]
+  before_filter :set_game_time_if_blank, only: [ :create ]
 
   def index
     render json: Game.all
   end
 
   def create
-    set_game_time_if_blank
     @game = Game.new(params[:game])
     @game.add_team(@home_team) if @home_team
     @game.add_team(@away_team) if @away_team

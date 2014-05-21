@@ -14,10 +14,17 @@ describe GamesController, "POST create" do
 
   context "even when game time is not given" do
     it { expect {
-      post :create, game: { wrong_params: "hey" }
+      post :create, game: { wrong_params: "something" }
       response.status.should == 200
       response.body.should == GameSerializer.new(Game.last).to_json
     }.to change(Game, :count).by(1) }
+  end
+
+  context "even when game params is empty" do
+    it { expect {
+      post :create, game: {}
+      response.status.should == 400
+    }.to change(Game, :count).by(0) }
   end
 
   context "when a existing team_id is given" do

@@ -10,6 +10,7 @@ class ApplicationController < ActionController::API
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
   rescue_from Errors::InvalidMethodCallError, with: :invalid_method_call
+  rescue_from ActionController::ParameterMissing, with: :missing_param
 
   before_filter do
     resource = controller_name.singularize.to_sym
@@ -18,6 +19,10 @@ class ApplicationController < ActionController::API
   end
 
   protected
+
+  def missing_param(e)
+    render json: { success: false, message: e.message }, status: 400
+  end
 
   def record_not_found(e)
     render json: { success: false, message: e.message }, status: 404
