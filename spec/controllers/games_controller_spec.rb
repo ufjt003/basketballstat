@@ -75,7 +75,7 @@ describe GamesController, "POST add_team" do
     it "should fail" do
       post :add_team, id: game.id, team_id: insufficient_team.id
       response.status.should == 400
-      response.body.should == { success: false, message: 'team has less than 5 players' }.to_json
+      response.body.should == { errors: 'team has less than 5 players' }.to_json
     end
   end
 
@@ -91,7 +91,6 @@ describe GamesController, "POST add_team" do
     it "should not add a team to a game" do
       post :add_team, id: game.id, team_id: 999
       response.status.should == 404
-      JSON.parse(response.body)["success"].should be_false
       game.teams.should be_empty
     end
   end
@@ -105,8 +104,7 @@ describe GamesController, "POST add_team" do
     it "should not add a team to a game" do
       post :add_team, id: game.id, team_id: team.id
       response.status.should == 400
-      JSON.parse(response.body)["success"].should be_false
-      JSON.parse(response.body)["message"].should == "game already has 2 teams"
+      JSON.parse(response.body)["errors"].should == "game already has 2 teams"
     end
   end
 end
@@ -152,7 +150,7 @@ describe GamesController, "POST start" do
       it do
         post :start, id: game.id
         response.status.should == 400
-        response.body.should == { success: false, message: 'game is already in progress' }.to_json
+        response.body.should == { errors: 'game is already in progress' }.to_json
       end
     end
   end
@@ -163,7 +161,7 @@ describe GamesController, "POST start" do
     it do
       post :start, id: game.id
       response.status.should == 400
-      response.body.should == { success: false, message: 'game requires 2 teams to get started' }.to_json
+      response.body.should == { errors: 'game requires 2 teams to get started' }.to_json
     end
   end
 end
@@ -186,7 +184,7 @@ describe GamesController, "POST finish" do
     it do
       post :finish, id: game.id
       response.status.should == 400
-      response.body.should == { success: false, message: 'game is not in progress' }.to_json
+      response.body.should == { errors: 'game is not in progress' }.to_json
     end
   end
 

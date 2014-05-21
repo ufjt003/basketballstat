@@ -21,11 +21,11 @@ class ApplicationController < ActionController::API
   protected
 
   def missing_param(e)
-    render json: { success: false, message: e.message }, status: 400
+    render json: { errors: e.message }, status: 400
   end
 
   def record_not_found(e)
-    render json: { success: false, message: e.message }, status: 404
+    render json: { errors: e.message }, status: 404
   end
 
   def record_invalid(error)
@@ -33,7 +33,7 @@ class ApplicationController < ActionController::API
   end
 
   def invalid_method_call(error)
-    render json: { success: false, message: error.message }, status: 400
+    render json: { errors: error.message }, status: 400
   end
 
   def default_serializer_options
