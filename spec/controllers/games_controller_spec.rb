@@ -5,7 +5,7 @@ describe GamesController, "POST create" do
     expect {
       post :create, game: { gametime: DateTime.now.strftime("%Y-%m-%d %H:%M:%S %z") }
       response.status.should == 200
-      response.body.should == { success: true, message: 'game created' }.to_json
+      response.body.should == GameSerializer.new(Game.last).to_json
     }.to change(Game, :count).by(1)
   end
 
@@ -13,7 +13,7 @@ describe GamesController, "POST create" do
     it { expect {
       post :create, game: { wrong_params: "hey" }
       response.status.should == 200
-      response.body.should == { success: true, message: 'game created' }.to_json
+      response.body.should == GameSerializer.new(Game.last).to_json
     }.to change(Game, :count).by(1) }
   end
 end

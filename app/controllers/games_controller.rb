@@ -10,8 +10,7 @@ class GamesController < ApplicationController
 
   def create
     set_game_time_if_blank
-    Game.create!(params[:game])
-    render json: { success: true, message: 'game created' }
+    render json: Game.create!(params[:game])
   end
 
   def show
