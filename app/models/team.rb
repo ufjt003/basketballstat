@@ -4,7 +4,7 @@ class Team < ActiveRecord::Base
 
   has_many :players
   has_one :all_time_stat, :foreign_key => 'team_id', :class_name => "AllTimeTeamStat"
-  belongs_to :game
+  belongs_to :current_game, :class_name => "Game", :foreign_key => "game_id"
 
   after_create :create_all_time_stat
 
@@ -19,15 +19,15 @@ class Team < ActiveRecord::Base
   end
 
   def game_stat
-    TeamStat.find_by(game_id: self.game, team_id: self.id) if self.in_a_game?
+    TeamStat.find_by(game_id: self.current_game, team_id: self.id) if self.currently_in_a_game?
   end
 
   def game_score
     game_stat.try(:points)
   end
 
-  def in_a_game?
-    self.game != nil
+  def currently_in_a_game?
+    self.current_game != nil
   end
 
   def serializable_hash(options)

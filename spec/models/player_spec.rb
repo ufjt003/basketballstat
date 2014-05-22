@@ -6,7 +6,7 @@ end
 
 describe Player, "relations" do
   it { should belong_to(:team) }
-  it { should belong_to(:game) }
+  it { should belong_to(:current_game) }
 end
 
 describe Player, "callbacks" do
