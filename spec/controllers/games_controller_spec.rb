@@ -84,7 +84,7 @@ describe GamesController, "POST add_team" do
     response.status.should == 200
     response.body.should == { success: true, message: 'a team added to a game' }.to_json
     game.teams.should include(team)
-    team.reload.game.should == game
+    team.reload.current_game.should == game
   end
 
   context "when a game is not found" do

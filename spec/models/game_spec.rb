@@ -24,7 +24,7 @@ describe Game, ".start .end .score" do
 
   describe ".score" do
     it { game_with_no_team.score.should == [] }
-    it { game.score.should == [ { "#{team.name}" => team.game_score },  { "#{team2.name}" => team2.game_score } ] }
+    it { game.score.should == [ { "#{team.name}" => team.current_game_score },  { "#{team2.name}" => team2.current_game_score } ] }
   end
 
   describe ".start" do
