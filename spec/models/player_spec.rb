@@ -7,6 +7,8 @@ end
 describe Player, "relations" do
   it { should belong_to(:team) }
   it { should belong_to(:current_game) }
+  it { should have_one(:all_time_stat) }
+  it { should have_many(:game_stats) }
 end
 
 describe Player, "callbacks" do

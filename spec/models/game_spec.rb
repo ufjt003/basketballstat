@@ -71,11 +71,17 @@ describe Game, ".add_team" do
     expect { game.add_team(team) }.to change(TeamStat, :count).by(1)
     game.teams.should include(team)
     TeamStat.last.game.should == game
+    team.game_stats.size.should == 1
+    team.game_stat(game).should == TeamStat.find_by(game_id: game, team_id: team.id)
   end
 
   it "should create player_stat's for this game" do
-    expect { game.add_team(team) }.to change(PlayerStat, :count).by(5)
+    expect { game.add_team(team) }.to change(PlayerStat, :count).by(team.players.size)
     game.players.size.should == 5
+    game.players.each do |p|
+      p.game_stats.size.should == 1
+      p.game_stat(game).should == PlayerStat.find_by(game_id: game.id, player_id: p.id)
+    end
   end
 
   context "when team has less than 5 teams" do
@@ -121,11 +127,15 @@ describe Game, ".remove_team" do
 
   it "should remove team_stat as well" do
     game.remove_team(team)
+    team.game_stat(game).should be_nil
     TeamStat.where(game_id: game.id, team_id: team.id).should be_empty
   end
 
   it "should remove player_stat" do
     game.remove_team(team)
+    team.players.each do |player|
+      player.game_stat(game).should be_nil
+    end
     PlayerStat.where(game_id: game.id, player_id: team.players).should be_empty
   end
 

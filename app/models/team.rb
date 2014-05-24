@@ -4,6 +4,7 @@ class Team < ActiveRecord::Base
 
   has_many :players
   has_one :all_time_stat, :foreign_key => 'team_id', :class_name => "AllTimeTeamStat"
+  has_many :game_stats, :foreign_key => 'team_id', :class_name => 'TeamStat'
   belongs_to :current_game, :class_name => "Game", :foreign_key => "game_id"
 
   after_create :create_all_time_stat
