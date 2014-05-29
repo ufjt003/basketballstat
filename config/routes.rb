@@ -31,6 +31,7 @@ Realballerz::Application.routes.draw do
 
     resources :teams, only: [ :create, :show, :index ] do
       member do
+        get  '/games', to: 'teams#games'
         post '/add_player/:player_id', to: 'teams#add_player'
         post '/remove_player/:player_id', to: 'teams#remove_player'
       end

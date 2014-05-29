@@ -67,6 +67,16 @@ describe Game, ".add_team" do
     5.times { team.add_player(FactoryGirl.create(:player)) }
   end
 
+  it "should set current_game for each team" do
+    game.add_team(team)
+    team.current_game.should == game
+  end
+
+  it "should create team_game record" do
+    expect { game.add_team(team) }.to change(TeamGame, :count).by(1)
+    team.games.include?(game).should == true
+  end
+
   it "should create team_stat for this game" do
     expect { game.add_team(team) }.to change(TeamStat, :count).by(1)
     game.teams.should include(team)
@@ -118,6 +128,18 @@ describe Game, ".remove_team" do
 
   before { 5.times { team.add_player(FactoryGirl.create(:player)) } }
   before { game.add_team(team) }
+
+  it "should un-set current_game for a team" do
+    game.teams.size.should == 1
+    game.remove_team(team)
+    game.teams.size.should == 0
+    team.current_game.should == nil
+  end
+
+  it "should remove a team_game record" do
+    expect { game.remove_team(team) }.to change(TeamGame, :count).by(-1)
+    team.games.include?(game).should == false
+  end
 
   it "should remove team and its players from game" do
     game.remove_team(team)

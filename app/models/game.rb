@@ -11,13 +11,16 @@ class Game < ActiveRecord::Base
     self.teams << team
     self.players << team.players
     create_game_stats(team)
+    TeamGame.create!(team_id: team.id, game_id: self.id)
   end
 
   def remove_team(team)
     error_if_in_progress
     self.teams.delete(team)
     self.players.delete(team.players)
+    team.current_game = nil
     remove_game_stats(team)
+    TeamGame.where(team_id: team.id, game_id: self.id).delete_all
   end
 
   def start

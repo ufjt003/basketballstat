@@ -9,6 +9,11 @@ class Team < ActiveRecord::Base
 
   after_create :create_all_time_stat
 
+  def games
+    game_ids = TeamGame.select(:game_id).where(team_id: self.id).map(&:game_id)
+    Game.where(id: game_ids)
+  end
+
   def add_player(player)
     raise Errors::InvalidMethodCallError.new("player #{player.name} already in the team") if self.players.include?(player)
     self.players << player

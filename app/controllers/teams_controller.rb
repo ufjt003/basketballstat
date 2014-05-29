@@ -24,6 +24,10 @@ class TeamsController < ApplicationController
     action
   end
 
+  def games
+    render json: @team.games
+  end
+
   private
 
   def action

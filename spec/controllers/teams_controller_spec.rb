@@ -27,6 +27,17 @@ describe TeamsController, "GET show" do
   end
 end
 
+describe TeamsController, "GET games" do
+  it "should return team's games" do
+    team = FactoryGirl.create(:complete_team)
+    game = FactoryGirl.create(:game)
+    game.add_team(team)
+    get :games, id: team.id
+    response.status.should == 200
+    response.body.should == TeamSerializer.new(team).to_json
+  end
+end
+
 describe TeamsController, "POST add_player" do
   let(:team) { FactoryGirl.create(:team) }
   let(:player) { FactoryGirl.create(:player) }
