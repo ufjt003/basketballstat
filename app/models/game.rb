@@ -1,24 +1,28 @@
 class Game < ActiveRecord::Base
   validates :gametime, presence: true
 
-  has_many :teams
   has_many :players
+
+  def teams
+    team_ids = TeamGame.where(game_id: self.id).map(&:team_id)
+    Team.where(id: team_ids)
+  end
 
   def add_team(team)
     error_if_in_progress
     error_if_game_already_has_two_teams
     error_if_team_has_less_than_five_players(team)
-    self.teams << team
+    TeamGame.create!(team_id: team.id, game_id: self.id)
+    team.update_attributes(game_id: self.id)
     self.players << team.players
     create_game_stats(team)
-    TeamGame.create!(team_id: team.id, game_id: self.id)
   end
 
   def remove_team(team)
     error_if_in_progress
-    self.teams.delete(team)
+    TeamGame.where(team_id: team.id, game_id: self.id).delete_all
     self.players.delete(team.players)
-    team.current_game = nil
+    team.update_attributes(game_id: nil)
     remove_game_stats(team)
     TeamGame.where(team_id: team.id, game_id: self.id).delete_all
   end

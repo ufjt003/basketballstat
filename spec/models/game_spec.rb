@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Game do
   it { should validate_presence_of(:gametime) }
-  it { should have_many(:teams) }
   it { should have_many(:players) }
 end
 
@@ -24,7 +23,10 @@ describe Game, ".start .end .score" do
 
   describe ".score" do
     it { game_with_no_team.score.should == [] }
-    it { game.score.should == [ { "#{team.name}" => team.current_game_score },  { "#{team2.name}" => team2.current_game_score } ] }
+    it do
+      expected = [ { "#{team.name}" => team.current_game_score },  { "#{team2.name}" => team2.current_game_score } ]
+      game.score.should == expected
+    end
   end
 
   describe ".start" do
