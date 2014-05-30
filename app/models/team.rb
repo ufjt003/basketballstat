@@ -15,11 +15,13 @@ class Team < ActiveRecord::Base
   end
 
   def add_player(player)
+    error_if_currently_playing_in_a_game
     raise Errors::InvalidMethodCallError.new("player #{player.name} already in the team") if self.players.include?(player)
     self.players << player
   end
 
   def remove_player(player)
+    error_if_currently_playing_in_a_game
     raise Errors::InvalidMethodCallError.new("player #{player.name} not in the team") unless self.players.include?(player)
     self.players.delete(player)
   end
@@ -44,6 +46,10 @@ class Team < ActiveRecord::Base
     self.current_game != nil
   end
 
+  def currently_playing_in_a_game?
+    currently_in_a_game? and self.current_game.is_in_progress?
+  end
+
   def serializable_hash(options)
     super(options.merge(except: [:updated_at, :created_at]))
   end
@@ -54,4 +60,7 @@ class Team < ActiveRecord::Base
     AllTimeTeamStat.create(team_id: self.id)
   end
 
+  def error_if_currently_playing_in_a_game
+    raise Errors::InvalidMethodCallError.new("team #{self.name} currently playing in a game") if self.currently_playing_in_a_game?
+  end
 end
