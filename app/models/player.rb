@@ -67,10 +67,6 @@ class Player < ActiveRecord::Base
     PlayerStat.find_by(game_id: game, player_id: self.id)
   end
 
-  def currently_in_a_game?
-    self.current_game != nil
-  end
-
   def in_a_team?
     self.team != nil
   end

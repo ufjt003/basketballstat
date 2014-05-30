@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140529224534) do
+ActiveRecord::Schema.define(version: 20140530171246) do
 
   create_table "all_time_player_stats", force: true do |t|
     t.integer  "player_id"
@@ -47,6 +47,13 @@ ActiveRecord::Schema.define(version: 20140529224534) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "foul",                  default: 0, null: false
+  end
+
+  create_table "game_players", force: true do |t|
+    t.integer  "game_id"
+    t.integer  "player_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "games", force: true do |t|

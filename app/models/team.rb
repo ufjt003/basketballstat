@@ -42,12 +42,8 @@ class Team < ActiveRecord::Base
     game_stat(game).try(:points)
   end
 
-  def currently_in_a_game?
-    self.current_game != nil
-  end
-
   def currently_playing_in_a_game?
-    currently_in_a_game? and self.current_game.is_in_progress?
+    self.current_game != nil and self.current_game.is_in_progress?
   end
 
   def serializable_hash(options)

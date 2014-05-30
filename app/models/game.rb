@@ -1,11 +1,14 @@
 class Game < ActiveRecord::Base
   validates :gametime, presence: true
 
-  has_many :players
-
   def teams
     team_ids = TeamGame.where(game_id: self.id).map(&:team_id)
     Team.where(id: team_ids)
+  end
+
+  def players
+    player_ids = GamePlayer.where(game_id: self.id).map(&:player_id)
+    Player.where(id: player_ids)
   end
 
   def add_team(team)
@@ -14,17 +17,22 @@ class Game < ActiveRecord::Base
     error_if_team_has_less_than_five_players(team)
     TeamGame.create!(team_id: team.id, game_id: self.id)
     team.update_attributes(game_id: self.id)
-    self.players << team.players
+    team.players.each do |player|
+      GamePlayer.create!(game_id: self.id, player_id: player.id)
+      player.update_attributes(game_id: self.id)
+    end
     create_game_stats(team)
   end
 
   def remove_team(team)
     error_if_in_progress
     TeamGame.where(team_id: team.id, game_id: self.id).delete_all
-    self.players.delete(team.players)
+    GamePlayer.where(game_id: self.id, player_id: self.players.map(&:id)).delete_all
+    self.players.each do |player|
+      player.update_attributes(game_id: nil)
+    end
     team.update_attributes(game_id: nil)
     remove_game_stats(team)
-    TeamGame.where(team_id: team.id, game_id: self.id).delete_all
   end
 
   def start
