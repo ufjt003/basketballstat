@@ -34,7 +34,9 @@ describe TeamsController, "GET games" do
     game.add_team(team)
     get :games, id: team.id
     response.status.should == 200
-    response.body.should == TeamSerializer.new(team).to_json
+    result = JSON.parse(response.body)
+    expected = JSON.parse(GameSerializer.new(game).to_json)
+    result.include?(expected).should == true
   end
 end
 

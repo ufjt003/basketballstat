@@ -1,7 +1,7 @@
 class TeamsController < ApplicationController
   skip_authorization_check
 
-  before_filter :load_team, only: [ :show, :add_player, :remove_player ]
+  before_filter :load_team, only: [ :show, :add_player, :remove_player, :games ]
   before_filter :load_player, only: [ :add_player, :remove_player ]
 
   def index

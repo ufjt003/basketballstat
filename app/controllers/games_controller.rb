@@ -13,10 +13,15 @@ class GamesController < ApplicationController
 
   def create
     @game = Game.new(params[:game])
-    @game.add_team(@home_team) if @home_team
-    @game.add_team(@away_team) if @away_team
     @game.save!
-    render json: @game
+    begin
+      @game.add_team(@home_team) if @home_team
+      @game.add_team(@away_team) if @away_team
+      render json: @game
+    rescue Errors::InvalidMethodCallError => e
+      @game.delete
+      invalid_method_call(e)
+    end
   end
 
   def show
