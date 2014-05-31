@@ -1,8 +1,30 @@
 <h1>Games</h1>
 
+<% if @teams.length < 2: %>
+<form id="create_new_game_form" style="display: none;">
+<% else: %>
+<form id="create_new_game_form">
+<% end %>
+  Home Team
+  <select id="home_team_id">
+    <% for team in @teams.models: %>
+      <option value=<%= team.get('id') %>><%= team.get('name') %></option>
+    <% end %>
+  </select>
+  VS
+  <select id="away_team_id">
+    <% for team in @teams.models: %>
+      <option value=<%= team.get('id') %>><%= team.get('name') %></option>
+    <% end %>
+  </select>
+  Away Team
+  <input type="submit" value="Create New Game">
+</form>
+
 <table class="table" id="games">
 <thead>
   <tr>
+    <th>Game ID</th>
     <th>Home Team</th>
     <th>Away Team</th>
     <th>Score</th>
