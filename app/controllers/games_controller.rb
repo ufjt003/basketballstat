@@ -18,7 +18,7 @@ class GamesController < ApplicationController
       @game.add_home_team(@home_team) if @home_team
       @game.add_away_team(@away_team) if @away_team
       render json: @game
-    rescue Errors::InvalidMethodCallError => e
+    rescue Errors::InvalidMethodCallError, ActiveRecord::RecordInvalid => e
       @game.delete
       invalid_method_call(e)
     end

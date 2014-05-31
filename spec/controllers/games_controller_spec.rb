@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe GamesController, "POST create" do
   let(:team_with_5_players) { FactoryGirl.create(:complete_team) }
+  let(:another_team_with_5_players) { FactoryGirl.create(:complete_team) }
   let(:team_with_no_player) { FactoryGirl.create(:team) }
 
   it "should create a game" do
@@ -29,12 +30,20 @@ describe GamesController, "POST create" do
 
   context "when a existing team_id is given" do
     it { expect {
-      post :create, game: { gametime: DateTime.now.strftime("%Y-%m-%d %H:%M:%S %z") }, home_team_id: team_with_5_players.id
+      post :create, game: { gametime: DateTime.now.strftime("%Y-%m-%d %H:%M:%S %z") },
+                    home_team_id: team_with_5_players.id, away_team_id: another_team_with_5_players.id
       response.status.should == 200
       response.body.should == GameSerializer.new(Game.last).to_json
-      teams = Game.last.teams
-      teams.size.should == 1
+      Game.last.teams.size.should == 2
     }.to change(Game, :count).by(1) }
+  end
+
+  context "when home and away team are the same" do
+    it { expect {
+      post :create, game: { gametime: DateTime.now.strftime("%Y-%m-%d %H:%M:%S %z") },
+                    home_team_id: team_with_5_players.id, away_team_id: team_with_5_players.id
+      response.status.should == 400
+    }.to change(Game, :count).by(0) }
   end
 
   context "when a non-existing team_id is given" do
@@ -205,4 +214,3 @@ describe GamesController, "POST finish" do
     end
   end
 end
-
