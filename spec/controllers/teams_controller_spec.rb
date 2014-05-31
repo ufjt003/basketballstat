@@ -1,6 +1,25 @@
 require 'spec_helper'
 
 describe TeamsController, "POST create" do
+  let(:game) { FactoryGirl.create(:game) }
+  let(:home_team) { FactoryGirl.create(:complete_team) }
+
+  context "when a team is not in a game" do
+    before { post :create, team: { name: "phoenix suns" } }
+    it { expect { delete :destroy, id: Team.last.id }.to change(Team, :count).by(-1) }
+  end
+
+  context "if team is in a game" do
+    before { game.add_home_team(home_team) }
+    it "" do
+      delete :destroy, id: home_team.id
+      response.status.should == 400
+      JSON.parse(response.body)["errors"].should == "team #{home_team.name} already in a game #{game.id}"
+    end
+  end
+end
+
+describe TeamsController, "POST create" do
   it "should create a team" do
     expect {
       post :create, team: { name: "phoenix suns" }
@@ -24,6 +43,19 @@ describe TeamsController, "GET show" do
     get :show, id: team.id
     response.status.should == 200
     response.body.should == TeamSerializer.new(team).to_json
+  end
+end
+
+describe TeamsController, "GET games" do
+  it "should return team's games" do
+    team = FactoryGirl.create(:complete_team)
+    game = FactoryGirl.create(:game)
+    game.add_home_team(team)
+    get :games, id: team.id
+    response.status.should == 200
+    result = JSON.parse(response.body)
+    expected = JSON.parse(GameSerializer.new(game).to_json)
+    result.include?(expected).should == true
   end
 end
 
@@ -109,4 +141,3 @@ describe TeamsController, "post remove_player" do
     end
   end
 end
-

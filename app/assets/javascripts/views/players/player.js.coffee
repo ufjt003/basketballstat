@@ -3,5 +3,5 @@ class Realballerz.Views.Player extends Backbone.View
   tagName: 'tr'
 
   render: ->
-    $(@el).html(@template(player: @model, show_remove_link: @show_remove_link))
+    $(@el).attr('id', "player-tr-#{@model.id}").html(@template(player: @model, show_remove_link: @show_remove_link))
     this

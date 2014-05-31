@@ -1,7 +1,26 @@
 require 'spec_helper'
 
+describe GamesController, "DELETE destroy" do
+  let(:team_with_5_players) { FactoryGirl.create(:complete_team) }
+  let(:another_team_with_5_players) { FactoryGirl.create(:complete_team) }
+  let(:team_with_no_player) { FactoryGirl.create(:team) }
+
+  before 'create a game' do
+    post :create, game: { gametime: DateTime.now.strftime("%Y-%m-%d %H:%M:%S %z") },
+                  home_team_id: team_with_5_players.id, away_team_id: another_team_with_5_players.id
+  end
+
+  it "should delete a game" do
+    expect {
+      delete :destroy, id: Game.last.id
+      response.status.should == 200
+    }.to change(Game, :count).by(-1)
+  end
+end
+
 describe GamesController, "POST create" do
   let(:team_with_5_players) { FactoryGirl.create(:complete_team) }
+  let(:another_team_with_5_players) { FactoryGirl.create(:complete_team) }
   let(:team_with_no_player) { FactoryGirl.create(:team) }
 
   it "should create a game" do
@@ -29,12 +48,20 @@ describe GamesController, "POST create" do
 
   context "when a existing team_id is given" do
     it { expect {
-      post :create, game: { gametime: DateTime.now.strftime("%Y-%m-%d %H:%M:%S %z") }, home_team_id: team_with_5_players.id
+      post :create, game: { gametime: DateTime.now.strftime("%Y-%m-%d %H:%M:%S %z") },
+                    home_team_id: team_with_5_players.id, away_team_id: another_team_with_5_players.id
       response.status.should == 200
       response.body.should == GameSerializer.new(Game.last).to_json
-      teams = Game.last.teams
-      teams.size.should == 1
+      Game.last.teams.size.should == 2
     }.to change(Game, :count).by(1) }
+  end
+
+  context "when home and away team are the same" do
+    it { expect {
+      post :create, game: { gametime: DateTime.now.strftime("%Y-%m-%d %H:%M:%S %z") },
+                    home_team_id: team_with_5_players.id, away_team_id: team_with_5_players.id
+      response.status.should == 400
+    }.to change(Game, :count).by(0) }
   end
 
   context "when a non-existing team_id is given" do
@@ -61,7 +88,7 @@ describe GamesController, "GET show" do
   end
 end
 
-describe GamesController, "POST add_team" do
+describe GamesController, "POST add_home_team, add_away_team" do
   let(:team) { FactoryGirl.create(:team) }
   let(:team2) { FactoryGirl.create(:team) }
   let(:game) { FactoryGirl.create(:game) }
@@ -73,23 +100,23 @@ describe GamesController, "POST add_team" do
     let(:insufficient_team) { FactoryGirl.create(:team) }
     before { 4.times { insufficient_team.add_player(FactoryGirl.create(:player)) } }
     it "should fail" do
-      post :add_team, id: game.id, team_id: insufficient_team.id
+      post :add_home_team, id: game.id, team_id: insufficient_team.id
       response.status.should == 400
       response.body.should == { errors: 'team has less than 5 players' }.to_json
     end
   end
 
-  it "should add a team to a game" do
-    post :add_team, id: game.id, team_id: team.id
+  it "should add a home team to a game" do
+    post :add_home_team, id: game.id, team_id: team.id
     response.status.should == 200
-    response.body.should == { success: true, message: 'a team added to a game' }.to_json
+    response.body.should == { success: true, message: 'a home team added to a game' }.to_json
     game.teams.should include(team)
     team.reload.current_game.should == game
   end
 
   context "when a game is not found" do
     it "should not add a team to a game" do
-      post :add_team, id: game.id, team_id: 999
+      post :add_home_team, id: game.id, team_id: 999
       response.status.should == 404
       game.teams.should be_empty
     end
@@ -97,15 +124,22 @@ describe GamesController, "POST add_team" do
 
   context "when a game has two teams already" do
     before do
-      post :add_team, id: game.id, team_id: team.id
-      post :add_team, id: game.id, team_id: team2.id
+      post :add_home_team, id: game.id, team_id: team.id
+      post :add_away_team, id: game.id, team_id: team2.id
     end
 
-    it "should not add a team to a game" do
-      post :add_team, id: game.id, team_id: team.id
+    it "should not add a home team to a game" do
+      post :add_home_team, id: game.id, team_id: team.id
       response.status.should == 400
-      JSON.parse(response.body)["errors"].should == "game already has 2 teams"
+      JSON.parse(response.body)["errors"].should == "game already has a home team"
     end
+
+    it "should not add a away team to a game" do
+      post :add_away_team, id: game.id, team_id: team.id
+      response.status.should == 400
+      JSON.parse(response.body)["errors"].should == "game already has an away team"
+    end
+
   end
 end
 
@@ -134,8 +168,8 @@ describe GamesController, "POST start" do
 
   context "when two teams have beend added to a game" do
     before 'add 2 teams to game' do
-      post :add_team, id: game.id, team_id: team.id
-      post :add_team, id: game.id, team_id: team2.id
+      post :add_home_team, id: game.id, team_id: team.id
+      post :add_away_team, id: game.id, team_id: team2.id
     end
 
     it do
@@ -156,7 +190,7 @@ describe GamesController, "POST start" do
   end
 
   context "when less than two teams are in a game" do
-    before { post :add_team, id: game.id, team_id: FactoryGirl.create(:team).id }
+    before { post :add_home_team, id: game.id, team_id: FactoryGirl.create(:team).id }
 
     it do
       post :start, id: game.id
@@ -175,8 +209,8 @@ describe GamesController, "POST finish" do
   before { 5.times { team2.add_player(FactoryGirl.create(:player)) } }
 
   before 'add 2 teams to game' do
-    post :add_team, id: game.id, team_id: team.id
-    post :add_team, id: game.id, team_id: team2.id
+    post :add_home_team, id: game.id, team_id: team.id
+    post :add_away_team, id: game.id, team_id: team2.id
   end
 
   context "when game is not started yet" do
@@ -198,4 +232,3 @@ describe GamesController, "POST finish" do
     end
   end
 end
-

@@ -1,7 +1,7 @@
 class TeamsController < ApplicationController
   skip_authorization_check
 
-  before_filter :load_team, only: [ :show, :add_player, :remove_player ]
+  before_filter :load_team, only: [ :show, :add_player, :remove_player, :games, :destroy ]
   before_filter :load_player, only: [ :add_player, :remove_player ]
 
   def index
@@ -10,6 +10,10 @@ class TeamsController < ApplicationController
 
   def create
     render json: Team.create!(params[:team])
+  end
+
+  def destroy
+    render json: @team.destroy
   end
 
   def show
@@ -22,6 +26,10 @@ class TeamsController < ApplicationController
 
   def remove_player
     action
+  end
+
+  def games
+    render json: @team.games
   end
 
   private

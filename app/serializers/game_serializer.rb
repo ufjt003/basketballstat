@@ -1,5 +1,5 @@
 class GameSerializer < ActiveModel::Serializer
-  attributes :id, :gametime, :in_progress, :home_team, :away_team, :home_team_score, :away_team_score
+  attributes :id, :gametime, :in_progress, :home_team, :away_team, :home_team_score, :away_team_score, :name
 
   def gametime
     object.gametime.strftime("%Y-%m-%d %H:%M:%S %z")
@@ -14,10 +14,14 @@ class GameSerializer < ActiveModel::Serializer
   end
 
   def home_team_score
-    object.home_team.try(:game_score)
+    object.try(:home_team_score)
   end
 
   def away_team_score
-    object.away_team.try(:game_score)
+    object.try(:away_team_score)
+  end
+
+  def name
+    object.try(:name)
   end
 end

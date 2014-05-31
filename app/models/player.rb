@@ -5,6 +5,7 @@ class Player < ActiveRecord::Base
   after_create :create_all_time_stat
 
   has_one :all_time_stat, :foreign_key => 'player_id', :class_name => "AllTimePlayerStat"
+  has_many :game_stats, :foreign_key => 'player_id', :class_name => 'PlayerStat'
   belongs_to :team
   belongs_to :current_game, :class_name => "Game", :foreign_key => "game_id"
 
@@ -58,12 +59,12 @@ class Player < ActiveRecord::Base
     player_action(__method__)
   end
 
-  def game_stat
-    PlayerStat.find_by(game_id: self.current_game, player_id: self.id) if currently_in_a_game?
+  def current_game_stat
+    game_stat(self.current_game)
   end
 
-  def currently_in_a_game?
-    self.current_game != nil
+  def game_stat(game)
+    PlayerStat.find_by(game_id: game, player_id: self.id)
   end
 
   def in_a_team?
@@ -78,7 +79,7 @@ class Player < ActiveRecord::Base
 
   def player_action(action_name)
     self.all_time_stat.increment!(action_name)
-    self.game_stat.try(:increment!, action_name)
+    self.current_game_stat.try(:increment!, action_name)
     update_team_stat(action_name)
   end
 
@@ -89,7 +90,7 @@ class Player < ActiveRecord::Base
   def update_team_stat(play)
     if in_a_team?
       self.team.all_time_stat.increment!(play)
-      self.team.game_stat.try(:increment!, play)
+      self.team.current_game_stat.try(:increment!, play)
     end
   end
 end

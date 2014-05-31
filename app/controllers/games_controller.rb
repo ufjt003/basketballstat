@@ -1,8 +1,8 @@
 class GamesController < ApplicationController
   skip_authorization_check
 
-  before_filter :load_game, only: [ :show, :add_team, :remove_team, :start ]
-  before_filter :load_team, only: [ :add_team, :remove_team ]
+  before_filter :load_game, only: [ :show, :add_home_team, :add_away_team, :remove_team, :start, :destroy ]
+  before_filter :load_team, only: [ :add_home_team, :add_away_team, :remove_team ]
   before_filter :load_home_team, only: [ :create ]
   before_filter :load_away_team, only: [ :create ]
   before_filter :set_game_time_if_blank, only: [ :create ]
@@ -11,21 +11,35 @@ class GamesController < ApplicationController
     render json: Game.all
   end
 
+  def destroy
+    render json: @game.destroy
+  end
+
   def create
     @game = Game.new(params[:game])
-    @game.add_team(@home_team) if @home_team
-    @game.add_team(@away_team) if @away_team
     @game.save!
-    render json: @game
+    begin
+      @game.add_home_team(@home_team) if @home_team
+      @game.add_away_team(@away_team) if @away_team
+      render json: @game
+    rescue Errors::InvalidMethodCallError, ActiveRecord::RecordInvalid => e
+      @game.delete
+      invalid_method_call(e)
+    end
   end
 
   def show
     render json: @game
   end
 
-  def add_team
-    @game.add_team(@team)
-    render json: { success: true, message: "a team added to a game" }
+  def add_home_team
+    @game.add_home_team(@team)
+    render json: { success: true, message: "a home team added to a game" }
+  end
+
+  def add_away_team
+    @game.add_away_team(@team)
+    render json: { success: true, message: "an away added to a game" }
   end
 
   def remove_team

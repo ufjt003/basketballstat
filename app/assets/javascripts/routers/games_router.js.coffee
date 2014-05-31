@@ -6,9 +6,11 @@ class Realballerz.Routers.Games extends Backbone.Router
   initialize: ->
     @collection = new Realballerz.Collections.Games()
     @collection.fetch({reset: true})
+    @teams = new Realballerz.Collections.Teams()
+    @teams.fetch({reset: true})
 
   index: ->
-    view = new Realballerz.Views.GamesIndex(collection: @collection)
+    view = new Realballerz.Views.GamesIndex(collection: @collection, teams: @teams)
     $('#container').html(view.render().el)
 
   show: (id) ->

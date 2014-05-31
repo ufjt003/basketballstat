@@ -38,7 +38,7 @@ describe PlayersController do
         post play.to_sym, id: player.id
         response.status.should == 200
         expected = { success: true, message: "player's #{play} incremented",
-                     player_stat: player.all_time_stat, team_stat: nil, player_game_stat: nil, team_game_stat: nil }
+                     player_stat: player.all_time_stat, team_stat: nil, player_current_game_stat: nil, team_current_game_stat: nil }
         response.body.should == expected.to_json
         player.all_time_stat.send(play.to_sym).should == 1
       end
@@ -49,7 +49,7 @@ describe PlayersController do
           post play.to_sym, id: player.id
           response.status.should == 200
           expected = { success: true, message: "player's #{play} incremented",
-                       player_stat: player.all_time_stat, team_stat: player.team.all_time_stat, player_game_stat: nil, team_game_stat: nil }
+                       player_stat: player.all_time_stat, team_stat: player.team.all_time_stat, player_current_game_stat: nil, team_current_game_stat: nil }
           response.body.should == expected.to_json
           team.all_time_stat.send(play.to_sym).should == 1
         end
@@ -58,14 +58,14 @@ describe PlayersController do
       context "when player belongs to a game" do
         before { team.add_player(player) }
         before { 4.times { team.add_player(FactoryGirl.create(:player)) } }
-        before { game.add_team(team) }
+        before { game.add_home_team(team) }
         it "should set game stat" do
           post play.to_sym, id: player.id
           response.status.should == 200
           expected = { success: true, message: "player's #{play} incremented",
-                       player_stat: player.all_time_stat, team_stat: player.team.all_time_stat, player_game_stat: player.game_stat, team_game_stat: player.team.try(:game_stat) }
+                       player_stat: player.all_time_stat, team_stat: player.team.all_time_stat, player_current_game_stat: player.current_game_stat, team_current_game_stat: player.team.try(:current_game_stat) }
           response.body.should == expected.to_json
-          player.game_stat.send(play.to_sym).should == 1
+          player.current_game_stat.send(play.to_sym).should == 1
         end
       end
 

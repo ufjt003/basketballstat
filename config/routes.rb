@@ -29,16 +29,18 @@ Realballerz::Application.routes.draw do
       end
     end
 
-    resources :teams, only: [ :create, :show, :index ] do
+    resources :teams, only: [ :create, :show, :index, :destroy ] do
       member do
+        get  '/games', to: 'teams#games'
         post '/add_player/:player_id', to: 'teams#add_player'
         post '/remove_player/:player_id', to: 'teams#remove_player'
       end
     end
 
-    resources :games, only: [ :create, :show, :index ] do
+    resources :games, only: [ :create, :show, :index, :destroy ] do
       member do
-        post '/add_team/:team_id', to: 'games#add_team'
+        post '/add_home_team/:team_id', to: 'games#add_home_team'
+        post '/add_away_team/:team_id', to: 'games#add_away_team'
         post '/remove_team/:team_id', to: 'games#remove_team'
         post '/start', to: 'games#start'
         post '/finish', to: 'games#finish'

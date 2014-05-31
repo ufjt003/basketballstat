@@ -7,6 +7,8 @@ end
 describe Player, "relations" do
   it { should belong_to(:team) }
   it { should belong_to(:current_game) }
+  it { should have_one(:all_time_stat) }
+  it { should have_many(:game_stats) }
 end
 
 describe Player, "callbacks" do
@@ -33,13 +35,13 @@ describe Player do
 
       context "when a player is in a game" do
         before { team.add_player(player) }
-        before { game.add_team(team) }
+        before { game.add_home_team(team) }
         it "player's + team's game stat and all_time_stat should be updated" do
           player.send(play)
           player.all_time_stat.send(play).should == 1
-          player.game_stat.send(play).should == 1
+          player.current_game_stat.send(play).should == 1
           team.all_time_stat.send(play).should == 1
-          team.game_stat.send(play).should == 1
+          team.current_game_stat.send(play).should == 1
         end
       end
     end

@@ -27,8 +27,8 @@ eastern_all_star_team.add_player(Player.create(name: 'Joakim Noah', number: 13))
 eastern_all_star_team.add_player(Player.create(name: 'Paul Millsap', number: 4))
 
 game = Game.create(gametime: DateTime.now)
-game.add_team(western_all_star_team)
-game.add_team(eastern_all_star_team)
+game.add_home_team(western_all_star_team)
+game.add_away_team(eastern_all_star_team)
 
 Player.create(name: 'Steve Nash', number: 10)
 Player.create(name: 'Klay Thompson', number: 20)
