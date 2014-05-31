@@ -33,7 +33,7 @@ class Realballerz.Views.GamesIndex extends Backbone.View
     @teams = options.teams
     @collection.on('reset', @render, this)
     @teams.on('reset', @render, this)
-    @collection.on('add', @appendGame, this)
+    @collection.on('add', @appendNewGame, this)
     @collection.on('destroy', @clearGame, this)
 
   clearGame: (game) =>
@@ -44,6 +44,10 @@ class Realballerz.Views.GamesIndex extends Backbone.View
     $(@el).html(@template(teams: @teams))
     @collection.each(@appendGame)
     this
+
+  appendNewGame: (game) ->
+    alert("added a new game #{game.get('name')}")
+    @appendGame(game)
 
   appendGame: (game) ->
     view = new Realballerz.Views.Game(model: game)
