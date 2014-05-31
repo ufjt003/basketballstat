@@ -4,26 +4,60 @@ describe Game do
   it { should validate_presence_of(:gametime) }
 end
 
+describe Game, ".destroy" do
+  let(:game) { FactoryGirl.create(:game) }
+  let(:home_team) { FactoryGirl.create(:complete_team) }
+  let(:away_team) { FactoryGirl.create(:complete_team) }
+
+  before "set up game" do
+    game.add_home_team(home_team)
+    game.add_away_team(away_team)
+    TeamStat.where(game_id: game.id).size.should   == 2
+    PlayerStat.where(game_id: game.id).size.should == 10
+    TeamGame.where(game_id: game.id).size.should   == 2
+    GamePlayer.where(game_id: game.id).size.should == 10
+    @game_players = game.players
+    @game_teams = game.teams
+    @game_players.each do |p|
+      p.current_game.should == game
+    end
+  end
+
+  before { game.destroy }
+
+  it { TeamStat.where(game_id: game.id).size.should == 0 }
+  it { PlayerStat.where(game_id: game.id).size.should == 0 }
+  it { TeamGame.where(game_id: game.id).size.should   == 0 }
+  it { GamePlayer.where(game_id: game.id).size.should == 0 }
+
+  it "reset game players' current game to nil" do
+    @game_players.reload.each do |p|
+      p.game_id.should == nil
+    end
+  end
+
+  it "should reset game teams' current game to nil" do
+    @game_teams.reload.each do |t|
+      t.game_id.should == nil
+    end
+  end
+end
+
 describe Game, ".start .end .score" do
   let(:game) { FactoryGirl.create(:game) }
   let(:game_with_no_team) { FactoryGirl.create(:game) }
-  let(:team) { FactoryGirl.create(:team) }
-  let(:team2) { FactoryGirl.create(:team) }
-
-  before "add players to teams" do
-    5.times { team.add_player(FactoryGirl.create(:player)) }
-    5.times { team2.add_player(FactoryGirl.create(:player)) }
-  end
+  let(:home_team) { FactoryGirl.create(:complete_team) }
+  let(:away_team) { FactoryGirl.create(:complete_team) }
 
   before "set up game" do
-    game.add_home_team(team)
-    game.add_away_team(team2)
+    game.add_home_team(home_team)
+    game.add_away_team(away_team)
   end
 
   describe ".score" do
     it { game_with_no_team.score.should == [] }
     it do
-      expected = [ { "#{team.name}" => team.current_game_score },  { "#{team2.name}" => team2.current_game_score } ]
+      expected = [ { "#{home_team.name}" => home_team.current_game_score },  { "#{away_team.name}" => away_team.current_game_score } ]
       game.score.should == expected
     end
   end
