@@ -62,6 +62,10 @@ class Game < ActiveRecord::Base
     [{teams.first.name => teams.first.current_game_score}, {teams.last.name => teams.last.current_game_score}]
   end
 
+  def name
+    "#{home_team.try(:name)} vs #{away_team.try(:name)}"
+  end
+
   def home_team
     team_id = TeamGame.find_by(game_id: self.id, is_home_team: true).try(:team_id)
     Team.find_by_id(team_id)
