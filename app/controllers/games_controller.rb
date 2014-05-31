@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
   skip_authorization_check
 
-  before_filter :load_game, only: [ :show, :add_home_team, :add_away_team, :remove_team, :start ]
+  before_filter :load_game, only: [ :show, :add_home_team, :add_away_team, :remove_team, :start, :destroy ]
   before_filter :load_team, only: [ :add_home_team, :add_away_team, :remove_team ]
   before_filter :load_home_team, only: [ :create ]
   before_filter :load_away_team, only: [ :create ]
@@ -9,6 +9,10 @@ class GamesController < ApplicationController
 
   def index
     render json: Game.all
+  end
+
+  def destroy
+    render json: @game.destroy
   end
 
   def create

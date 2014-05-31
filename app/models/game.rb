@@ -1,5 +1,11 @@
 class Game < ActiveRecord::Base
   validates :gametime, presence: true
+  after_destroy :reset_players_current_game
+  after_destroy :reset_teams_current_game
+  after_destroy :destroy_team_stat
+  after_destroy :destroy_player_stat
+  after_destroy :destroy_team_game
+  after_destroy :destroy_game_player
 
   def teams
     team_ids = TeamGame.where(game_id: self.id).map(&:team_id)
@@ -23,8 +29,8 @@ class Game < ActiveRecord::Base
 
   def remove_team(team)
     error_if_in_progress
-    TeamGame.where(team_id: team.id, game_id: self.id).delete_all
-    GamePlayer.where(game_id: self.id, player_id: self.players.map(&:id)).delete_all
+    TeamGame.where(team_id: team.id, game_id: self.id).destroy_all
+    GamePlayer.where(game_id: self.id, player_id: self.players.map(&:id)).destroy_all
     self.players.each do |player|
       player.update_attributes(game_id: nil)
     end
@@ -133,6 +139,30 @@ class Game < ActiveRecord::Base
       player.update_attributes(game_id: self.id)
     end
     create_game_stats(team)
+  end
+
+  def destroy_game_player
+    GamePlayer.where(game_id: self.id).destroy_all
+  end
+
+  def destroy_player_stat
+    PlayerStat.where(game_id: self.id).destroy_all
+  end
+
+  def destroy_team_stat
+    TeamStat.where(game_id: self.id).destroy_all
+  end
+
+  def destroy_team_game
+    TeamGame.where(game_id: self.id).destroy_all
+  end
+
+  def reset_players_current_game
+    self.players.each { |p| p.update_attributes(game_id: nil) }
+  end
+
+  def reset_teams_current_game
+    self.teams.each { |t| t.update_attributes(game_id: nil) }
   end
 
 end

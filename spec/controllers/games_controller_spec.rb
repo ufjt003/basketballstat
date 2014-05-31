@@ -1,5 +1,68 @@
 require 'spec_helper'
 
+describe GamesController, "DELETE destroy" do
+  let(:team_with_5_players) { FactoryGirl.create(:complete_team) }
+  let(:another_team_with_5_players) { FactoryGirl.create(:complete_team) }
+  let(:team_with_no_player) { FactoryGirl.create(:team) }
+
+  before 'create a game' do
+    post :create, game: { gametime: DateTime.now.strftime("%Y-%m-%d %H:%M:%S %z") },
+                  home_team_id: team_with_5_players.id, away_team_id: another_team_with_5_players.id
+    @game_json = JSON.parse(response.body)
+    @game = Game.find_by_id(@game_json["id"])
+    TeamStat.where(game_id: @game_json["id"]).size.should == 2
+    PlayerStat.where(game_id: @game_json["id"]).size.should == 10
+    TeamGame.where(game_id: @game_json["id"]).size.should == 2
+    GamePlayer.where(game_id: @game_json["id"]).size.should == 10
+    @game_players = @game.players
+    @game_teams = @game.teams
+    @game_players.each do |p|
+      p.current_game.should == @game
+    end
+  end
+
+  it "should create a game" do
+    expect {
+      delete :destroy, id: @game_json["id"]
+      response.status.should == 200
+    }.to change(Game, :count).by(-1)
+  end
+
+  it "should remove team stat for the game" do
+    delete :destroy, id: @game_json["id"]
+    TeamStat.where(game_id: @game_json["id"]).size.should == 0
+  end
+
+  it "should remove player stat for the game" do
+    delete :destroy, id: @game_json["id"]
+    PlayerStat.where(game_id: @game_json["id"]).size.should == 0
+  end
+
+  it "should remove team_game records" do
+    delete :destroy, id: @game_json["id"]
+    TeamGame.where(game_id: @game_json["id"]).size.should == 0
+  end
+
+  it "should remove game_player records" do
+    delete :destroy, id: @game_json["id"]
+    GamePlayer.where(game_id: @game_json["id"]).size.should == 0
+  end
+
+  it "reset game players' current game to nil" do
+    delete :destroy, id: @game_json["id"]
+    @game_players.reload.each do |p|
+      p.game_id.should == nil
+    end
+  end
+
+  it "should reset game teams' current game to nil" do
+    delete :destroy, id: @game_json["id"]
+    @game_teams.reload.each do |t|
+      t.game_id.should == nil
+    end
+  end
+end
+
 describe GamesController, "POST create" do
   let(:team_with_5_players) { FactoryGirl.create(:complete_team) }
   let(:another_team_with_5_players) { FactoryGirl.create(:complete_team) }

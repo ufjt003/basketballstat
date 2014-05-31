@@ -37,7 +37,7 @@ Realballerz::Application.routes.draw do
       end
     end
 
-    resources :games, only: [ :create, :show, :index ] do
+    resources :games, only: [ :create, :show, :index, :destroy ] do
       member do
         post '/add_home_team/:team_id', to: 'games#add_home_team'
         post '/add_away_team/:team_id', to: 'games#add_away_team'
