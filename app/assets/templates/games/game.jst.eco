@@ -4,3 +4,4 @@
 <td><%= @game.get('home_team_score') %> : <%= @game.get('away_team_score') %></td>
 <td><%= @game.get('in_progress') %></td>
 <td><%= @game.get('gametime') %></td>
+<td><a id='remove_game' data='<%= @game.get('id') %>'>X</a></td>
