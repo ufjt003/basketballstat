@@ -51,6 +51,5 @@ describe Team, "#add_player, #remove_player" do
       expect { complete_team.remove_player(player) }.to raise_error(Errors::InvalidMethodCallError, 
                                                                  "team #{complete_team.name} currently playing in a game")
     end
-
   end
 end

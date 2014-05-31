@@ -1,6 +1,25 @@
 require 'spec_helper'
 
 describe TeamsController, "POST create" do
+  let(:game) { FactoryGirl.create(:game) }
+  let(:home_team) { FactoryGirl.create(:complete_team) }
+
+  context "when a team is not in a game" do
+    before { post :create, team: { name: "phoenix suns" } }
+    it { expect { delete :destroy, id: Team.last.id }.to change(Team, :count).by(-1) }
+  end
+
+  context "if team is in a game" do
+    before { game.add_home_team(home_team) }
+    it "" do
+      delete :destroy, id: home_team.id
+      response.status.should == 400
+      JSON.parse(response.body)["errors"].should == "team #{home_team.name} already in a game #{game.id}"
+    end
+  end
+end
+
+describe TeamsController, "POST create" do
   it "should create a team" do
     expect {
       post :create, team: { name: "phoenix suns" }
@@ -122,4 +141,3 @@ describe TeamsController, "post remove_player" do
     end
   end
 end
-

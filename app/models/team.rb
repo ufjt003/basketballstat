@@ -8,6 +8,11 @@ class Team < ActiveRecord::Base
   belongs_to :current_game, :class_name => "Game", :foreign_key => "game_id"
 
   after_create :create_all_time_stat
+  before_destroy :check_if_in_a_game
+
+  def check_if_in_a_game
+    raise Errors::InvalidMethodCallError.new("team #{self.name} already in a game #{self.current_game.id}") if self.currently_in_a_game?
+  end
 
   def games
     game_ids = TeamGame.select(:game_id).where(team_id: self.id).map(&:game_id)
@@ -40,6 +45,10 @@ class Team < ActiveRecord::Base
 
   def game_score(game)
     game_stat(game).try(:points)
+  end
+
+  def currently_in_a_game?
+    self.current_game != nil
   end
 
   def currently_playing_in_a_game?
