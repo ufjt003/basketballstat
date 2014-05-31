@@ -35,7 +35,7 @@ describe Player do
 
       context "when a player is in a game" do
         before { team.add_player(player) }
-        before { game.add_team(team) }
+        before { game.add_home_team(team) }
         it "player's + team's game stat and all_time_stat should be updated" do
           player.send(play)
           player.all_time_stat.send(play).should == 1

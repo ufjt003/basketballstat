@@ -16,8 +16,8 @@ describe Game, ".start .end .score" do
   end
 
   before "set up game" do
-    game.add_team(team)
-    game.add_team(team2)
+    game.add_home_team(team)
+    game.add_away_team(team2)
   end
 
   describe ".score" do
@@ -61,33 +61,31 @@ describe Game, ".start .end .score" do
   end
 end
 
-describe Game, ".add_team" do
+describe Game, ".add_home_team, .add_away_team" do
   let(:game) { FactoryGirl.create(:game) }
-  let(:team) { FactoryGirl.create(:team) }
-  before 'add 5 players to team' do
-    5.times { team.add_player(FactoryGirl.create(:player)) }
-  end
+  let(:home_team) { FactoryGirl.create(:complete_team) }
+  let(:away_team) { FactoryGirl.create(:complete_team) }
 
   it "should set current_game for each team" do
-    game.add_team(team)
-    team.current_game.should == game
+    game.add_home_team(home_team)
+    home_team.current_game.should == game
   end
 
   it "should create team_game record" do
-    expect { game.add_team(team) }.to change(TeamGame, :count).by(1)
-    team.games.include?(game).should == true
+    expect { game.add_home_team(home_team) }.to change(TeamGame, :count).by(1)
+    home_team.games.include?(game).should == true
   end
 
   it "should create team_stat for this game" do
-    expect { game.add_team(team) }.to change(TeamStat, :count).by(1)
-    game.teams.should include(team)
+    expect { game.add_home_team(home_team) }.to change(TeamStat, :count).by(1)
+    game.teams.should include(home_team)
     TeamStat.last.game.should == game
-    team.game_stats.size.should == 1
-    team.game_stat(game).should == TeamStat.find_by(game_id: game, team_id: team.id)
+    home_team.game_stats.size.should == 1
+    home_team.game_stat(game).should == TeamStat.find_by(game_id: game, team_id: home_team.id)
   end
 
   it "should create player_stat's for this game" do
-    expect { game.add_team(team) }.to change(PlayerStat, :count).by(team.players.size)
+    expect { game.add_home_team(home_team) }.to change(PlayerStat, :count).by(home_team.players.size)
     game.players.size.should == 5
     game.players.each do |p|
       p.game_stats.size.should == 1
@@ -98,27 +96,22 @@ describe Game, ".add_team" do
   context "when team has less than 5 teams" do
     let(:team_with_four_players) { FactoryGirl.create(:team) }
     before { 4.times { team_with_four_players.add_player(FactoryGirl.create(:player)) } }
-    it { expect { game.add_team(team_with_four_players) }.to raise_error(Errors::InvalidMethodCallError, 'team has less than 5 players') }
+    it { expect { game.add_home_team(team_with_four_players) }.to raise_error(Errors::InvalidMethodCallError, 'team has less than 5 players') }
   end
 
-  context "when game already has 2 teams" do
-    let(:team2) { FactoryGirl.create(:team) }
-    let(:team3) { FactoryGirl.create(:team) }
-    before 'add 5 players to team' do
-      5.times { team2.add_player(FactoryGirl.create(:player)) }
-      5.times { team3.add_player(FactoryGirl.create(:player)) }
+  context "when game already has a home team" do
+    before { game.add_home_team(home_team) }
+    it do
+      another_home_team = FactoryGirl.create(:complete_team)
+      expect { game.add_home_team(another_home_team) }.to raise_error(Errors::InvalidMethodCallError, 'game already has a home team')
     end
+  end
 
-    before 'add 2 teams to game' do
-      game.add_team(team2)
-      game.add_team(team3)
-    end
-
-    it { expect { game.add_team(team) }.to raise_error(Errors::InvalidMethodCallError, 'game already has 2 teams') }
-
-    context 'when game is alreayd in progress' do
-      before { game.start }
-      it { expect { game.add_team(team) }.to raise_error(Errors::InvalidMethodCallError, 'game is already in progress') }
+  context "when game already has a away team" do
+    before { game.add_away_team(away_team) }
+    it do
+      another_away_team = FactoryGirl.create(:complete_team)
+      expect { game.add_away_team(another_away_team) }.to raise_error(Errors::InvalidMethodCallError, 'game already has an away team')
     end
   end
 end
@@ -128,7 +121,7 @@ describe Game, ".remove_team" do
   let(:team) { FactoryGirl.create(:team) }
 
   before { 5.times { team.add_player(FactoryGirl.create(:player)) } }
-  before { game.add_team(team) }
+  before { game.add_home_team(team) }
 
   it "should un-set current_game for a team" do
     game.teams.size.should == 1
@@ -166,7 +159,7 @@ describe Game, ".remove_team" do
     let(:team2) { FactoryGirl.create(:team) }
     before "add another team and start game" do
       5.times { team2.add_player(FactoryGirl.create(:player)) }
-      game.add_team(team2)
+      game.add_away_team(team2)
       game.start
     end
 

@@ -37,8 +37,8 @@ describe Team, "#add_player, #remove_player" do
 
   context "when a team is currently playing in a game" do
     before do
-      game.add_team(complete_team)
-      game.add_team(complete_team2)
+      game.add_home_team(complete_team)
+      game.add_away_team(complete_team2)
       game.start
     end
 

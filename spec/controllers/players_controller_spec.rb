@@ -58,7 +58,7 @@ describe PlayersController do
       context "when player belongs to a game" do
         before { team.add_player(player) }
         before { 4.times { team.add_player(FactoryGirl.create(:player)) } }
-        before { game.add_team(team) }
+        before { game.add_home_team(team) }
         it "should set game stat" do
           post play.to_sym, id: player.id
           response.status.should == 200

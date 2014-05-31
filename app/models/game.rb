@@ -11,17 +11,14 @@ class Game < ActiveRecord::Base
     Player.where(id: player_ids)
   end
 
-  def add_team(team)
-    error_if_in_progress
-    error_if_game_already_has_two_teams
-    error_if_team_has_less_than_five_players(team)
-    TeamGame.create!(team_id: team.id, game_id: self.id)
-    team.update_attributes(game_id: self.id)
-    team.players.each do |player|
-      GamePlayer.create!(game_id: self.id, player_id: player.id)
-      player.update_attributes(game_id: self.id)
-    end
-    create_game_stats(team)
+  def add_home_team(team)
+    error_if_already_has_a_home_team
+    add_team(team, is_home_team: true)
+  end
+
+  def add_away_team(team)
+    error_if_already_has_an_away_team
+    add_team(team, is_home_team: false)
   end
 
   def remove_team(team)
@@ -60,11 +57,13 @@ class Game < ActiveRecord::Base
   end
 
   def home_team
-    self.teams.first
+    team_id = TeamGame.find_by(game_id: self.id, is_home_team: true).try(:team_id)
+    Team.find_by_id(team_id)
   end
 
   def away_team
-    self.teams.last
+    team_id = TeamGame.find_by(game_id: self.id, is_home_team: false).try(:team_id)
+    Team.find_by_id(team_id)
   end
 
   def home_team_score
@@ -85,11 +84,15 @@ class Game < ActiveRecord::Base
     h
   end
 
-  private
-
-  def error_if_game_already_has_two_teams
-    raise Errors::InvalidMethodCallError.new('game already has 2 teams') if has_two_teams?
+  def has_a_home_team?
+    TeamGame.find_by(game_id: self.id, is_home_team: true).blank? == false
   end
+
+  def has_an_away_team?
+    TeamGame.find_by(game_id: self.id, is_home_team: false).blank? == false
+  end
+
+  private
 
   def error_if_team_has_less_than_five_players(team)
     raise Errors::InvalidMethodCallError.new('team has less than 5 players') if team.players.count < 5
@@ -97,6 +100,14 @@ class Game < ActiveRecord::Base
 
   def error_if_in_progress
     raise Errors::InvalidMethodCallError.new('game is already in progress') if is_in_progress?
+  end
+
+  def error_if_already_has_a_home_team
+    raise Errors::InvalidMethodCallError.new('game already has a home team') if has_a_home_team?
+  end
+
+  def error_if_already_has_an_away_team
+    raise Errors::InvalidMethodCallError.new('game already has an away team') if has_an_away_team?
   end
 
   def create_game_stats(team)
@@ -110,4 +121,18 @@ class Game < ActiveRecord::Base
     TeamStat.where(game_id: self.id, team_id: team.id).destroy_all
     PlayerStat.where(game_id: self.id, player_id: team.players).destroy_all
   end
+
+  def add_team(team, options = {})
+    options.reverse_merge!(is_home_team: false)
+    error_if_in_progress
+    error_if_team_has_less_than_five_players(team)
+    TeamGame.create!(team_id: team.id, game_id: self.id, is_home_team: options[:is_home_team])
+    team.update_attributes(game_id: self.id)
+    team.players.each do |player|
+      GamePlayer.create!(game_id: self.id, player_id: player.id)
+      player.update_attributes(game_id: self.id)
+    end
+    create_game_stats(team)
+  end
+
 end

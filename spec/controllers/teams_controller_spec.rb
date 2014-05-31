@@ -31,7 +31,7 @@ describe TeamsController, "GET games" do
   it "should return team's games" do
     team = FactoryGirl.create(:complete_team)
     game = FactoryGirl.create(:game)
-    game.add_team(team)
+    game.add_home_team(team)
     get :games, id: team.id
     response.status.should == 200
     result = JSON.parse(response.body)
