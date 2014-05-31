@@ -59,7 +59,7 @@ class Game < ActiveRecord::Base
 
   def score
     return [] unless has_two_teams?
-    [{teams.first.name => teams.first.current_game_score}, {teams.last.name => teams.last.current_game_score}]
+    [{home_team.name => home_team_score}, {away_team.name => away_team_score}]
   end
 
   def name
@@ -77,11 +77,11 @@ class Game < ActiveRecord::Base
   end
 
   def home_team_score
-    home_team.current_game_score
+    home_team.game_score(self) if home_team
   end
 
   def away_team_score
-    away_team.current_game_score
+    away_team.game_score(self) if away_team
   end
 
   def serializable_hash(options)
