@@ -88,13 +88,14 @@ describe GamesController, "GET show" do
   end
 end
 
-describe GamesController, "POST add_home_team, add_away_team" do
-  let(:team) { FactoryGirl.create(:team) }
-  let(:team2) { FactoryGirl.create(:team) }
-  let(:game) { FactoryGirl.create(:game) }
+describe GamesController, "GET team_stats, home_team_stat, away_team_stat" do
 
-  before { 5.times { team.add_player(FactoryGirl.create(:player)) } }
-  before { 5.times { team2.add_player(FactoryGirl.create(:player)) } }
+end
+
+describe GamesController, "POST add_home_team, add_away_team" do
+  let(:home_team) { FactoryGirl.create(:complete_team) }
+  let(:away_team) { FactoryGirl.create(:complete_team) }
+  let(:game) { FactoryGirl.create(:game) }
 
   context "trying to add a team with less than 5 players" do
     let(:insufficient_team) { FactoryGirl.create(:team) }
@@ -107,11 +108,11 @@ describe GamesController, "POST add_home_team, add_away_team" do
   end
 
   it "should add a home team to a game" do
-    post :add_home_team, id: game.id, team_id: team.id
+    post :add_home_team, id: game.id, team_id: home_team.id
     response.status.should == 200
     response.body.should == { success: true, message: 'a home team added to a game' }.to_json
-    game.teams.should include(team)
-    team.reload.current_game.should == game
+    game.teams.should include(home_team)
+    home_team.reload.current_game.should == game
   end
 
   context "when a game is not found" do
@@ -124,18 +125,18 @@ describe GamesController, "POST add_home_team, add_away_team" do
 
   context "when a game has two teams already" do
     before do
-      post :add_home_team, id: game.id, team_id: team.id
-      post :add_away_team, id: game.id, team_id: team2.id
+      post :add_home_team, id: game.id, team_id: home_team.id
+      post :add_away_team, id: game.id, team_id: away_team.id
     end
 
     it "should not add a home team to a game" do
-      post :add_home_team, id: game.id, team_id: team.id
+      post :add_home_team, id: game.id, team_id: home_team.id
       response.status.should == 400
       JSON.parse(response.body)["errors"].should == "game already has a home team"
     end
 
     it "should not add a away team to a game" do
-      post :add_away_team, id: game.id, team_id: team.id
+      post :add_away_team, id: game.id, team_id: away_team.id
       response.status.should == 400
       JSON.parse(response.body)["errors"].should == "game already has an away team"
     end
@@ -159,17 +160,14 @@ describe GamesController, "POST remove_team" do
 end
 
 describe GamesController, "POST start" do
-  let(:team) { FactoryGirl.create(:team) }
-  let(:team2) { FactoryGirl.create(:team) }
+  let(:home_team) { FactoryGirl.create(:complete_team) }
+  let(:away_team) { FactoryGirl.create(:complete_team) }
   let(:game) { FactoryGirl.create(:game) }
-
-  before { 5.times { team.add_player(FactoryGirl.create(:player)) } }
-  before { 5.times { team2.add_player(FactoryGirl.create(:player)) } }
 
   context "when two teams have beend added to a game" do
     before 'add 2 teams to game' do
-      post :add_home_team, id: game.id, team_id: team.id
-      post :add_away_team, id: game.id, team_id: team2.id
+      post :add_home_team, id: game.id, team_id: home_team.id
+      post :add_away_team, id: game.id, team_id: away_team.id
     end
 
     it do
@@ -201,16 +199,13 @@ describe GamesController, "POST start" do
 end
 
 describe GamesController, "POST finish" do
-  let(:team) { FactoryGirl.create(:team) }
-  let(:team2) { FactoryGirl.create(:team) }
+  let(:home_team) { FactoryGirl.create(:complete_team) }
+  let(:away_team) { FactoryGirl.create(:complete_team) }
   let(:game) { FactoryGirl.create(:game) }
 
-  before { 5.times { team.add_player(FactoryGirl.create(:player)) } }
-  before { 5.times { team2.add_player(FactoryGirl.create(:player)) } }
-
   before 'add 2 teams to game' do
-    post :add_home_team, id: game.id, team_id: team.id
-    post :add_away_team, id: game.id, team_id: team2.id
+    post :add_home_team, id: game.id, team_id: home_team.id
+    post :add_away_team, id: game.id, team_id: away_team.id
   end
 
   context "when game is not started yet" do
