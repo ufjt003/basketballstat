@@ -46,6 +46,8 @@ Realballerz::Application.routes.draw do
         post '/finish', to: 'games#finish'
         get  '/home_team_stat', to: 'games#home_team_stat'
         get  '/away_team_stat', to: 'games#away_team_stat'
+        get  '/home_player_stats', to: 'games#home_player_stats'
+        get  '/away_player_stats', to: 'games#away_player_stats'
       end
     end
   end

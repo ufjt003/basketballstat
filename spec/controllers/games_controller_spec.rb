@@ -88,7 +88,7 @@ describe GamesController, "GET show" do
   end
 end
 
-describe GamesController, "GET team_stats, home_team_stat, away_team_stat" do
+describe GamesController, "GET home_team_stat, away_team_stat, home_player_stats, away_player_stats" do
   let(:home_team) { FactoryGirl.create(:complete_team) }
   let(:away_team) { FactoryGirl.create(:complete_team) }
   let(:game) { FactoryGirl.create(:game) }
@@ -98,28 +98,38 @@ describe GamesController, "GET team_stats, home_team_stat, away_team_stat" do
     game.add_away_team(away_team)
   end
 
-  it do
-    get :home_team_stat, id: game.id
-    response.status.should == 200
-    response.body.should == TeamStatSerializer.new(home_team.game_stat(game)).to_json
-  end
+  context "when game id is exsiting" do
+    it do
+      get :home_team_stat, id: game.id
+      response.body.should == TeamStatSerializer.new(home_team.game_stat(game)).to_json
+    end
 
-  it do
-    get :away_team_stat, id: game.id
-    response.status.should == 200
-    response.body.should == TeamStatSerializer.new(away_team.game_stat(game)).to_json
+    it do
+      get :away_team_stat, id: game.id
+      response.body.should == TeamStatSerializer.new(away_team.game_stat(game)).to_json
+    end
+
+    it do
+      get :home_player_stats, id: game.id
+      stats = game.home_team.players.map { |p| p.game_stat(game) }
+      response.body.should == ActiveModel::ArraySerializer.new(stats, each_serializer: PlayerStatSerializer).to_json
+    end
+
+    it do
+      get :away_player_stats, id: game.id
+      stats = game.away_team.players.map { |p| p.game_stat(game) }
+      response.body.should == ActiveModel::ArraySerializer.new(stats, each_serializer: PlayerStatSerializer).to_json
+    end
+
+    after { response.status.should == 200 }
   end
 
   context "if game id is not existing" do
-    it do
-      get :home_team_stat, id: game.id + 999
-      response.status.should == 404
-    end
-
-    it do
-      get :away_team_stat, id: game.id + 999
-      response.status.should == 404
-    end
+    it { get :home_team_stat,    id: game.id + 999 }
+    it { get :home_player_stats, id: game.id + 999 }
+    it { get :away_team_stat,    id: game.id + 999 }
+    it { get :away_player_stats, id: game.id + 999 }
+    after { response.status.should == 404 }
   end
 end
 
