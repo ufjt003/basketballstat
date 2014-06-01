@@ -14,4 +14,5 @@ class Realballerz.Routers.Games extends Backbone.Router
     $('#container').html(view.render().el)
 
   show: (id) ->
-    alert "Game #{id}"
+    view = new Realballerz.Views.GamesShow(collection: @collection, id: id)
+    $('#container').html(view.render().el)

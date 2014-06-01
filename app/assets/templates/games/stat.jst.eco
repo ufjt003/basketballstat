@@ -1,0 +1,10 @@
+<td><%= @stat.get('team_name') %></td>
+<td><%= @stat.get('two_pointer_make') %> / <%= @stat.get('two_pointer_attempt') %></td>
+<td><%= @stat.get('three_pointer_make') %> / <%= @stat.get('three_pointer_attempt') %></td>
+<td><%= @stat.get('free_throw_make') %> / <%= @stat.get('free_throw_attempt') %></td>
+<td><%= @stat.get('rebound') %></td>
+<td><%= @stat.get('assist') %></td>
+<td><%= @stat.get('steal') %></td>
+<td><%= @stat.get('block') %></td>
+<td><%= @stat.get('turnover') %></td>
+<td><%= @stat.get('foul') %></td>

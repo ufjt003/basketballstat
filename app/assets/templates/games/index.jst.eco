@@ -30,6 +30,7 @@
     <th>Score</th>
     <th>In Progress</th>
     <th>GameTime</th>
+    <th>View</th>
     <th>DELETE</th>
   </tr>
 </thead>

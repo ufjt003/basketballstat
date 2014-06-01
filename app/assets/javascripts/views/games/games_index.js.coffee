@@ -5,6 +5,12 @@ class Realballerz.Views.GamesIndex extends Backbone.View
   events:
     'submit #create_new_game_form': 'createNewGame'
     'click #remove_game': 'remove_game'
+    'click #view_game': 'view_game'
+
+  view_game: (event) ->
+    event.preventDefault()
+    game_id = event.target.getAttribute('data')
+    Backbone.history.navigate("games/#{game_id}", true)
 
   remove_game: (event) ->
     event.preventDefault()

@@ -1,0 +1,36 @@
+<h1><%= @game.get('name') %></h1>
+<h3>Game Score</h3>
+<table class="table" id="game_score">
+  <tr>
+    <td><%= @game.get('home_team') %></td>
+    <td><%= @game.get('home_team_score') %></td>
+  </tr>
+  <tr>
+    <td><%= @game.get('away_team') %></td>
+    <td><%= @game.get('away_team_score') %></td>
+  </tr>
+</table>
+<h3>Team Stat</h3>
+<table class="table" id="team_stat">
+  <thead>
+    <tr>
+      <th></th>
+      <th>FGM / A</th>
+      <th>3PM / A</th>
+      <th>FTM / A</th>
+      <th>Rebound</th>
+      <th>Assist</th>
+      <th>Steal</th>
+      <th>Block</th>
+      <th>Turnover</th>
+      <th>Foul</th>
+    </tr>
+  </thead>
+  <tr id="tr-home-team-stat">
+    <td><%= @game.get('home_team') %></td>
+  </tr>
+  <tr id="tr-away-team-stat">
+    <td><%= @game.get('away_team') %></td>
+  </tr>
+</table>
+
