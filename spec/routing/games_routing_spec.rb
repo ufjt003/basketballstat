@@ -4,6 +4,8 @@ describe GamesController do
   it { { post: 'api/games' }.should route_to(controller: "games", action: "create") }
   it { { get:  'api/games' }.should route_to(controller: "games", action: "index") }
   it { { get:  'api/games/1' }.should route_to(controller: "games", action: "show", id: "1") }
+  it { { get:  'api/games/1/home_team_stat' }.should route_to(controller: "games", action: "home_team_stat", id: "1") }
+  it { { get:  'api/games/1/away_team_stat' }.should route_to(controller: "games", action: "away_team_stat", id: "1") }
   it { { delete:  'api/games/1' }.should route_to(controller: "games", action: "destroy", id: "1") }
   it { { post: 'api/games/1/add_home_team/2' }.should route_to(controller: "games", action: "add_home_team", id: "1", team_id: "2") }
   it { { post: 'api/games/1/add_away_team/2' }.should route_to(controller: "games", action: "add_away_team", id: "1", team_id: "2") }

@@ -89,7 +89,38 @@ describe GamesController, "GET show" do
 end
 
 describe GamesController, "GET team_stats, home_team_stat, away_team_stat" do
+  let(:home_team) { FactoryGirl.create(:complete_team) }
+  let(:away_team) { FactoryGirl.create(:complete_team) }
+  let(:game) { FactoryGirl.create(:game) }
 
+  before do
+    game.add_home_team(home_team)
+    game.add_away_team(away_team)
+  end
+
+  it do
+    get :home_team_stat, id: game.id
+    response.status.should == 200
+    response.body.should == TeamStatSerializer.new(home_team.game_stat(game)).to_json
+  end
+
+  it do
+    get :away_team_stat, id: game.id
+    response.status.should == 200
+    response.body.should == TeamStatSerializer.new(away_team.game_stat(game)).to_json
+  end
+
+  context "if game id is not existing" do
+    it do
+      get :home_team_stat, id: game.id + 999
+      response.status.should == 404
+    end
+
+    it do
+      get :away_team_stat, id: game.id + 999
+      response.status.should == 404
+    end
+  end
 end
 
 describe GamesController, "POST add_home_team, add_away_team" do
