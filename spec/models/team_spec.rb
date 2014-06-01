@@ -11,6 +11,21 @@ describe Team, "relations" do
   it { should have_many(:game_stats) }
 end
 
+describe Team, ".destroy" do
+  let(:team) { FactoryGirl.create(:team) }
+  let(:player) { FactoryGirl.create(:player) }
+
+  before do
+    team.add_player(player)
+    player.team.should == team
+  end
+
+  it do
+    team.destroy
+    player.reload.team_id.should == nil
+  end
+end
+
 describe Team, "callbacks" do
   it "should create team all_time_stat afterwards" do
     team = FactoryGirl.create(:team)

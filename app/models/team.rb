@@ -9,6 +9,11 @@ class Team < ActiveRecord::Base
 
   after_create :create_all_time_stat
   before_destroy :check_if_in_a_game
+  after_destroy :reset_player_team
+
+  def reset_player_team
+    self.players.each { |p| p.update_attributes(team_id: nil) }
+  end
 
   def check_if_in_a_game
     raise Errors::InvalidMethodCallError.new("team #{self.name} already in a game #{self.current_game.id}") if self.currently_in_a_game?
@@ -68,4 +73,6 @@ class Team < ActiveRecord::Base
   def error_if_currently_playing_in_a_game
     raise Errors::InvalidMethodCallError.new("team #{self.name} currently playing in a game") if self.currently_playing_in_a_game?
   end
+
+
 end
