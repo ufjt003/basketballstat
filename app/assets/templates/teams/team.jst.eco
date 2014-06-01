@@ -1,6 +1,7 @@
 <td>
   <%= @team.get('name') %>
   <a id="edit_team" data="<%= @team.get('id') %>">Edit</a>
+  <a id="remove_team" data="<%= @team.get('id') %>">Remove</a>
 </td>
 <td>
   <ul>

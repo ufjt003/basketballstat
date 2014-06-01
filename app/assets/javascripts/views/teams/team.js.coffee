@@ -3,6 +3,6 @@ class Realballerz.Views.Team extends Backbone.View
   tagName: 'tr'
 
   render: ->
-    $(@el).html(@template(team: @model))
+    $(@el).attr('id', "team-tr-#{@model.id}").html(@template(team: @model))
     this
 
