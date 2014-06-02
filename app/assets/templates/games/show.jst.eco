@@ -1,5 +1,14 @@
 <h1><%= @game.get('name') %></h1>
-<h3>Game Score (<%= @game.get('status') %>)</h3>
+<h4 id='game_status'>
+<% if @game.get('status') == 'not_started': %>
+  <a id='start_game'>Start Game</a>
+<% else if @game.get('status') == 'in_progress': %>
+  <a id='finish_game'>Finish Game</a>
+<% else if @game.get('status') == 'finished': %>
+  Finished (<a id='restart_game'>Restart</a>)
+<% end %>
+</h4>
+<h3>Game Score</h3>
 <table class="table" id="game_score">
   <tr>
     <td><%= @game.get('home_team') %></td>

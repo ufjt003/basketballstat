@@ -49,6 +49,11 @@ class Game < ActiveRecord::Base
     update_attributes(status: 'finished')
   end
 
+  def restart
+    raise Errors::InvalidMethodCallError.new('game is still in progress') if is_in_progress?
+    update_attributes(status: 'in_progress')
+  end
+
   def is_in_progress?
     self.status == 'in_progress'
   end

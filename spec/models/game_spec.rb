@@ -89,7 +89,21 @@ describe Game, ".start .end .score" do
       it do
         game.start
         game.finish.should be_true
+        game.reload.status.should == 'finished'
         game.is_in_progress?.should be_false
+      end
+    end
+  end
+
+  describe ".restart" do
+    context "when game is finished" do
+      before do
+        game.update_attributes(status: 'finished')
+      end
+
+      it do
+        game.restart
+        game.reload.status.should == 'in_progress'
       end
     end
   end

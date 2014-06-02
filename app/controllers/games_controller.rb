@@ -2,7 +2,7 @@ class GamesController < ApplicationController
   skip_authorization_check
 
   before_filter :load_game, only: [ :show, :add_home_team, :add_away_team, :remove_team,
-                                    :start, :destroy, :home_team_stat, :away_team_stat,
+                                    :start, :finish, :restart, :destroy, :home_team_stat, :away_team_stat,
                                     :home_player_stats, :away_player_stats ]
   before_filter :load_team, only: [ :add_home_team, :add_away_team, :remove_team ]
   before_filter :load_home_team, only: [ :create ]
@@ -51,12 +51,17 @@ class GamesController < ApplicationController
 
   def start
     @game.start
-    render json: { success: true, message: "game started" }
+    render json: @game.reload
   end
 
   def finish
     @game.finish
-    render json: { success: true, message: "game finished" }
+    render json: @game.reload
+  end
+
+  def restart
+    @game.restart
+    render json: @game.reload
   end
 
   def home_team_stat

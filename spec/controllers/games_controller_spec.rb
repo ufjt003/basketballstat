@@ -214,7 +214,7 @@ describe GamesController, "POST start" do
     it do
       post :start, id: game.id
       response.status.should == 200
-      response.body.should == { success: true, message: 'game started' }.to_json
+      response.body.should == GameSerializer.new(game.reload).to_json
     end
 
     context "when game is already started" do
@@ -264,7 +264,13 @@ describe GamesController, "POST finish" do
     it do
       post :finish, id: game.id
       response.status.should == 200
-      response.body.should == { success: true, message: 'game finished' }.to_json
+      response.body.should == GameSerializer.new(game.reload).to_json
+    end
+
+    after do
+      post :restart, id: game.id
+      response.status.should == 200
+      response.body.should == GameSerializer.new(game.reload).to_json
     end
   end
 end
