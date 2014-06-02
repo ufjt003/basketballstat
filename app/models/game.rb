@@ -41,16 +41,20 @@ class Game < ActiveRecord::Base
   def start
     error_if_in_progress
     raise Errors::InvalidMethodCallError.new('game requires 2 teams to get started') unless has_two_teams?
-    update_attributes(in_progress: true)
+    update_attributes(status: 'in_progress')
   end
 
   def finish
     raise Errors::InvalidMethodCallError.new('game is not in progress') unless is_in_progress?
-    update_attributes(in_progress: false)
+    update_attributes(status: 'finished')
   end
 
   def is_in_progress?
-    self.in_progress
+    self.status == 'in_progress'
+  end
+
+  def is_finished?
+    self.status == 'finished'
   end
 
   def has_two_teams?
