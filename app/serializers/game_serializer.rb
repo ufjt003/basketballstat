@@ -1,5 +1,5 @@
 class GameSerializer < ActiveModel::Serializer
-  attributes :id, :gametime, :in_progress, :home_team, :away_team, :home_team_score, :away_team_score, :name, :is_finished
+  attributes :id, :gametime, :in_progress, :home_team, :away_team, :home_team_score, :away_team_score, :name, :is_finished, :status
 
   def is_finished
     object.is_finished?

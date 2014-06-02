@@ -28,7 +28,7 @@
     <th>Home Team</th>
     <th>Away Team</th>
     <th>Score</th>
-    <th>In Progress</th>
+    <th>Status</th>
     <th>GameTime</th>
     <th>View</th>
     <th>DELETE</th>

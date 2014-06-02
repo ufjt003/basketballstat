@@ -1,5 +1,5 @@
 <h1><%= @game.get('name') %></h1>
-<h3>Game Score</h3>
+<h3>Game Score (<%= @game.get('status') %>)</h3>
 <table class="table" id="game_score">
   <tr>
     <td><%= @game.get('home_team') %></td>
