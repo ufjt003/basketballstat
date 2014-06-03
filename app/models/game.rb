@@ -29,12 +29,8 @@ class Game < ActiveRecord::Base
 
   def remove_team(team)
     error_if_in_progress
-    TeamGame.where(team_id: team.id, game_id: self.id).destroy_all
-    GamePlayer.where(game_id: self.id, player_id: self.players.map(&:id)).destroy_all
-    self.players.each do |player|
-      player.update_attributes(game_id: nil)
-    end
-    team.update_attributes(game_id: nil)
+    destroy_game_records(team)
+    reset_current_game_id(team)
     remove_game_stats(team)
   end
 
@@ -145,13 +141,23 @@ class Game < ActiveRecord::Base
     options.reverse_merge!(is_home_team: false)
     error_if_in_progress
     error_if_team_has_less_than_five_players(team)
-    TeamGame.create!(team_id: team.id, game_id: self.id, is_home_team: options[:is_home_team])
-    team.update_attributes(game_id: self.id)
+    create_game_records(team, options[:is_home_team])
+    set_current_game_id(team)
+    create_game_stats(team)
+  end
+
+  def create_game_records(team, is_home_team = false)
+    TeamGame.create!(team_id: team.id, game_id: self.id, is_home_team: is_home_team)
     team.players.each do |player|
       GamePlayer.create!(game_id: self.id, player_id: player.id)
+    end
+  end
+
+  def set_current_game_id(team)
+    team.update_attributes(game_id: self.id)
+    team.players.each do |player|
       player.update_attributes(game_id: self.id)
     end
-    create_game_stats(team)
   end
 
   def destroy_game_player
@@ -176,6 +182,18 @@ class Game < ActiveRecord::Base
 
   def reset_teams_current_game
     self.teams.each { |t| t.update_attributes(game_id: nil) }
+  end
+
+  def reset_current_game_id(team)
+    self.players.each do |player|
+      player.update_attributes(game_id: nil)
+    end
+    team.update_attributes(game_id: nil)
+  end
+
+  def destroy_game_records(team)
+    TeamGame.where(team_id: team.id, game_id: self.id).destroy_all
+    GamePlayer.where(game_id: self.id, player_id: self.players.map(&:id)).destroy_all
   end
 
 end
