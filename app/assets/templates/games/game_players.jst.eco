@@ -1,0 +1,36 @@
+<h3>Players In Game</h3>
+<table class="table" id="players_in_game">
+  <thead>
+    <tr><td>Home Team</td></tr>
+  </thead>
+  <tbody id="home_players_in_game">
+  </tbody>
+  <thead>
+    <tr><td>Away Team</td></tr>
+  </thead>
+  <tbody id="away_players_in_game">
+  </tbody>
+</table>
+
+<h3>Players On Bench</h3>
+<table class="table" id="bench_players">
+  <thead>
+    <tr><td>Team 1</td></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Player 1</td>
+      <td>Sub</td>
+    </tr>
+  </tbody>
+  <thead>
+    <tr><td>Team 1</td></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Player 1</td>
+      <td>Sub</td>
+    </tr>
+  </tbody>
+</table>
+

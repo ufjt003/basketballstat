@@ -33,13 +33,11 @@ describe PlayersController do
 
   ['three_pointer_attempt', 'three_pointer_make', 'two_pointer_attempt', 'two_pointer_make',
    'free_throw_attempt', 'free_throw_make', 'assist', 'block', 'steal', 'rebound', 'turnover', 'foul'].each do |play|
-    describe "POST #{play}" do
+    describe "PUT #{play}" do
       it "should set player all_time_stat accordingly" do
-        post play.to_sym, id: player.id
+        put play.to_sym, id: player.id
         response.status.should == 200
-        expected = { success: true, message: "player's #{play} incremented",
-                     player_stat: player.all_time_stat, team_stat: nil, player_current_game_stat: nil, team_current_game_stat: nil }
-        response.body.should == expected.to_json
+        response.body.should == PlayerSerializer.new(player.reload).to_json
         player.all_time_stat.send(play.to_sym).should == 1
       end
 
@@ -48,9 +46,7 @@ describe PlayersController do
         it "should set team all_time_stat, too" do
           post play.to_sym, id: player.id
           response.status.should == 200
-          expected = { success: true, message: "player's #{play} incremented",
-                       player_stat: player.all_time_stat, team_stat: player.team.all_time_stat, player_current_game_stat: nil, team_current_game_stat: nil }
-          response.body.should == expected.to_json
+          response.body.should == PlayerSerializer.new(player.reload).to_json
           team.all_time_stat.send(play.to_sym).should == 1
         end
       end
@@ -62,9 +58,7 @@ describe PlayersController do
         it "should set game stat" do
           post play.to_sym, id: player.id
           response.status.should == 200
-          expected = { success: true, message: "player's #{play} incremented",
-                       player_stat: player.all_time_stat, team_stat: player.team.all_time_stat, player_current_game_stat: player.current_game_stat, team_current_game_stat: player.team.try(:current_game_stat) }
-          response.body.should == expected.to_json
+          response.body.should == PlayerSerializer.new(player.reload).to_json
           player.current_game_stat.send(play.to_sym).should == 1
         end
       end

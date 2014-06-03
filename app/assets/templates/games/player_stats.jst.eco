@@ -1,0 +1,40 @@
+<h3>Player Stat</h3>
+<h4>Home</h4>
+<table class="table" id="home-player-stats">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>FGM / A</th>
+      <th>3PM / A</th>
+      <th>FTM / A</th>
+      <th>Rebound</th>
+      <th>Assist</th>
+      <th>Steal</th>
+      <th>Block</th>
+      <th>Turnover</th>
+      <th>Foul</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+<h4>Away</h4>
+<table class="table" id="away-player-stats">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>FGM / A</th>
+      <th>3PM / A</th>
+      <th>FTM / A</th>
+      <th>Rebound</th>
+      <th>Assist</th>
+      <th>Steal</th>
+      <th>Block</th>
+      <th>Turnover</th>
+      <th>Foul</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>

@@ -1,0 +1,13 @@
+<td><%= @player.get('name') %></td>
+<td><a class="two_pointer_attempt" data="<%= @player.get('id') %>">Shoots 2</a></td>
+<td><a class="two_pointer_make" data="<%= @player.get('id') %>">Makes 2</a></td>
+<td><a class="three_pointer_attempt" data="<%= @player.get('id') %>">Shoots 3</a></td>
+<td><a class="three_pointer_make" data="<%= @player.get('id') %>">Makes 3</a></td>
+<td><a class="free_throw_attempt" data="<%= @player.get('id') %>">Shoots FT</a></td>
+<td><a class="free_throw_make" data="<%= @player.get('id') %>">Makes FT</a></td>
+<td><a class="rebound" data="<%= @player.get('id') %>">Rebound</a></td>
+<td><a class="assist" data="<%= @player.get('id') %>">Assist</a></td>
+<td><a class="block" data="<%= @player.get('id') %>">Block</a></td>
+<td><a class="steal" data="<%= @player.get('id') %>">Steal</a></td>
+<td><a class="turnover" data="<%= @player.get('id') %>">Turnover</a></td>
+<td><a class="foul" data="<%= @player.get('id') %>">Foul</a></td>

@@ -78,11 +78,7 @@ class PlayersController < ApplicationController
 
   def action
     @player.send(action_name)
-    render json: { success: true, message: "player's #{action_name} incremented",
-                   player_stat: @player.all_time_stat,
-                   team_stat: @player.team.try(:all_time_stat),
-                   player_current_game_stat: @player.current_game_stat,
-                   team_current_game_stat: @player.team.try(:current_game_stat) }
+    render json: @player.reload
   end
 
   def load_player

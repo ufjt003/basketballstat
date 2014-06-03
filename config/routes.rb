@@ -14,18 +14,18 @@ Realballerz::Application.routes.draw do
         get :not_in_a_team
       end
       member do
-        post :two_pointer_attempt
-        post :two_pointer_make
-        post :three_pointer_attempt
-        post :three_pointer_make
-        post :free_throw_attempt
-        post :free_throw_make
-        post :assist
-        post :rebound
-        post :steal
-        post :block
-        post :turnover
-        post :foul
+        put :two_pointer_attempt
+        put :two_pointer_make
+        put :three_pointer_attempt
+        put :three_pointer_make
+        put :free_throw_attempt
+        put :free_throw_make
+        put :assist
+        put :rebound
+        put :steal
+        put :block
+        put :turnover
+        put :foul
       end
     end
 
@@ -49,6 +49,8 @@ Realballerz::Application.routes.draw do
         get  '/away_team_stat', to: 'games#away_team_stat'
         get  '/home_player_stats', to: 'games#home_player_stats'
         get  '/away_player_stats', to: 'games#away_player_stats'
+        get  '/home_team_players', to: 'games#home_team_players'
+        get  '/away_team_players', to: 'games#away_team_players'
       end
     end
   end
