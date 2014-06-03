@@ -75,9 +75,23 @@ class Player < ActiveRecord::Base
     super(options.merge(except: [:updated_at, :created_at]))
   end
 
+  def currently_in_a_game?
+    self.current_game != nil
+  end
+
   private
 
+  def error_if_currently_not_in_a_game
+    raise Errors::InvalidMethodCallError.new('player is currently not in a game') unless currently_in_a_game?
+  end
+
+  def error_if_current_game_is_not_in_progress
+    raise Errors::InvalidMethodCallError.new("player's current game is not in progress") unless self.current_game.is_in_progress?
+  end
+
   def player_action(action_name)
+    error_if_currently_not_in_a_game
+    error_if_current_game_is_not_in_progress
     self.all_time_stat.increment!(action_name)
     self.current_game_stat.try(:increment!, action_name)
     update_team_stat(action_name)

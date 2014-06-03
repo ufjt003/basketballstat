@@ -24,24 +24,36 @@ describe Player do
    :free_throw_attempt, :free_throw_make, :assist, :block, :steal,
    :rebound, :turnover, :foul].each do |play|
     describe "#{play}" do
-      let(:player) { FactoryGirl.create(:player) }
-      let(:team) { FactoryGirl.create(:team) }
+      let(:team) { FactoryGirl.create(:complete_team) }
+      let(:another_team) { FactoryGirl.create(:complete_team) }
       let(:game) { FactoryGirl.create(:game) }
-      before { 5.times { team.add_player(FactoryGirl.create(:player)) } }
-
-      it "should increment #{play}" do
-        expect { player.send(play) }.to change(player.all_time_stat, play).by(1)
-      end
 
       context "when a player is in a game" do
-        before { team.add_player(player) }
-        before { game.add_home_team(team) }
-        it "player's + team's game stat and all_time_stat should be updated" do
-          player.send(play)
-          player.all_time_stat.send(play).should == 1
-          player.current_game_stat.send(play).should == 1
-          team.all_time_stat.send(play).should == 1
-          team.current_game_stat.send(play).should == 1
+        before { game.add_home_team(team); game.add_away_team(another_team) }
+        context "when the game is in progress" do
+          before { game.start }
+          it "player's + team's game stat and all_time_stat should be updated" do
+            player = team.players.first
+            player.send(play)
+            player.all_time_stat.send(play).should == 1
+            player.current_game_stat.send(play).should == 1
+            team.all_time_stat.send(play).should == 1
+            team.current_game_stat.send(play).should == 1
+          end
+        end
+
+        context "when the game is not in progress" do
+          it do
+            player = team.players.first
+            expect { player.send(play) }.to raise_error(Errors::InvalidMethodCallError)
+          end
+        end
+      end
+
+      context "when player is not in a game" do
+        it do
+          player = team.players.first
+          expect { player.send(play) }.to raise_error(Errors::InvalidMethodCallError)
         end
       end
     end
