@@ -1,0 +1,13 @@
+<% if @players_with_no_team.length == 0: %>
+<form id="add_new_player_form" style="display: none;">
+<% else: %>
+<form id="add_new_player_form">
+<% end %>
+  <select id="new_player_id">
+    <% for player in @players_with_no_team.models: %>
+      <option value=<%= player.get('id') %>><%= player.get('name') %></option>
+    <% end %>
+  </select>
+  <input type="submit" value="Add Player">
+</form>
+
