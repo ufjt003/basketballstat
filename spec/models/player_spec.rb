@@ -60,3 +60,85 @@ describe Player do
   end
 end
 
+describe Player, ".leave_game" do
+  let(:game) { FactoryGirl.create(:game) }
+  let(:home_team) { FactoryGirl.create(:complete_team) }
+  let(:away_team) { FactoryGirl.create(:complete_team) }
+  let(:unregistered_player) { FactoryGirl.create(:player) }
+  let(:last_home_player) { FactoryGirl.create(:player) }
+  let(:last_away_player) { FactoryGirl.create(:player) }
+
+  before do
+    home_team.add_player(last_home_player)
+    away_team.add_player(last_away_player)
+    game.add_home_team(home_team)
+    game.add_away_team(away_team)
+  end
+
+  context "when the player is not yet in the game" do
+    it do
+      p = home_team.players.first
+      expect { p.leave_game(game) }.to raise_error(Errors::InvalidMethodCallError)
+    end
+  end
+
+  it do
+    p = home_team.players.first
+    p.enter_game(game)
+    p.leave_game(game)
+    game.players_in_game.include?(p).should == false
+  end
+end
+
+describe Player, ".enter_game" do
+  let(:game) { FactoryGirl.create(:game) }
+  let(:home_team) { FactoryGirl.create(:complete_team) }
+  let(:away_team) { FactoryGirl.create(:complete_team) }
+  let(:unregistered_player) { FactoryGirl.create(:player) }
+  let(:last_home_player) { FactoryGirl.create(:player) }
+  let(:last_away_player) { FactoryGirl.create(:player) }
+
+  before do
+    home_team.add_player(last_home_player)
+    away_team.add_player(last_away_player)
+    game.add_home_team(home_team)
+    game.add_away_team(away_team)
+  end
+
+  it do
+    p = home_team.players.first
+    p.enter_game(game)
+    p.reload.is_playing_in_game?(game).should == true
+  end
+
+  context "when the player is not registerd in the game" do
+    it do
+      expect { unregistered_player.enter_game(game) }.to raise_error(Errors::InvalidMethodCallError,
+                                                                     "player #{unregistered_player.name} is not registered in the game")
+    end
+  end
+
+  context "when the player is already playing in the game" do
+    it do
+      p = home_team.players.first
+      p.enter_game(game)
+      expect { p.enter_game(game) }.to raise_error(Errors::InvalidMethodCallError, "player #{p.name} is already playing in the game")
+    end
+  end
+
+  context "if the game already has 5 players playing" do
+    before do
+      home_team.players[0..4].each { |p| p.enter_game(game) }
+      away_team.players[0..4].each { |p| p.enter_game(game) }
+    end
+
+    it do
+      expect { last_home_player.enter_game(game) }.to raise_error(Errors::InvalidMethodCallError, "home team already has 5 players playing")
+    end
+
+    it do
+      expect { last_away_player.enter_game(game) }.to raise_error(Errors::InvalidMethodCallError, "away team already has 5 players playing")
+    end
+
+  end
+end

@@ -123,12 +123,12 @@ describe GamesController, "GET home_team_stat, away_team_stat, home_player_stats
 
     it do
       get :home_team_players, id: game.id
-      response.body.should == ActiveModel::ArraySerializer.new(game.home_team.players, each_serializer: PlayerSerializer).to_json
+      response.body.should == ActiveModel::ArraySerializer.new(game.home_team.players, each_serializer: GamePlayerSerializer).to_json
     end
 
     it do
       get :away_team_players, id: game.id
-      response.body.should == ActiveModel::ArraySerializer.new(game.away_team.players, each_serializer: PlayerSerializer).to_json
+      response.body.should == ActiveModel::ArraySerializer.new(game.away_team.players, each_serializer: GamePlayerSerializer).to_json
     end
 
     after { response.status.should == 200 }
@@ -140,6 +140,98 @@ describe GamesController, "GET home_team_stat, away_team_stat, home_player_stats
     it { get :away_team_stat,    id: game.id + 999 }
     it { get :away_player_stats, id: game.id + 999 }
     after { response.status.should == 404 }
+  end
+end
+
+describe GamesController, "PUT player_leave" do
+  let(:home_team) { FactoryGirl.create(:complete_team) }
+  let(:away_team) { FactoryGirl.create(:complete_team) }
+  let(:game) { FactoryGirl.create(:game) }
+
+  before do
+    game.add_home_team(home_team)
+    game.add_away_team(away_team)
+  end
+
+  context "when the player not playing in the game tries to leave" do
+    it do
+      put :player_leave, id: game.id, player_id: home_team.players.first.id
+      response.status.should == 400
+      JSON.parse(response.body)['errors'].should == "player #{home_team.players.first.name} is not playing in the game"
+    end
+  end
+
+  context "when the player playing in the game tries to leave" do
+    before do
+      put :player_entry, id: game.id, player_id: home_team.players.first.id
+    end
+
+    it do
+      put :player_leave, id: game.id, player_id: home_team.players.first.id
+      response.status.should == 200
+      response.body.should == PlayerSerializer.new(home_team.players.first.reload).to_json
+    end
+  end
+end
+
+describe GamesController, "PUT player_entry" do
+  let(:home_team) { FactoryGirl.create(:complete_team) }
+  let(:away_team) { FactoryGirl.create(:complete_team) }
+  let(:game) { FactoryGirl.create(:game) }
+  let(:last_home_player) { FactoryGirl.create(:player) }
+  let(:last_away_player) { FactoryGirl.create(:player) }
+
+  before do
+    home_team.add_player(last_home_player)
+    away_team.add_player(last_away_player)
+    game.add_home_team(home_team)
+    game.add_away_team(away_team)
+  end
+
+  it do
+    put :player_entry, id: game.id, player_id: home_team.players.first.id
+    response.status.should == 200
+    response.body.should == PlayerSerializer.new(home_team.players.first.reload).to_json
+  end
+
+  context "when already 5 players are entered in the game" do
+    before do
+      home_team.players[0..4].each do |p|
+        put :player_entry, id: game.id, player_id: p.id
+      end
+    end
+
+    it do
+      put :player_entry, id: game.id, player_id: last_home_player.id
+      response.status.should == 400
+      JSON.parse(response.body)["errors"].should == "home team already has 5 players playing"
+    end
+  end
+
+  context "when a player is already entered in the game" do
+    before do
+      put :player_entry, id: game.id, player_id: home_team.players.first.id
+    end
+
+    it do
+      put :player_entry, id: game.id, player_id: home_team.players.first.id
+      response.status.should == 400
+      JSON.parse(response.body)["errors"].should == "player #{home_team.players.first.name} is already playing in the game"
+    end
+  end
+
+  context "when game is not found" do
+    it do
+      put :player_entry, id: game.id + 999, player_id: home_team.players.first.id
+      response.status.should == 404
+    end
+  end
+
+  context "when player is not found" do
+    it do
+      put :player_entry, id: game.id, player_id: home_team.players.first.id + 999
+      response.status.should == 404
+    end
   end
 end
 

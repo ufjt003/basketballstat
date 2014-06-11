@@ -107,6 +107,32 @@ class Game < ActiveRecord::Base
     TeamGame.find_by(game_id: self.id, is_home_team: false).blank? == false
   end
 
+  def home_players_playing_in_game
+    players_in_game & home_team.players
+  end
+
+  def away_players_playing_in_game
+    players_in_game & away_team.players
+  end
+
+  def home_players_on_bench
+    home_team.players - players_in_game
+  end
+
+  def away_players_on_bench
+    away_team.players - players_in_game
+  end
+
+  def players_in_game
+    player_ids = GamePlayer.where(game_id: self.id, in_game: true).map(&:player_id)
+    Player.where(id: player_ids)
+  end
+
+  def players_on_bench
+    player_ids = GamePlayer.where(game_id: self.id, in_game: false).map(&:player_id)
+    Player.where(id: player_ids)
+  end
+
   private
 
   def error_if_team_has_less_than_five_players(team)

@@ -4,4 +4,5 @@ class PlayerSerializer < ActiveModel::Serializer
   def team_name
     object.team.try(:name)
   end
+
 end

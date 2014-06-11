@@ -14,6 +14,8 @@ class Realballerz.Views.GamePlayers extends Backbone.View
     'click .rebound': 'rebound'
     'click .turnover': 'turnover'
     'click .foul': 'foul'
+    'click .player_leave': 'player_leave'
+    'click .player_enter': 'player_enter'
 
   initialize: (options) ->
     @set_home_team_players(this)
@@ -38,12 +40,20 @@ class Realballerz.Views.GamePlayers extends Backbone.View
     players.each(@append_away_player)
 
   append_home_player: (player) ->
-    view = new Realballerz.Views.PlayerAction(model: player)
-    $('#home_players_in_game').append(view.render().el)
+    if player.get('playing_in_game')
+      view = new Realballerz.Views.PlayerAction(model: player)
+      $('#home_players_in_game').append(view.render().el)
+    else
+      view = new Realballerz.Views.BenchPlayer(model: player)
+      $('#home_bench_players').append(view.render().el)
 
   append_away_player: (player) ->
-    view = new Realballerz.Views.PlayerAction(model: player)
-    $('#away_players_in_game').append(view.render().el)
+    if player.get('playing_in_game')
+      view = new Realballerz.Views.PlayerAction(model: player)
+      $('#away_players_in_game').append(view.render().el)
+    else
+      view = new Realballerz.Views.BenchPlayer(model: player)
+      $('#away_bench_players').append(view.render().el)
 
   player_action: (event, action_name) ->
     event.preventDefault()
@@ -93,9 +103,48 @@ class Realballerz.Views.GamePlayers extends Backbone.View
   foul: (event) ->
     @player_action(event, "foul")
 
+  player_enter: (event) ->
+    event.preventDefault()
+    player_id = event.target.getAttribute('data')
+    player = new Realballerz.Models.Player(id: player_id)
+    player.url = "/api/games/#{@id}/player_entry/#{player_id}"
+    player.save(
+      {},
+      wait: true
+      success: @player_entry_success
+      error: @handleError
+    )
+
+  player_leave: (event) ->
+    event.preventDefault()
+    player_id = event.target.getAttribute('data')
+    player = new Realballerz.Models.Player(id: player_id)
+    player.url = "/api/games/#{@id}/player_leave/#{player_id}"
+    player.save(
+      {},
+      wait: true
+      success: @player_leave_success
+      error: @handleError
+    )
+
+  player_leave_success: (player) ->
+    $("#player-tr-#{player.get('id')}").remove()
+    alert("#{player.get('name')} leaves game")
+
+  player_entry_success: (player) ->
+    view = new Realballerz.Views.PlayerAction(model: player)
+    $('#home_players_in_game').append(view.render().el)
+    alert("#{player.get('name')} enters game")
+
   update_player_stat: (player) ->
     console.log(player.get('name'))
 
   render: =>
     $(@el).html(@template())
     this
+
+  handleError: (entry, response) ->
+    if response.status != 200
+      errors = $.parseJSON(response.responseText).errors
+      alert(errors)
+

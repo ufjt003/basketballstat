@@ -11,3 +11,4 @@
 <td><a class="steal" data="<%= @player.get('id') %>">Steal</a></td>
 <td><a class="turnover" data="<%= @player.get('id') %>">Turnover</a></td>
 <td><a class="foul" data="<%= @player.get('id') %>">Foul</a></td>
+<td><a class="player_leave" data="<%= @player.get('id') %>">To Bench</a></td>

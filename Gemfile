@@ -14,7 +14,7 @@ gem 'backbone-on-rails'
 gem 'active_model_serializers'
 
 group :test, :development do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~>2.14.2'
   gem 'pry'
   gem 'flog'
   gem 'flay'

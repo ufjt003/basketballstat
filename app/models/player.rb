@@ -79,7 +79,44 @@ class Player < ActiveRecord::Base
     self.current_game != nil
   end
 
+  def enter_game(game)
+    error_if_not_registered_in_game(game)
+    error_if_playing_in_game(game)
+    error_if_game_has_5_players_playing_for_a_team(game)
+    GamePlayer.find_by(game_id: game.id, player_id: self.id).update_attributes(in_game: true)
+    self.reload
+  end
+
+  def leave_game(game)
+    raise Errors::InvalidMethodCallError.new("player #{self.name} is not playing in the game") unless game.players_in_game.include?(self)
+    GamePlayer.find_by(game_id: game.id, player_id: self.id).update_attributes(in_game: false)
+    self.reload
+  end
+
+  def is_playing_in_game?(game)
+    return true if GamePlayer.find_by(game_id: game.id, player_id: self.id, in_game: true)
+    false
+  end
+
   private
+
+  def error_if_game_has_5_players_playing_for_a_team(game)
+    if self.team == game.away_team
+      raise Errors::InvalidMethodCallError.new("away team already has 5 players playing") if game.away_players_playing_in_game.size == 5
+    end
+
+    if self.team == game.home_team
+      raise Errors::InvalidMethodCallError.new("home team already has 5 players playing") if game.home_players_playing_in_game.size == 5
+    end
+  end
+
+  def error_if_not_registered_in_game(game)
+    raise Errors::InvalidMethodCallError.new("player #{self.name} is not registered in the game") unless game.players.include?(self)
+  end
+
+  def error_if_playing_in_game(game)
+    raise Errors::InvalidMethodCallError.new("player #{self.name} is already playing in the game") if self.is_playing_in_game?(game)
+  end
 
   def error_if_currently_not_in_a_game
     raise Errors::InvalidMethodCallError.new('player is currently not in a game') unless currently_in_a_game?

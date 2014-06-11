@@ -17,4 +17,6 @@ describe GamesController do
   it { { put: 'api/games/1/restart' }.should route_to(controller: "games", action: "restart", id: "1") }
   it { { get: 'api/games/1/home_team_players' }.should route_to(controller: "games", action: "home_team_players", id: "1") }
   it { { get: 'api/games/1/away_team_players' }.should route_to(controller: "games", action: "away_team_players", id: "1") }
+  it { { put: 'api/games/1/player_entry/2' }.should route_to(controller: "games", action: "player_entry", id: "1", player_id: "2") }
+  it { { put: 'api/games/1/player_leave/2' }.should route_to(controller: "games", action: "player_leave", id: "1", player_id: "2") }
 end

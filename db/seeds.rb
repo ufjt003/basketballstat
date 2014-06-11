@@ -30,6 +30,13 @@ game = Game.create(gametime: DateTime.now)
 game.add_home_team(western_all_star_team)
 game.add_away_team(eastern_all_star_team)
 
+eastern_all_star_team.players[0..4].each do |p|
+  p.enter_game(game)
+end
+western_all_star_team.players[0..4].each do |p|
+  p.enter_game(game)
+end
+
 Player.create(name: 'Steve Nash', number: 10)
 Player.create(name: 'Klay Thompson', number: 20)
 Player.create(name: 'David Lee', number: 10)
