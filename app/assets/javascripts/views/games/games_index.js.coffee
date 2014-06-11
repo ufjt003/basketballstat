@@ -36,11 +36,12 @@ class Realballerz.Views.GamesIndex extends Backbone.View
       alert(errors)
 
   initialize: (options) ->
-    @teams = options.teams
     @collection.on('reset', @render, this)
-    @teams.on('reset', @render, this)
     @collection.on('add', @appendNewGame, this)
     @collection.on('destroy', @clearGame, this)
+    @teams = new Realballerz.Collections.Teams()
+    @teams.on('reset', @render, this)
+    @teams.fetch({reset: true})
 
   clearGame: (game) =>
     $("#game-tr-#{game.get('id')}").remove()
