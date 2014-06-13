@@ -17,4 +17,5 @@ describe PlayersController do
   it { { put: 'api/players/1/block' }.should route_to(controller: "players", action: "block", id: "1") }
   it { { put: 'api/players/1/turnover' }.should route_to(controller: "players", action: "turnover", id: "1") }
   it { { put: 'api/players/1/foul' }.should route_to(controller: "players", action: "foul", id: "1") }
+  it { { put: 'api/players/1/undo' }.should route_to(controller: "players", action: "undo", id: "1") }
 end

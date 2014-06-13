@@ -33,6 +33,43 @@ describe PlayersController do
   let(:solo_player) { FactoryGirl.create(:player) }
   let(:team_player) { team.players.first }
 
+  describe "PUT undo" do
+    context "game is in progress" do
+      before { game.add_home_team(team); game.add_away_team(another_team) }
+      before { game.start }
+
+      before do
+        put :rebound, id: team_player.id
+        team_player.all_time_stat.send(:rebound).should == 1
+        team_player.current_game_stat.send(:rebound).should == 1
+        team.all_time_stat.send(:rebound).should == 1
+        team.current_game_stat.send(:rebound).should == 1
+      end
+
+      it do
+        put :undo, id: team_player.id
+        team_player.all_time_stat.reload.send(:rebound).should == 0
+        team_player.current_game_stat.reload.send(:rebound).should == 0
+        team.all_time_stat.reload.send(:rebound).should == 0
+        team.current_game_stat.reload.send(:rebound).should == 0
+      end
+
+      context "if the player is not in a game" do
+        it do
+          put :undo, id: solo_player.id
+          response.status.should == 400
+        end
+      end
+    end
+
+    context "if the player is in a game but the game is not in progress" do
+      it do
+        put :undo, id: team_player.id
+        response.status.should == 400
+      end
+    end
+  end
+
   ['three_pointer_attempt', 'three_pointer_make', 'two_pointer_attempt', 'two_pointer_make',
    'free_throw_attempt', 'free_throw_make', 'assist', 'block', 'steal', 'rebound', 'turnover', 'foul'].each do |play|
     describe "PUT #{play}" do

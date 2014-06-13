@@ -26,6 +26,7 @@ Realballerz::Application.routes.draw do
         put :block
         put :turnover
         put :foul
+        put :undo
       end
     end
 

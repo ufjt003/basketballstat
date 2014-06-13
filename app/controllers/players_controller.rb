@@ -4,7 +4,7 @@ class PlayersController < ApplicationController
   before_filter :load_player, only: [ :show, :shoot, :two_pointer_attempt, :two_pointer_make,
                                       :three_pointer_attempt, :three_pointer_make,
                                       :free_throw_attempt, :free_throw_make, :assist,
-                                      :block, :steal, :rebound, :turnover, :foul ]
+                                      :block, :steal, :rebound, :turnover, :foul, :undo ]
 
   def index
     if params[:not_in_a_team]
@@ -72,6 +72,11 @@ class PlayersController < ApplicationController
 
   def foul
     action
+  end
+
+  def undo
+    @player.undo
+    render json: @player.reload
   end
 
   private

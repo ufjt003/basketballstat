@@ -98,6 +98,18 @@ class Player < ActiveRecord::Base
     false
   end
 
+  def undo
+    error_if_currently_not_in_a_game
+    error_if_current_game_is_not_in_progress
+    if last_play = LastPlay.find_by(game_id: self.current_game.id, player_id: self.id)
+      action_name = last_play.action
+      self.all_time_stat.decrement!(action_name)
+      self.current_game_stat.try(:decrement!, action_name)
+      decrement_team_stat(action_name)
+      last_play.destroy!
+    end
+  end
+
   private
 
   def error_if_game_has_5_players_playing_for_a_team(game)
@@ -131,17 +143,30 @@ class Player < ActiveRecord::Base
     error_if_current_game_is_not_in_progress
     self.all_time_stat.increment!(action_name)
     self.current_game_stat.try(:increment!, action_name)
-    update_team_stat(action_name)
+    increment_team_stat(action_name)
+    record_last_play(action_name)
+  end
+
+  def record_last_play(action_name)
+    LastPlay.find_or_create_by(game_id: self.current_game.id).update_attributes(player_id: self.id, action: action_name)
   end
 
   def create_all_time_stat
     AllTimePlayerStat.create(player_id: self.id)
   end
 
-  def update_team_stat(play)
+  def increment_team_stat(play)
     if in_a_team?
       self.team.all_time_stat.increment!(play)
       self.team.current_game_stat.try(:increment!, play)
     end
   end
+
+  def decrement_team_stat(play)
+    if in_a_team?
+      self.team.all_time_stat.decrement!(play)
+      self.team.current_game_stat.try(:decrement!, play)
+    end
+  end
+
 end

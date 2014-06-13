@@ -32,13 +32,33 @@ describe Player do
         before { game.add_home_team(team); game.add_away_team(another_team) }
         context "when the game is in progress" do
           before { game.start }
+
+          before do
+            @player = team.players.first
+            @player.send(play)
+          end
+
           it "player's + team's game stat and all_time_stat should be updated" do
-            player = team.players.first
-            player.send(play)
-            player.all_time_stat.send(play).should == 1
-            player.current_game_stat.send(play).should == 1
+            @player.all_time_stat.send(play).should == 1
+            @player.current_game_stat.send(play).should == 1
             team.all_time_stat.send(play).should == 1
             team.current_game_stat.send(play).should == 1
+          end
+
+          it "should record last play for game" do
+            last_play = LastPlay.find_by(game_id: game.id)
+            last_play.should_not be_nil
+            last_play.player_id.should == @player.id
+            last_play.action.should == play.to_s
+          end
+
+          after "undo" do
+            @player.undo
+            @player.all_time_stat.send(play).should == 0
+            @player.current_game_stat.send(play).should == 0
+            team.all_time_stat.reload.send(play).should == 0
+            team.current_game_stat.reload.send(play).should == 0
+            LastPlay.find_by(game_id: game.id).should == nil
           end
         end
 
