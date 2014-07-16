@@ -89,6 +89,18 @@ class Game < ActiveRecord::Base
     away_team.game_score(self) if away_team
   end
 
+  def home_player_stats
+    home_team.players.map { |p| p.game_stat(self) } if home_team
+  end
+
+  def away_player_stats
+    away_team.players.map { |p| p.game_stat(self) } if away_team
+  end
+
+  def player_stats
+    home_player_stats.concat(away_player_stats).compact
+  end
+
   def home_team_stat
     home_team.game_stat(self) if home_team
   end

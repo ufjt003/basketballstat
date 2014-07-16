@@ -1,6 +1,6 @@
 <h3>Player Stat</h3>
 <h4>Home</h4>
-<table class="table" id="home-player-stats">
+<table class="table" id="player-stats-team-<%= @home_team_id %>">
   <thead>
     <tr>
       <th>Name</th>
@@ -20,7 +20,7 @@
 </table>
 
 <h4>Away</h4>
-<table class="table" id="away-player-stats">
+<table class="table" id="player-stats-team-<%= @away_team_id %>">
   <thead>
     <tr>
       <th>Name</th>

@@ -9,6 +9,7 @@ describe GamesController do
   it { { get:  'api/games/1/team_stats' }.should route_to(controller: "games", action: "team_stats", id: "1") }
   it { { get:  'api/games/1/home_player_stats' }.should route_to(controller: "games", action: "home_player_stats", id: "1") }
   it { { get:  'api/games/1/away_player_stats' }.should route_to(controller: "games", action: "away_player_stats", id: "1") }
+  it { { get:  'api/games/1/player_stats' }.should route_to(controller: "games", action: "player_stats", id: "1") }
   it { { delete:  'api/games/1' }.should route_to(controller: "games", action: "destroy", id: "1") }
   it { { post: 'api/games/1/add_home_team/2' }.should route_to(controller: "games", action: "add_home_team", id: "1", team_id: "2") }
   it { { post: 'api/games/1/add_away_team/2' }.should route_to(controller: "games", action: "add_away_team", id: "1", team_id: "2") }

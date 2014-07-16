@@ -23,7 +23,7 @@ class Realballerz.Routers.Games extends Backbone.Router
     $('#backbone_container').html(view.render().el)
 
   player_stats: (id) ->
-    view = new Realballerz.Views.PlayerGameStats(id: id)
+    view = new Realballerz.Views.PlayerGameStats(collection: @collection, id: id)
     $('#backbone_container').html(view.render().el)
 
   players: (id) ->
