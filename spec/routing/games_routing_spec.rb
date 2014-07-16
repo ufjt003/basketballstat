@@ -6,6 +6,7 @@ describe GamesController do
   it { { get:  'api/games/1' }.should route_to(controller: "games", action: "show", id: "1") }
   it { { get:  'api/games/1/home_team_stat' }.should route_to(controller: "games", action: "home_team_stat", id: "1") }
   it { { get:  'api/games/1/away_team_stat' }.should route_to(controller: "games", action: "away_team_stat", id: "1") }
+  it { { get:  'api/games/1/team_stats' }.should route_to(controller: "games", action: "team_stats", id: "1") }
   it { { get:  'api/games/1/home_player_stats' }.should route_to(controller: "games", action: "home_player_stats", id: "1") }
   it { { get:  'api/games/1/away_player_stats' }.should route_to(controller: "games", action: "away_player_stats", id: "1") }
   it { { delete:  'api/games/1' }.should route_to(controller: "games", action: "destroy", id: "1") }

@@ -14,10 +14,10 @@
       <th>Foul</th>
     </tr>
   </thead>
-  <tr id="tr-home-team-stat">
+  <tr id="tr-game-stat-team-<%= @home_team_id %>">
     <td></td>
   </tr>
-  <tr id="tr-away-team-stat">
+  <tr id="tr-game-stat-team-<%= @away_team_id %>">
     <td></td>
   </tr>
 </table>

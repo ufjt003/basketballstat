@@ -18,6 +18,7 @@ class Realballerz.Views.GamePlayers extends Backbone.View
     'click .player_enter': 'player_enter'
 
   initialize: (options) ->
+    @set_players(this)
     @collection.on('reset', @render)
 
   set_players: ->
@@ -129,7 +130,6 @@ class Realballerz.Views.GamePlayers extends Backbone.View
 
   render: =>
     if @game = @collection.get(@id)
-      @set_players(this)
       $(@el).html(@template(home_team_id: @game.get('home_team_id'), away_team_id: @game.get('away_team_id')))
     this
 

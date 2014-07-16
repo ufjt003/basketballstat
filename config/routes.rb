@@ -48,6 +48,7 @@ Realballerz::Application.routes.draw do
         put '/restart', to: 'games#restart'
         get  '/home_team_stat', to: 'games#home_team_stat'
         get  '/away_team_stat', to: 'games#away_team_stat'
+        get  '/team_stats', to: 'games#team_stats'
         get  '/home_player_stats', to: 'games#home_player_stats'
         get  '/away_player_stats', to: 'games#away_player_stats'
         get  '/home_team_players', to: 'games#home_team_players'

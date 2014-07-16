@@ -89,6 +89,18 @@ class Game < ActiveRecord::Base
     away_team.game_score(self) if away_team
   end
 
+  def home_team_stat
+    home_team.game_stat(self) if home_team
+  end
+
+  def away_team_stat
+    away_team.game_stat(self) if away_team
+  end
+
+  def team_stats
+    [home_team_stat, away_team_stat].compact
+  end
+
   def serializable_hash(options)
     h = super(options.merge(except: [:updated_at, :created_at]))
     h.merge!(gametime: gametime.strftime("%Y-%m-%d %H:%M %z"))

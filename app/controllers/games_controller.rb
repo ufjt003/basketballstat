@@ -3,7 +3,7 @@ class GamesController < ApplicationController
 
   before_filter :load_game, only: [ :show, :add_home_team, :add_away_team, :remove_team,
                                     :start, :finish, :restart, :destroy, :home_team_stat, :away_team_stat,
-                                    :home_player_stats, :away_player_stats, :players,
+                                    :home_player_stats, :away_player_stats, :players, :team_stats,
                                     :home_team_players, :away_team_players, :player_entry, :player_leave ]
   before_filter :load_team, only: [ :add_home_team, :add_away_team, :remove_team ]
   before_filter :load_home_team, only: [ :create ]
@@ -67,11 +67,15 @@ class GamesController < ApplicationController
   end
 
   def home_team_stat
-    render json: @game.home_team.game_stat(@game)
+    render json: @game.home_team_stat
   end
 
   def away_team_stat
-    render json: @game.away_team.game_stat(@game)
+    render json: @game.away_team_stat
+  end
+
+  def team_stats
+    render json: @game.team_stats
   end
 
   def home_player_stats

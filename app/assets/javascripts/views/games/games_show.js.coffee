@@ -13,7 +13,7 @@ class Realballerz.Views.GamesShow extends Backbone.View
     @game = @collection.get(@id)
     if @game != undefined
       $(@el).html(@template(game: @game))
-      view = new Realballerz.Views.TeamGameStats(id: @id)
+      view = new Realballerz.Views.TeamGameStats(collection: @collection, id: @id)
       $('#team-stats').replaceWith(view.render().el)
       view = new Realballerz.Views.PlayerGameStats(id: @id)
       $('#player-stats').replaceWith(view.render().el)
