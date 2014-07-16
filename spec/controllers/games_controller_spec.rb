@@ -88,7 +88,7 @@ describe GamesController, "GET show" do
   end
 end
 
-describe GamesController, "GET home_team_stat, away_team_stat, home_player_stats, away_player_stats, home_team_players, away_team_players" do
+describe GamesController, "GET home_team_stat, away_team_stat, home_player_stats, away_player_stats, home_team_players, away_team_players, players" do
   let(:home_team) { FactoryGirl.create(:complete_team) }
   let(:away_team) { FactoryGirl.create(:complete_team) }
   let(:game) { FactoryGirl.create(:game) }
@@ -124,6 +124,11 @@ describe GamesController, "GET home_team_stat, away_team_stat, home_player_stats
     it do
       get :home_team_players, id: game.id
       response.body.should == ActiveModel::ArraySerializer.new(game.home_team.players, each_serializer: GamePlayerSerializer).to_json
+    end
+
+    it do
+      get :players, id: game.id
+      response.body.should == ActiveModel::ArraySerializer.new(game.players, each_serializer: GamePlayerSerializer).to_json
     end
 
     it do

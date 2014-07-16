@@ -3,7 +3,7 @@ class GamesController < ApplicationController
 
   before_filter :load_game, only: [ :show, :add_home_team, :add_away_team, :remove_team,
                                     :start, :finish, :restart, :destroy, :home_team_stat, :away_team_stat,
-                                    :home_player_stats, :away_player_stats,
+                                    :home_player_stats, :away_player_stats, :players,
                                     :home_team_players, :away_team_players, :player_entry, :player_leave ]
   before_filter :load_team, only: [ :add_home_team, :add_away_team, :remove_team ]
   before_filter :load_home_team, only: [ :create ]
@@ -90,6 +90,10 @@ class GamesController < ApplicationController
 
   def away_team_players
     render json: ActiveModel::ArraySerializer.new(@game.away_team.players, each_serializer: GamePlayerSerializer)
+  end
+
+  def players
+    render json: ActiveModel::ArraySerializer.new(@game.players, each_serializer: GamePlayerSerializer)
   end
 
   def player_entry

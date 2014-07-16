@@ -1,5 +1,6 @@
 class GameSerializer < ActiveModel::Serializer
-  attributes :id, :gametime, :in_progress, :home_team, :away_team, :home_team_score, :away_team_score, :name, :is_finished, :status
+  attributes :id, :gametime, :in_progress, :home_team, :away_team, :home_team_score, :away_team_score,
+    :name, :is_finished, :status, :home_team_id, :away_team_id
 
   def is_finished
     object.is_finished?
@@ -19,6 +20,14 @@ class GameSerializer < ActiveModel::Serializer
 
   def away_team
     object.away_team.try(:name)
+  end
+
+  def home_team_id
+    object.home_team.try(:id)
+  end
+
+  def away_team_id
+    object.away_team.try(:id)
   end
 
   def home_team_score

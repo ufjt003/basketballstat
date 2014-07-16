@@ -52,6 +52,7 @@ Realballerz::Application.routes.draw do
         get  '/away_player_stats', to: 'games#away_player_stats'
         get  '/home_team_players', to: 'games#home_team_players'
         get  '/away_team_players', to: 'games#away_team_players'
+        get  '/players', to: 'games#players'
         put '/player_entry/:player_id', to: 'games#player_entry'
         put '/player_leave/:player_id', to: 'games#player_leave'
       end

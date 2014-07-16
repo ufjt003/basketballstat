@@ -18,42 +18,25 @@ class Realballerz.Views.GamePlayers extends Backbone.View
     'click .player_enter': 'player_enter'
 
   initialize: (options) ->
-    @set_home_team_players(this)
-    @set_away_team_players(this)
+    @collection.on('reset', @render)
 
-  set_home_team_players: ->
-    @home_team_players = new Realballerz.Collections.Players()
-    @home_team_players.url = "/api/games/#{@id}/home_team_players"
-    @home_team_players.on('reset', @update_home_team_players, this)
-    @home_team_players.fetch({reset: true})
+  set_players: ->
+    @players = new Realballerz.Collections.Players()
+    @players.url = "/api/games/#{@id}/players"
+    @players.on('reset', @update_players, this)
+    @players.fetch({reset: true})
 
-  set_away_team_players: ->
-    @away_team_players = new Realballerz.Collections.Players()
-    @away_team_players.url = "/api/games/#{@id}/away_team_players"
-    @away_team_players.on('reset', @update_away_team_players, this)
-    @away_team_players.fetch({reset: true})
+  update_players: (players) ->
+    players.each(@append_player)
 
-  update_home_team_players: (players) ->
-    players.each(@append_home_player)
-
-  update_away_team_players: (players) ->
-    players.each(@append_away_player)
-
-  append_home_player: (player) ->
+  append_player: (player) ->
+    team_id = player.get('team_id')
     if player.get('playing_in_game')
       view = new Realballerz.Views.PlayerAction(model: player)
-      $('#home_players_in_game').append(view.render().el)
+      $("#game_players_in_team_#{team_id}").append(view.render().el)
     else
       view = new Realballerz.Views.BenchPlayer(model: player)
-      $('#home_bench_players').append(view.render().el)
-
-  append_away_player: (player) ->
-    if player.get('playing_in_game')
-      view = new Realballerz.Views.PlayerAction(model: player)
-      $('#away_players_in_game').append(view.render().el)
-    else
-      view = new Realballerz.Views.BenchPlayer(model: player)
-      $('#away_bench_players').append(view.render().el)
+      $("#bench_players_in_team_#{team_id}").append(view.render().el)
 
   player_action: (event, action_name) ->
     event.preventDefault()
@@ -129,18 +112,25 @@ class Realballerz.Views.GamePlayers extends Backbone.View
 
   player_leave_success: (player) ->
     $("#player-tr-#{player.get('id')}").remove()
+    view = new Realballerz.Views.BenchPlayer(model: player)
+    team_id = player.get('team_id')
+    $("#bench_players_in_team_#{team_id}").append(view.render().el)
     alert("#{player.get('name')} leaves game")
 
   player_entry_success: (player) ->
+    $("#player-tr-#{player.get('id')}").remove()
     view = new Realballerz.Views.PlayerAction(model: player)
-    $('#home_players_in_game').append(view.render().el)
+    team_id = player.get('team_id')
+    $("#game_players_in_team_#{team_id}").append(view.render().el)
     alert("#{player.get('name')} enters game")
 
   update_player_stat: (player) ->
     console.log(player.get('name'))
 
   render: =>
-    $(@el).html(@template())
+    if @game = @collection.get(@id)
+      @set_players(this)
+      $(@el).html(@template(home_team_id: @game.get('home_team_id'), away_team_id: @game.get('away_team_id')))
     this
 
   handleError: (entry, response) ->
